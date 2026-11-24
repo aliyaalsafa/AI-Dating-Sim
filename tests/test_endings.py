@@ -84,5 +84,5 @@ def test_not_solo_if_anyone_reaches_25(gs):
 
 def test_all_ending_ids(cast):
     ids = all_ending_ids(cast)
-    assert len(ids) == 2 + 3 * len(cast)
+    assert len(ids) == 3 + 3 * len(cast)          # solo, rivals, truth + 3 per character
     assert "good_shen" in ids and SOLO in ids and RIVALS in ids

@@ -30,6 +30,7 @@ label shen_opens_up:
     $ set_flag("shen.opened_up")
     $ reveal("shen", "likes")
     "(You learned what Shen likes. Check your phone.)"
+    call minor_clue("shen", "freebie")
 
     hide shen
     with dissolve

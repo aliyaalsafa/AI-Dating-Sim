@@ -31,6 +31,7 @@ label gemma_opens_up:
     $ set_flag("gemma.opened_up")
     $ reveal("gemma", "likes")
     "(You learned what Gemma likes. Check your phone.)"
+    call minor_clue("gemma", "freebie")
 
     hide gemma
     with dissolve

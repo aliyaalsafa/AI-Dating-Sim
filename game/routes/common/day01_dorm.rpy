@@ -13,8 +13,9 @@ label day01_dorm:
     "Your phone buzzes. A post from an account called [XENIA_HANDLE]."
 
     # PLACEHOLDER: @x_unfiltered post
-    $ post("Day 1 of the human experiment: Grace gave them THE QUIZ. Somebody check on them.")
+    $ post("Day 1 of the human experiment: Grace gave %s THE QUIZ. Somebody check on %s." % (pn.them, pn.them))
 
+    call mystery_hook
     "(Tap Phone at the top right any time to see your contacts, the campus feed and achievements.)"
     "Tomorrow, the campus is yours to explore."
     return

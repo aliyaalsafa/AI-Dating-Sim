@@ -34,7 +34,10 @@ screen gala_choice():
         null height 14
         hbox:
             xalign 0.5
+            spacing 20
             use pill_button("Go alone", Return(None), "white", 30)
+            if mystery_on() and sim_clues.solved(gs, MYSTERY["order"]):
+                use pill_button("Tell everyone what you found", Return(sim_end.TRUTH_CHOICE), "gold", 30)
 
 
 label gala:
@@ -82,7 +85,14 @@ label gala:
     while gala_pick == "unset":
         call screen gala_choice
         $ gala_pick_tmp = _return
-        if gala_pick_tmp is None:
+        if gala_pick_tmp == sim_end.TRUTH_CHOICE:
+            menu:
+                "Skip the invitations and reveal the truth?"
+                "Yes. Tell them.":
+                    $ gala_pick = gala_pick_tmp
+                "Wait, let me think again.":
+                    pass
+        elif gala_pick_tmp is None:
             menu:
                 "Go to the gala alone?"
                 "Yes, go alone.":

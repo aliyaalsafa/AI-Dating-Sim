@@ -16,10 +16,19 @@ def test_slots_cycle_and_day_advances(gs):
     assert s.day_log == []          # recap cleared for the new day
 
 
-def test_gala_day(gs):
+def test_gala_is_the_last_evening(gs):
     s = gs
     s.day = R.semester_days
-    assert calendar.is_gala_day(s)
+    s.slot = 1
+    assert not calendar.is_gala_day(s)          # last day's afternoon is still playable
+    s = calendar.advance(s)
+    assert calendar.is_gala_day(s)              # its evening is the gala
+
+
+def test_short_semester_slot_count():
+    """Days 1..N-1 have 3 slots each, the last day has the slots before the gala."""
+    assert R.semester_days == 7
+    assert (R.semester_days - 1) * 3 + R.gala_slot == 20
 
 
 LOCS = {

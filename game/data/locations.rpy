@@ -22,7 +22,7 @@ init -3 python:
         },
         "robotics_lab": {
             "name": "Robotics Lab",
-            "icon": "⚙",
+            "icon": "⬢",
             "color": "#dde8fb",
             "schedule": {"morning": ["gemma", "shen"], "afternoon": ["gemma"], "evening": ["gemma"]},
         },
@@ -40,7 +40,7 @@ init -3 python:
         },
         "cafeteria": {
             "name": "Cafeteria",
-            "icon": "☕",
+            "icon": "❖",
             "color": "#fff1d6",
             "schedule": {"morning": [], "afternoon": ["xenia"], "evening": []},
         },
@@ -54,7 +54,7 @@ init -3 python:
         },
         "campus_store": {
             "name": "Campus Store",
-            "icon": "♥",
+            "icon": "❥",
             "color": "#f3e8ff",
             "kind": "shop",
             "schedule": {},

@@ -31,6 +31,7 @@ label claudia_opens_up:
     $ set_flag("claudia.opened_up")
     $ reveal("claudia", "likes")
     "(You learned what Claudia likes. Check your phone.)"
+    call minor_clue("claudia", "freebie")
 
     hide claudia
     with dissolve

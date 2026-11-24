@@ -7,6 +7,7 @@ init -3 python:
     ENDINGS = {
         "solo":   {"title": "Party of One",          "label": "ending_solo",   "secret": False},
         "rivals": {"title": "Rivals Take the Floor", "label": "ending_rivals", "secret": True},
+        "truth":  {"title": "The Lovelace Question", "label": "ending_truth",  "secret": True},
     }
     ENDING_KINDS = [("good", "Good Ending"), ("sweet", "Sweet Ending"), ("friends", "Friends Ending")]
     for _cid in ["grace", "xenia", "claudia", "gemma", "shen"]:

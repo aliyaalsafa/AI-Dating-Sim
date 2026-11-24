@@ -26,7 +26,11 @@ screen phone(tab="contacts"):
             hbox:
                 spacing 8
                 xalign 0.5
-                for t, label_ in [("contacts", "Contacts"), ("feed", "Feed"), ("achievements", "Awards")]:
+                $ tabs = [("contacts", "Contacts"), ("feed", "Feed")]
+                if mystery_on() and has_flag(sim_clues.STARTED_FLAG):
+                    $ tabs.append(("case", "Case"))
+                $ tabs.append(("achievements", "Awards"))
+                for t, label_ in tabs:
                     button:
                         background ui_pill("pink" if current == t else "plum")
                         hover_background ui_pill("violet")
@@ -51,6 +55,8 @@ screen phone(tab="contacts"):
                             use phone_contacts
                         elif current == "feed":
                             use phone_feed
+                        elif current == "case":
+                            use phone_case
                         else:
                             use phone_achievements
 
@@ -114,3 +120,45 @@ screen phone_feed():
 
 screen phone_achievements():
     use achievement_rows
+
+
+## Mystery board: the premise, then per character her major clue and the two
+## minor clues about her (who gives them, and how).
+screen phone_case():
+    $ found, total = mystery_progress()
+    $ subs = sim_clues.minor_subjects(MYSTERY["order"])
+    $ minors = sim_clues.known_minors(gs)
+    $ majors = sim_clues.known_majors(gs)
+    text MYSTERY["title"] size 32 bold True color PHONE_INK
+    text MYSTERY["premise"] size 24 color THEME_MUTED italic True
+    text "Pieces found: %d / %d" % (found, total) size 26 bold True color THEME_HOT
+    if found == total:
+        frame:
+            xfill True
+            background ui_panel("panel_dark")
+            padding (26, 18)
+            text MYSTERY["solution"] size 24 color "#ffffff"
+    for cid in MYSTERY["order"]:
+        $ major = MYSTERY["major"][cid]
+        frame:
+            xfill True
+            padding (24, 16)
+            background ui_card("card_hover" if cid in majors else "card")
+            vbox:
+                spacing 6
+                hbox:
+                    spacing 12
+                    use char_chip(cid, 24)
+                    text (major["name"] if cid in majors else "Major clue: ???") size 24 bold True color PHONE_INK yalign 0.5
+                if cid in majors:
+                    text major["text"] size 22 color PHONE_INK italic True
+                for src in MYSTERY["order"]:
+                    for which in ("freebie", "earned"):
+                        if subs[src][which] == cid:
+                            if (src, cid) in minors:
+                                text "• " + MYSTERY["minor"][src][which]["text"] size 22 color PHONE_INK
+                            else:
+                                text "• ??? (%s, %s)" % (cname(src), "when she opens up" if which == "freebie" else "after her favor") size 22 color "#9a8f98"
+                if cid not in majors:
+                    $ ready = sim_clues.can_craft(gs, MYSTERY["order"], cid)
+                    text ("You know enough to ask her the right way." if ready else "Find both hints to ask the right way, or force it out of her.") size 20 color (THEME_HOT if ready else "#9a8f98") italic True

@@ -28,6 +28,7 @@ label grace_opens_up:
     $ set_flag("grace.opened_up")
     $ reveal("grace", "likes")
     "(You learned what Grace likes. Check your phone.)"
+    call minor_clue("grace", "freebie")
 
     hide grace
     with dissolve

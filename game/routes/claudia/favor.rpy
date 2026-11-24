@@ -96,6 +96,7 @@ label claudia_favor_report:
     $ gs = sim_fav.advance_step(gs, "claudia", CAST["claudia"]["favor"]["steps"])
     $ bump("claudia", sim_aff.scale_gain(10, CAST["claudia"]["difficulty"]), "favor_done")
     $ grant("first_favor")
+    call minor_clue("claudia", "earned")
     claudia "I'm going to write you a thank-you note now. I'm sorry in advance. It's going to have a postscript."
 
     hide claudia

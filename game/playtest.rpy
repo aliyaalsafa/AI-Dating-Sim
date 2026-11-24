@@ -28,6 +28,12 @@ init python:
         s.seen_today = set()
         store.gs = s
 
+    def pt_all_clues():
+        """Know every minor clue (to test crafted prompts)."""
+        pairs = [(src, MYSTERY["minor"][src][w]["about"]) for src in MYSTERY["order"] for w in ("freebie", "earned")]
+        store.gs = sim_clues.seed_minors(store.gs, pairs)
+        renpy.notify("All minor clues known")
+
     def pt_money(n):
         s = sim_state.evolve(store.gs)
         s.money += n
@@ -58,9 +64,10 @@ screen playtest_tools():
             null height 10
             hbox:
                 spacing 24
-                textbutton "Skip 5 days" action Function(pt_skip_days, 5)
+                textbutton "Skip 2 days" action Function(pt_skip_days, 2)
                 textbutton "Go to gala eve" action Function(pt_to_gala_eve)
                 textbutton "+100 cash" action Function(pt_money, 100)
+                textbutton "All clues" action Function(pt_all_clues)
             textbutton "Close" xalign 0.5 action Hide("playtest_tools")
 
 

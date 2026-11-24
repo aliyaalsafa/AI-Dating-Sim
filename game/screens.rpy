@@ -804,6 +804,12 @@ screen preferences():
                     for _sp in ACCESS_LINE_SPACINGS:
                         textbutton "%.1fx" % _sp action Preference("font line spacing", _sp)
 
+                if not main_menu:
+                    vbox:
+                        style_prefix "radio"
+                        label _("Pronouns")
+                        textbutton pn.label() action Show("pronoun_picker", in_menu=True)
+
                 vbox:
                     style_prefix "check"
                     label _("Assist")

@@ -149,6 +149,7 @@ label gemma_favor_finish:
     $ gs = sim_fav.advance_step(gs, "gemma", CAST["gemma"]["favor"]["steps"])
     $ bump("gemma", sim_aff.scale_gain(10, CAST["gemma"]["difficulty"]), "favor_done")
     $ grant("first_favor")
+    call minor_clue("gemma", "earned")
     gemma "Thank you. I didn't look that up. I just know it. Thank you."
 
     hide gemma

@@ -18,6 +18,7 @@ label day01_prologue:
     grace "Before we start, what should I call you?"
 
     $ player_name = renpy.input("What's your name?", length=20).strip() or "You"
+    call choose_pronouns
     $ set_flag("met_grace")
 
     grace "[player_name]! Great name. Honestly? One of the best names I've heard today."

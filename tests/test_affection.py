@@ -76,3 +76,13 @@ def test_hearts(gs):
     assert affection.hearts(gs, "grace") == 0
     s = affection.add_affection(gs, "grace", 90)
     assert affection.hearts(s, "grace") == 5
+
+
+def test_gain_multiplier_applies_to_gains_only(cast):
+    from dataclasses import replace
+    from sim.affection import choice_delta
+    from sim.rules import DEFAULT_RULES
+    double = replace(DEFAULT_RULES, gain_multiplier=2.0)
+    one = replace(DEFAULT_RULES, gain_multiplier=1.0)
+    assert choice_delta(cast, "gemma", 3, None, double) == 2 * choice_delta(cast, "gemma", 3, None, one)
+    assert choice_delta(cast, "gemma", -4, None, double) == choice_delta(cast, "gemma", -4, None, one) == -4

@@ -26,7 +26,8 @@ def choice_delta(cast: dict, char_id: str, base: int, style: str | None = None,
                  rules: Rules = DEFAULT_RULES) -> int:
     """The affection change a choice would cause, before clamping."""
     raw = base + affinity(cast, char_id, style) * rules.affinity_weight
-    return scale_gain(raw, cast[char_id]["difficulty"])
+    gain = scale_gain(raw, cast[char_id]["difficulty"])
+    return round_half_up(gain * rules.gain_multiplier) if gain > 0 else gain
 
 
 def add_affection(state: GameState, char_id: str, delta: int, reason: str = "",

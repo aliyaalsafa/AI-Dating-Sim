@@ -58,7 +58,7 @@ def test_ending_achievements(cast):
 
 def test_endings_progress_ignores_unknown_ids(cast):
     seen, total = endings_progress(cast.keys(), {"solo", "good_grace", "not_an_ending"})
-    assert (seen, total) == (2, 17)
+    assert (seen, total) == (2, 18)
 
 
 def test_every_earnable_id_is_registered(data, gs, cast):
@@ -68,6 +68,8 @@ def test_every_earnable_id_is_registered(data, gs, cast):
         s.chars[c].favor_status = "done"
         s.chars[c].dealbreaker_hits = 2
         s.chars[c].romance_locked = True
+        s.flags |= {"mystery.%s.jailbreak" % c, "mystery.%s.crafted" % c}
+    s.layers["clues"] = {"minor": {("shen", "grace")}, "major": set(cast)}
     ids = earned(s, cast.keys(), set(all_ending_ids(cast.keys())))
     assert ids <= set(data["ACHIEVEMENTS"])
     assert len(ids) == len(data["ACHIEVEMENTS"]) - 3   # first_day, first_gift, loved_gift are granted by scenes

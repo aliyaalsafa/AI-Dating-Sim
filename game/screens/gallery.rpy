@@ -37,6 +37,8 @@ screen endings_gallery():
                 spacing 16
                 use gallery_card("solo", ENDINGS["solo"]["title"])
                 use gallery_card("rivals", ENDINGS["rivals"]["title"])
+                if RULES.clue_layer:
+                    use gallery_card("truth", ENDINGS["truth"]["title"])
 
 
 screen gallery_card(eid, label_text):

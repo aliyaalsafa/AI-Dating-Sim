@@ -78,6 +78,7 @@ label grace_favor_report:
     $ gs = sim_fav.advance_step(gs, "grace", CAST["grace"]["favor"]["steps"])
     $ bump("grace", sim_aff.scale_gain(10, CAST["grace"]["difficulty"]), "favor_done")
     $ grant("first_favor")
+    call minor_clue("grace", "earned")
     grace "Thank you. Really. Want me to— no. I'm not offering anything. I'm just saying thank you."
 
     hide grace

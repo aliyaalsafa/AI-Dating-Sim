@@ -34,6 +34,7 @@ label xenia_opens_up:
     $ set_flag("xenia.opened_up")
     $ reveal("xenia", "likes")
     "(You learned what Xenia likes. Check your phone.)"
+    call minor_clue("xenia", "freebie")
 
     hide xenia
     with dissolve

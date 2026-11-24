@@ -14,7 +14,9 @@ def is_evening(state: GameState) -> bool:
 
 
 def is_gala_day(state: GameState, rules: Rules = DEFAULT_RULES) -> bool:
-    return state.day >= rules.semester_days
+    """True once the gala slot (evening of the last day, by default) arrives."""
+    return state.day > rules.semester_days or (
+        state.day == rules.semester_days and state.slot >= rules.gala_slot)
 
 
 def advance(state: GameState, rules: Rules = DEFAULT_RULES) -> GameState:

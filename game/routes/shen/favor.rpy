@@ -127,6 +127,7 @@ label shen_favor_report:
     $ gs = sim_fav.advance_step(gs, "shen", CAST["shen"]["favor"]["steps"])
     $ bump("shen", sim_aff.scale_gain(10, CAST["shen"]["difficulty"]), "favor_done")
     $ grant("first_favor")
+    call minor_clue("shen", "earned")
     shen "You did that fairly. No shortcuts. I noticed."
     shen "Thank you. That's the whole sentence. It doesn't need more."
 

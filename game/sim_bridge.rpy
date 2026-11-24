@@ -8,6 +8,7 @@ init -2 python:
     from sim import achievements as sim_ach
     from sim import affection as sim_aff
     from sim import calendar as sim_cal
+    from sim import clues as sim_clues
     from sim import endings as sim_end
     from sim import events as sim_ev
     from sim import favors as sim_fav

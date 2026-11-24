@@ -97,3 +97,17 @@ def test_every_achievement_can_be_granted(data):
 def test_gallery_lists_every_ending(data):
     from sim.endings import all_ending_ids
     assert set(data["ENDINGS"]) == set(all_ending_ids(data["CAST"].keys()))
+
+
+def test_every_route_hands_out_its_minor_clues(data):
+    """Freebie when she opens up, earned when her favor is done (CLAUDE.md §6.7)."""
+    for cid in data["CAST"]:
+        opens = (GAME / "routes" / cid / "opens_up.rpy").read_text(encoding="utf-8")
+        favor = (GAME / "routes" / cid / "favor.rpy").read_text(encoding="utf-8")
+        assert 'call minor_clue("%s", "freebie")' % cid in opens, cid
+        assert 'call minor_clue("%s", "earned")' % cid in favor, cid
+
+
+def test_mystery_starts_on_day_one():
+    dorm = (GAME / "routes" / "common" / "day01_dorm.rpy").read_text(encoding="utf-8")
+    assert "call mystery_hook" in dorm

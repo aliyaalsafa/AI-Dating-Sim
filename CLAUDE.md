@@ -238,3 +238,4 @@ Implement this as a pure function, `evaluate_ending(state, gala_choice) -> Endin
 - `game/gui/` images come from the launcher's `generate_gui` **plus** the `gui_images` command. Lint does not catch missing GUI images; they only fail at runtime.
 - Release builds: `scripts/build_release.sh` → `dists/`. Tag `v<config.version>` to publish via `.github/workflows/release.yml`. See RELEASE.md.
 - The Dev button is automatic: it's on from the SDK or when `game/playtest_enabled.txt` exists (created only by pages.yml). Never commit that file.
+- Owner decisions (2026-11-24): title is Lovelace Academy; semester is 7 days (gala = day 7 evening); the player chooses pronouns; the §6.7 clue layer is ON (mystery side quests + secret ending "truth"). See DECISIONS.md #46–53.

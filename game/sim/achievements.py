@@ -6,7 +6,8 @@ grants whatever is new. Achievements that depend on a single moment (giving a
 gift) are still granted directly from the scene that causes them.
 """
 
-from .endings import RIVALS, SOLO, all_ending_ids
+from . import clues
+from .endings import RIVALS, SOLO, TRUTH, all_ending_ids
 from .state import GameState
 
 
@@ -38,6 +39,12 @@ def earned(state: GameState | None, cast_ids, endings_seen=()) -> set:
             got.add("hit_a_nerve")
         if any(chars[c].romance_locked for c in cast_ids):
             got.add("friend_zoned")
+        if clues.known_minors(state) or clues.known_majors(state):
+            got.add("first_clue")
+        if any("mystery.%s.jailbreak" % c in flags for c in cast_ids):
+            got.add("jailbreak")
+        if any("mystery.%s.crafted" % c in flags for c in cast_ids):
+            got.add("prompt_engineer")
 
     if seen:
         got.add("first_ending")
@@ -47,6 +54,8 @@ def earned(state: GameState | None, cast_ids, endings_seen=()) -> set:
         got.add("rivals_ending")
     if SOLO in seen:
         got.add("solo_ending")
+    if TRUTH in seen:
+        got.add("truth_ending")
     if cast_ids and all(f"good_{c}" in seen for c in cast_ids):
         got.add("all_good")
     if cast_ids and set(all_ending_ids(cast_ids)) <= seen:

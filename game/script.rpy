@@ -1,10 +1,11 @@
 ﻿## Entry point and main loop (CLAUDE.md §5).
 ##
 ## Each slot: a scripted ("forced") scene if one is due, otherwise the campus
-## map. Evenings end with the phone recap. Day `semester_days` is the gala.
+## map. Evenings end with the phone recap. The last day's evening is the gala.
 
 label start:
     $ gs = sim_state.new_game(CAST.keys(), RULES)
+    $ mystery_seed_new_game()
     jump day_loop
 
 
@@ -31,9 +32,13 @@ label day_loop:
                 $ scene_music(loc)
                 call screen gift_shop
             else:
-                $ ev = sim_ev.pick_event(EVENTS, gs, LOCATIONS, loc)
+                call mystery_offer(loc)
+                $ mtarget = _return
+                $ ev = None if mtarget else sim_ev.pick_event(EVENTS, gs, LOCATIONS, loc)
                 $ scene_music(loc, ev)
-                if ev is not None:
+                if mtarget:
+                    call mystery_confront(mtarget)
+                elif ev is not None:
                     $ gs = sim_ev.mark_seen(gs, ev)
                     call expression ev["label"] pass (*ev.get("args", []))
                 elif sim_ev.present(LOCATIONS, loc, gs):
