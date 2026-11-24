@@ -24,7 +24,7 @@ init -3 python:
                 "liked": ["rainbow_folders", "bouquet"],
                 "disliked": ["mystery_box"],
             },
-            # PLACEHOLDER: favor content is TBD (CLAUDE.md §6.3). Steps: run the meeting, report back.
+            # PLACEHOLDER: favor content is TBD (CLAUDE.md §6.3); steps match routes/<id>/favor.rpy. Steps: run the meeting, report back.
             "favor": {"steps": 2, "desc": "Run her Debate Club meeting on the quad one morning, so she can take an hour for herself."},
         },
         "xenia": {
@@ -45,8 +45,8 @@ init -3 python:
                 "liked": ["meme_poster", "instant_noodles"],
                 "disliked": ["school_spirit_scarf"],
             },
-            # PLACEHOLDER: favor content is TBD (CLAUDE.md §6.3).
-            "favor": {"steps": 1, "desc": "Smuggle a replacement eyepiece onto the roof past campus security."},
+            # PLACEHOLDER: favor content is TBD (CLAUDE.md §6.3); steps match routes/<id>/favor.rpy.
+            "favor": {"steps": 2, "desc": "Pick up a spare telescope eyepiece from Gemma in the robotics lab, then get it up to the roof one night without campus security noticing."},
         },
         "claudia": {
             "difficulty": 8,
@@ -66,8 +66,8 @@ init -3 python:
                 "liked": ["tea_tin", "bouquet"],
                 "disliked": ["gossip_magazine"],
             },
-            # PLACEHOLDER: favor content is TBD (CLAUDE.md §6.3).
-            "favor": {"steps": 1, "desc": "Deliver one of her never-sent letters, and don't read it on the way."},
+            # PLACEHOLDER: favor content is TBD (CLAUDE.md §6.3); steps match routes/<id>/favor.rpy.
+            "favor": {"steps": 2, "desc": "Deliver one of her never-sent letters to Xenia in the cafeteria one afternoon, without reading it, then tell Claudia it's done."},
         },
         "gemma": {
             "difficulty": 5,
@@ -87,8 +87,8 @@ init -3 python:
                 "liked": ["rainbow_folders", "color_planner"],
                 "disliked": ["retro_bard_mug"],
             },
-            # PLACEHOLDER: favor content is TBD (CLAUDE.md §6.3).
-            "favor": {"steps": 1, "desc": "Help her actually finish one project, start to end, no new ones allowed."},
+            # PLACEHOLDER: favor content is TBD (CLAUDE.md §6.3); steps match routes/<id>/favor.rpy.
+            "favor": {"steps": 3, "desc": "Help her finish one project: pick it with her in the lab, get Shen to review it in the library, then finish it together."},
         },
         "shen": {
             "difficulty": 7,
@@ -108,7 +108,7 @@ init -3 python:
                 "liked": ["instant_noodles", "whale_keychain"],
                 "disliked": ["designer_pen"],
             },
-            # PLACEHOLDER: favor content is TBD (CLAUDE.md §6.3).
-            "favor": {"steps": 1, "desc": "Find out who started the rumor that she copied Grace's notes, fairly."},
+            # PLACEHOLDER: favor content is TBD (CLAUDE.md §6.3); steps match routes/<id>/favor.rpy.
+            "favor": {"steps": 3, "desc": "Find out, fairly, where the rumor that she copied Grace's notes came from: ask Claudia, check with Gemma in the lab, then report back."},
         },
     }

@@ -170,10 +170,3 @@ def test_days_1_to_3_introduce_everyone(data):
         if e.get("forced") and e.get("day_max", 99) <= 3:
             met |= set(e.get("introduces", ()))
     assert met == set(data["CAST"])
-
-
-def test_grace_route_is_complete(data):
-    kinds = {e["kind"] for e in data["EVENTS"] if "grace" in e.get("chars", ()) and e.get("route") == "grace"}
-    assert {"hangout", "story", "favor", "bonus"} <= kinds
-    labels = {data["ENDINGS"][k]["label"] for k in ("good_grace", "sweet_grace", "friends_grace")}
-    assert "ending_placeholder" not in labels

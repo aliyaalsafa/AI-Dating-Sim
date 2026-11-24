@@ -27,3 +27,7 @@ define shen    = Character(CAST_NAMES["shen"]["name"],    color=SIGNATURE_COLORS
 default player_name = "You"
 
 define CHAR = {"grace": grace, "xenia": xenia, "claudia": claudia, "gemma": gemma, "shen": shen}
+
+# Cameos: Claudia's younger sisters.
+define sonnet = Character(CAMEO_NAMES["sonnet"]["name"], color="#c98a5a")
+define haiku  = Character(CAMEO_NAMES["haiku"]["name"],  color="#d9a37a")

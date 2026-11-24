@@ -80,10 +80,6 @@ init -2 python:
         s.feed.append({"day": s.day, "text": text})
         store.gs = s
 
-    def line(cid, key, **fmt):
-        """Say a placeholder line from HANGOUT_LINES (routes/common/hangouts.rpy)."""
-        renpy.say(CHAR[cid], HANGOUT_LINES[cid][key].format(name=store.player_name, **fmt))
-
     def buy_gift(gid):
         store.gs = sim_gifts.buy(store.gs, SHOP, gid)
         renpy.notify("Bought: " + SHOP[gid]["name"])

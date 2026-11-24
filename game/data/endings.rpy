@@ -5,8 +5,8 @@
 init -3 python:
 
     ENDINGS = {
-        "solo":   {"title": "Party of One",          "label": "ending_placeholder"},
-        "rivals": {"title": "Rivals Take the Floor", "label": "ending_placeholder"},
+        "solo":   {"title": "Party of One",          "label": "ending_solo"},
+        "rivals": {"title": "Rivals Take the Floor", "label": "ending_rivals"},
     }
     for _cid in ["grace", "xenia", "claudia", "gemma", "shen"]:
         for _kind, _title in [("good", "Good Ending"), ("sweet", "Sweet Ending"), ("friends", "Friends Ending")]:
@@ -16,7 +16,7 @@ init -3 python:
                 "label": "ending_placeholder",   # replaced per route below as routes land
             }
 
-    # Routes with written endings (M2: Grace).
-    for _cid in ["grace"]:
+    # Routes with written endings.
+    for _cid in ["grace", "xenia", "claudia", "gemma", "shen"]:
         for _kind in ["good", "sweet", "friends"]:
             ENDINGS["%s_%s" % (_kind, _cid)]["label"] = "ending_%s_%s" % (_kind, _cid)

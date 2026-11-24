@@ -31,69 +31,96 @@ init -3 python:
     ]
 
     # ---------------------------------------------------------------------
-    # Grace's route (routes/grace/)
+    # Character routes (routes/<id>/). Every route has the same beats:
+    #   hangout (daily) -> opens up at 25 -> favor offer at 50 -> favor steps
+    #   -> bonus date at 75 -> confession at 90 (after the bonus date).
+    # ---------------------------------------------------------------------
+    ROUTES = {
+        "grace": {
+            "hangouts": ["council_office"],
+            "home": "council_office",
+            "date_slots": ["evening"],
+            # Favor steps, in order: (event suffix, location, characters who must be there, slots)
+            "favor_steps": [
+                ("debate", "quad", [], ["morning"]),
+                ("report", "council_office", ["grace"], None),
+            ],
+        },
+        "xenia": {
+            "hangouts": ["cafeteria", "observatory_roof"],
+            "home": "observatory_roof",
+            "date_slots": ["evening"],
+            "favor_steps": [
+                ("pickup", "robotics_lab", ["gemma"], None),
+                ("deliver", "observatory_roof", ["xenia"], None),
+            ],
+        },
+        "claudia": {
+            "hangouts": ["quad", "claudia_library"],
+            "home": "claudia_library",
+            "date_slots": ["evening"],
+            "favor_steps": [
+                ("deliver", "cafeteria", ["xenia"], None),
+                ("report", "claudia_library", ["claudia"], None),
+            ],
+        },
+        "gemma": {
+            "hangouts": ["robotics_lab"],
+            "home": "robotics_lab",
+            "date_slots": ["evening"],
+            "favor_steps": [
+                ("pick", "robotics_lab", ["gemma"], None),
+                ("review", "library_3f", ["shen"], None),
+                ("finish", "robotics_lab", ["gemma"], None),
+            ],
+        },
+        "shen": {
+            "hangouts": ["library_3f", "robotics_lab"],
+            "home": "library_3f",
+            "date_slots": ["evening"],
+            "favor_steps": [
+                ("claudia", "claudia_library", ["claudia"], None),
+                ("wiki", "robotics_lab", ["gemma"], None),
+                ("report", "library_3f", ["shen"], None),
+            ],
+        },
+    }
+
+    for _cid, _r in ROUTES.items():
+        for _loc in _r["hangouts"]:
+            EVENTS.append({"id": "%s_hangout_%s" % (_cid, _loc), "label": "%s_hangout" % _cid,
+                           "kind": "hangout", "route": _cid, "location": _loc, "chars": [_cid]})
+        _home = _r["home"]
+        EVENTS += [
+            {"id": "%s_opens_up" % _cid, "label": "%s_opens_up" % _cid, "kind": "story", "route": _cid,
+             "location": _home, "chars": [_cid], "min_affection": {_cid: 25}},
+            {"id": "%s_favor_offer" % _cid, "label": "%s_favor_offer" % _cid, "kind": "story", "route": _cid,
+             "location": _home, "chars": [_cid], "min_affection": {_cid: 50},
+             "requires_flags": ["%s.opened_up" % _cid], "favor_status": {_cid: "not_offered"}},
+            {"id": "%s_bonus_date" % _cid, "label": "%s_bonus_date" % _cid, "kind": "bonus", "route": _cid,
+             "location": _home, "chars": [_cid], "slots": _r["date_slots"], "min_affection": {_cid: 75}},
+            {"id": "%s_confession" % _cid, "label": "%s_confession" % _cid, "kind": "story", "route": _cid,
+             "location": _home, "chars": [_cid], "slots": _r["date_slots"], "min_affection": {_cid: 90},
+             "requires_flags": ["%s.bonus_date_done" % _cid]},
+        ]
+        for _i, (_suffix, _loc, _chars, _slots) in enumerate(_r["favor_steps"]):
+            _ev = {"id": "%s_favor_%s" % (_cid, _suffix), "label": "%s_favor_%s" % (_cid, _suffix),
+                   "kind": "favor", "route": _cid, "location": _loc, "chars": list(_chars),
+                   "favor_step": {_cid: _i}, "once": False}
+            if _slots:
+                _ev["slots"] = _slots
+            EVENTS.append(_ev)
+
+    # ---------------------------------------------------------------------
+    # Group scenes
     # ---------------------------------------------------------------------
     EVENTS += [
-        {"id": "grace_hangout", "label": "grace_hangout", "kind": "hangout", "route": "grace",
-         "location": "council_office", "chars": ["grace"]},
-        {"id": "grace_opens_up", "label": "grace_opens_up", "kind": "story", "route": "grace",
-         "location": "council_office", "chars": ["grace"], "min_affection": {"grace": 25}},
-        {"id": "grace_favor_offer", "label": "grace_favor_offer", "kind": "story", "route": "grace",
-         "location": "council_office", "chars": ["grace"], "min_affection": {"grace": 50},
-         "requires_flags": ["grace.opened_up"], "favor_status": {"grace": "not_offered"}},
-        # Favor step 1: run her Debate Club meeting on the quad (any morning).
-        {"id": "grace_favor_debate", "label": "grace_favor_debate", "kind": "favor", "route": "grace",
-         "location": "quad", "chars": [], "slots": ["morning"], "favor_step": {"grace": 0}, "once": False},
-        # Favor step 2: report back to her.
-        {"id": "grace_favor_report", "label": "grace_favor_report", "kind": "favor", "route": "grace",
-         "location": "council_office", "chars": ["grace"], "favor_step": {"grace": 1}, "once": False},
-        {"id": "grace_bonus_date", "label": "grace_bonus_date", "kind": "bonus", "route": "grace",
-         "location": "council_office", "chars": ["grace"], "slots": ["evening"],
-         "min_affection": {"grace": 75}},
-        {"id": "grace_confession", "label": "grace_confession", "kind": "story", "route": "grace",
-         "location": "council_office", "chars": ["grace"], "slots": ["evening"],
-         "min_affection": {"grace": 90}, "requires_flags": ["grace.bonus_date_done"]},
+        {"id": "group_lab_partners", "label": "group_lab_partners", "kind": "group",
+         "location": "robotics_lab", "chars": ["gemma", "shen"], "slots": ["morning"], "day_min": 4},
+        # Rivals (secret ending setup): Grace shows up at Shen's library table one evening.
+        # Lower priority than Shen's own story beats so her route isn't blocked.
+        {"id": "rivals_study_night", "label": "rivals_study_night", "kind": "group", "route": "rivals",
+         "location": "library_3f", "chars": ["shen"], "slots": ["evening"], "priority": -1,
+         "min_affection": {"grace": 60, "shen": 60},
+         "requires_flags": ["grace.opened_up", "shen.opened_up"]},
     ]
-
-    # ---------------------------------------------------------------------
-    # Other routes: generic placeholder hangouts until M3.
-    # ---------------------------------------------------------------------
-    for _cid, _locs in {
-        "xenia":   ["cafeteria", "observatory_roof"],
-        "claudia": ["quad", "claudia_library"],
-        "gemma":   ["robotics_lab"],
-        "shen":    ["library_3f", "robotics_lab"],
-    }.items():
-        for _loc in _locs:
-            EVENTS.append({
-                "id": "hangout_%s_%s" % (_cid, _loc),
-                "label": "generic_hangout",
-                "args": [_cid],
-                "kind": "hangout",
-                "location": _loc,
-                "chars": [_cid],
-            })
-
-    for _cid, _loc in [("xenia", "observatory_roof"), ("claudia", "claudia_library"),
-                       ("gemma", "robotics_lab"), ("shen", "library_3f")]:
-        EVENTS.append({
-            "id": "favor_%s" % _cid,
-            "label": "generic_favor_step",
-            "args": [_cid],
-            "kind": "favor",
-            "location": _loc,
-            "chars": [_cid],
-            "favor_status": {_cid: "active"},
-            "once": False,
-        })
-
-    EVENTS.append({
-        "id": "group_lab_partners",
-        "label": "group_lab_partners",
-        "args": [],
-        "kind": "group",
-        "location": "robotics_lab",
-        "chars": ["gemma", "shen"],
-        "slots": ["morning"],
-        "day_min": 4,
-    })
