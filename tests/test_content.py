@@ -78,3 +78,22 @@ def test_no_model_names_in_dialogue(data):
                 continue
             for m in models:
                 assert m not in line, f"{path.name}:{n} mentions {m}"
+
+
+def test_every_character_has_a_gala_greeting(data):
+    labels = defined_labels()
+    for cid in data["CAST"]:
+        assert "gala_greeting_" + cid in labels, cid
+
+
+def test_every_achievement_can_be_granted(data):
+    """Each achievement is either derived in sim/achievements.py or granted by a scene."""
+    sim_src = (GAME / "sim" / "achievements.py").read_text(encoding="utf-8")
+    rpy = "\n".join(p.read_text(encoding="utf-8") for p in GAME.rglob("*.rpy"))
+    for aid in data["ACHIEVEMENTS"]:
+        assert ('"%s"' % aid in sim_src) or ('grant("%s")' % aid in rpy), aid
+
+
+def test_gallery_lists_every_ending(data):
+    from sim.endings import all_ending_ids
+    assert set(data["ENDINGS"]) == set(all_ending_ids(data["CAST"].keys()))

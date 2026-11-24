@@ -39,6 +39,8 @@ label day_loop:
                 else:
                     "Nobody's around. You enjoy a quiet moment to yourself."
 
+        $ check_achievements()
+
         if sim_cal.is_evening(gs):
             call screen day_recap
             if gs.day == 1:

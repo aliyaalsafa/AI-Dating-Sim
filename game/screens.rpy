@@ -320,6 +320,10 @@ screen navigation():
 
         textbutton _("Preferences") action ShowMenu("preferences")
 
+        textbutton _("Endings") action ShowMenu("endings_gallery")
+
+        textbutton _("Achievements") action ShowMenu("achievements_gallery")
+
         if _in_replay:
 
             textbutton _("End Replay") action EndReplay(confirm=True)

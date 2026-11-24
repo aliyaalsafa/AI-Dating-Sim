@@ -113,12 +113,4 @@ screen phone_feed():
 
 
 screen phone_achievements():
-    for aid, a in ACHIEVEMENTS.items():
-        $ got = aid in persistent.achievements
-        frame:
-            xfill True
-            padding (18, 14)
-            background Solid("#ff5fa233" if got else "#00000010")
-            vbox:
-                text (a["name"] if got else "???") size 28 bold True color PHONE_INK
-                text (a["desc"] if got else "Locked") size 22 color "#8a7f88"
+    use achievement_rows

@@ -13,7 +13,7 @@ sys.path.insert(0, GAME_DIR)
 from sim.rules import DEFAULT_RULES  # noqa: E402
 from sim.state import new_game  # noqa: E402
 
-DATA_FILES = ["data/cast.rpy", "data/locations.rpy", "data/events.rpy", "data/gifts.rpy", "data/endings.rpy"]
+DATA_FILES = ["data/cast.rpy", "data/locations.rpy", "data/events.rpy", "data/gifts.rpy", "data/endings.rpy", "data/achievements.rpy"]
 
 
 def load_rpy_python(*relpaths):

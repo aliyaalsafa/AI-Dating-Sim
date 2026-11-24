@@ -5,6 +5,7 @@
 init -2 python:
 
     import sim
+    from sim import achievements as sim_ach
     from sim import affection as sim_aff
     from sim import calendar as sim_cal
     from sim import endings as sim_end
@@ -89,6 +90,18 @@ init -2 python:
             persistent.achievements.add(aid)
             achievement.grant(aid)
             renpy.notify("Achievement: " + ACHIEVEMENTS[aid]["name"])
+
+    def check_achievements():
+        """Grant every state-derived achievement that now holds (game/sim/achievements.py)."""
+        for aid in sorted(sim_ach.earned(store.gs, CAST.keys(), persistent.endings_seen)):
+            if aid in ACHIEVEMENTS:
+                grant(aid)
+
+    def endings_progress():
+        return sim_ach.endings_progress(CAST.keys(), persistent.endings_seen)
+
+    for _aid in ACHIEVEMENTS:
+        achievement.register(_aid)
 
     def location_bg(lid):
         loc = LOCATIONS[lid]
