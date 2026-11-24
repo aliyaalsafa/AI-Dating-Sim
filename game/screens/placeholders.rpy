@@ -8,10 +8,10 @@
 
 init -1 python:
 
-    def placeholder_bg(label, color="#ffd6e8"):
+    def placeholder_bg(label, color="#ffd6e8", text_color="#3a164099"):
         return Fixed(
             Solid(color),
-            Text(label, size=64, color="#3a164099", bold=True, xalign=0.5, yalign=0.12),
+            Text(label, size=64, color=text_color, bold=True, xalign=0.5, yalign=0.12),
         )
 
     def placeholder_sprite(char_id):

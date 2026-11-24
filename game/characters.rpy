@@ -25,3 +25,5 @@ define gemma   = Character(CAST_NAMES["gemma"]["name"],   color=SIGNATURE_COLORS
 define shen    = Character(CAST_NAMES["shen"]["name"],    color=SIGNATURE_COLORS["shen"]["name"])
 
 default player_name = "You"
+
+define CHAR = {"grace": grace, "xenia": xenia, "claudia": claudia, "gemma": gemma, "shen": shen}

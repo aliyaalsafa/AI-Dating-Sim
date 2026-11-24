@@ -1,4 +1,4 @@
-﻿################################################################################
+################################################################################
 ## Initialization
 ################################################################################
 
@@ -209,7 +209,16 @@ screen choice(items):
 
     vbox:
         for i in items:
-            textbutton i.caption action i.action
+            ## Prompt-style icon (CLAUDE.md §6.2): `"Text" (prompt="honest")`.
+            $ ps = i.kwargs.get("prompt")
+            button:
+                action i.action
+                hbox:
+                    spacing 18
+                    xalign 0.5
+                    if ps and persistent.show_style_icons:
+                        use style_badge(ps)
+                    text i.caption style "choice_button_text"
 
 
 style choice_vbox is vbox
@@ -755,6 +764,11 @@ screen preferences():
                     textbutton _("Unseen Text") action Preference("skip", "toggle")
                     textbutton _("After Choices") action Preference("after choices", "toggle")
                     textbutton _("Transitions") action InvertSelected(Preference("transitions", "toggle"))
+
+                vbox:
+                    style_prefix "check"
+                    label _("Choices")
+                    textbutton _("Style Icons") action ToggleField(persistent, "show_style_icons")
 
                 ## Additional vboxes of type "radio_pref" or "check_pref" can be
                 ## added here, to add additional creator-defined preferences.
