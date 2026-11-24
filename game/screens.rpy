@@ -389,6 +389,9 @@ screen main_menu():
 
         vbox:
             style "main_menu_vbox"
+            at title_bob
+
+            add "gui/theme/heart_big.png" xalign 0.5 at heart_beat
 
             text "[config.name!t]":
                 style "main_menu_title"
@@ -1321,7 +1324,7 @@ screen notify(message):
     zorder 100
     style_prefix "notify"
 
-    frame at notify_appear:
+    frame at notify_pop:
         text "[message!tq]"
 
     timer 3.25 action Hide('notify')

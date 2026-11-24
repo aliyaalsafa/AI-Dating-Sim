@@ -2,70 +2,73 @@
 
 screen gift_shop():
     modal True
-    add Solid("#00000066")
+    add Solid("#3a164077")
 
     frame:
         xalign 0.5
-        yalign 0.55
-        xysize (1100, 860)
-        padding (34, 28)
-        background Solid("#f3e8ff")
+        yalign 0.56
+        xysize (1160, 880)
+        padding (54, 40, 54, 44)
+        background ui_panel("panel")
 
         vbox:
             spacing 16
             hbox:
                 xfill True
-                text "Campus Store" size 44 bold True color PHONE_INK
-                text "Cash: [gs.money]" size 32 color "#7b4dff" xalign 1.0 yalign 0.5
+                text "Campus Store" size 56 color "#ffffff" outlines OUTLINE_MED
+                frame:
+                    xalign 1.0
+                    yalign 0.5
+                    background ui_pill("gold")
+                    padding (26, 8, 30, 12)
+                    text "$ [gs.money]" size 30 color "#ffffff" outlines [(3, "#b77900", 0, 0)]
 
             viewport:
-                ysize 620
+                ysize 600
                 scrollbars "vertical"
                 mousewheel True
                 draggable True
                 vbox:
-                    spacing 8
+                    spacing 10
                     for gid, item in SHOP.items():
                         $ owned = gs.inventory.get(gid, 0)
-                        hbox:
+                        frame:
                             xfill True
-                            text item["name"] + (" (own %d)" % owned if owned else "") size 28 color PHONE_INK yalign 0.5
-                            textbutton "Buy  %d" % item["price"]:
-                                xalign 1.0
-                                padding (20, 6)
-                                background Solid("#7b4dff")
-                                hover_background Solid("#ff5fa2")
-                                insensitive_background Solid("#c9bfd6")
-                                text_color "#ffffff"
-                                text_size 26
-                                sensitive gs.money >= item["price"]
-                                action Function(buy_gift, gid)
+                            background ui_card("card")
+                            padding (26, 12)
+                            hbox:
+                                xfill True
+                                text item["name"] + ("  (own %d)" % owned if owned else "") size 28 color THEME_PLUM yalign 0.5
+                                hbox:
+                                    xalign 1.0
+                                    use pill_button("Buy  $%d" % item["price"], Function(buy_gift, gid), "pink", 24, gs.money >= item["price"])
 
-            textbutton "Leave":
+            hbox:
                 xalign 0.5
-                text_size 32
-                action Return()
+                use pill_button("Leave", Return(), "white", 30)
 
 
 screen gift_picker(cid):
     modal True
-    add Solid("#00000066")
+    add Solid("#3a164077")
 
     frame:
         xalign 0.5
         yalign 0.5
         xsize 900
-        padding (34, 28)
-        background Solid("#fff6fb")
+        padding (54, 40, 54, 44)
+        background ui_panel("panel")
         vbox:
-            spacing 12
-            text "Give %s..." % cname(cid) size 40 bold True color PHONE_INK
+            spacing 14
+            xfill True
+            use heading("Give %s a gift" % cname(cid), 48)
             if not gs.inventory:
-                text "You don't have any gifts. The campus store sells them." size 26 color "#8a7f88"
+                text "You don't have any gifts. The campus store sells them." size 26 color THEME_MUTED xalign 0.5
             for gid, n in gs.inventory.items():
-                textbutton "%s  x%d" % (SHOP[gid]["name"], n):
-                    text_size 30
-                    action Return(gid)
-            textbutton "Never mind":
-                text_size 28
-                action Return(None)
+                hbox:
+                    xalign 0.5
+                    use pill_button("%s  x%d" % (SHOP[gid]["name"], n), Return(gid), "pink", 28, True, 640)
+            null height 4
+            hbox:
+                xalign 0.5
+                use pill_button("Never mind", Return(None), "white", 28)

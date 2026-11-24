@@ -25,21 +25,21 @@ define config.check_conflicting_properties = True
 ## The colors of text in the interface.
 
 ## An accent color used throughout the interface to label and highlight text.
-define gui.accent_color = '#ff5fa2'
+define gui.accent_color = '#ff2f86'
 
 ## The color used for a text button when it is neither selected nor hovered.
-define gui.idle_color = '#707070'
+define gui.idle_color = '#7a4a78'
 
 ## The small color is used for small text, which needs to be brighter/darker to
 ## achieve the same effect.
-define gui.idle_small_color = '#606060'
+define gui.idle_small_color = '#7a4a78'
 
 ## The color that is used for buttons and bars that are hovered.
-define gui.hover_color = '#ff5fa2'
+define gui.hover_color = '#ff2f86'
 
 ## The color used for a text button when it is selected but not focused. A
 ## button is selected if it is the current screen or preference value.
-define gui.selected_color = '#555555'
+define gui.selected_color = '#3a1640'
 
 ## The color used for a text button when it cannot be selected.
 define gui.insensitive_color = '#7070707f'
@@ -50,8 +50,8 @@ define gui.muted_color = '#ff9fc7'
 define gui.hover_muted_color = '#ffbfd9'
 
 ## The colors used for dialogue and menu choice text.
-define gui.text_color = '#404040'
-define gui.interface_text_color = '#404040'
+define gui.text_color = '#3a1640'
+define gui.interface_text_color = '#3a1640'
 
 
 ## Fonts and Font Sizes ########################################################
@@ -60,16 +60,16 @@ define gui.interface_text_color = '#404040'
 define gui.text_font = cjk_fallback("DejaVuSans.ttf")
 
 ## The font used for character names.
-define gui.name_text_font = cjk_fallback("DejaVuSans.ttf")
+define gui.name_text_font = cjk_fallback("DejaVuSans-Bold.ttf")
 
 ## The font used for out-of-game text.
-define gui.interface_text_font = cjk_fallback("DejaVuSans.ttf")
+define gui.interface_text_font = cjk_fallback("DejaVuSans-Bold.ttf")
 
 ## The size of normal dialogue text.
-define gui.text_size = 33
+define gui.text_size = 36
 
 ## The size of character names.
-define gui.name_text_size = 45
+define gui.name_text_size = 38
 
 ## The size of text in the game's user interface.
 define gui.interface_text_size = 33
@@ -78,10 +78,10 @@ define gui.interface_text_size = 33
 define gui.label_text_size = 36
 
 ## The size of text on the notify screen.
-define gui.notify_text_size = 24
+define gui.notify_text_size = 28
 
 ## The size of the game's title.
-define gui.title_text_size = 75
+define gui.title_text_size = 110
 
 
 ## Main and Game Menus #########################################################
@@ -97,7 +97,7 @@ define gui.game_menu_background = "gui/game_menu.png"
 ## time.
 
 ## The height of the textbox containing dialogue.
-define gui.textbox_height = 278
+define gui.textbox_height = 290
 
 ## The placement of the textbox vertically on the screen. 0.0 is the top, 0.5 is
 ## center, and 1.0 is the bottom.
@@ -106,8 +106,8 @@ define gui.textbox_yalign = 1.0
 
 ## The placement of the speaking character's name, relative to the textbox.
 ## These can be a whole number of pixels from the left or top, or 0.5 to center.
-define gui.name_xpos = 360
-define gui.name_ypos = 0
+define gui.name_xpos = 70
+define gui.name_ypos = -30
 
 ## The horizontal alignment of the character's name. This can be 0.0 for left-
 ## aligned, 0.5 for centered, and 1.0 for right-aligned.
@@ -120,7 +120,7 @@ define gui.namebox_height = None
 
 ## The borders of the box containing the character's name, in left, top, right,
 ## bottom order.
-define gui.namebox_borders = Borders(5, 5, 5, 5)
+define gui.namebox_borders = Borders(36, 8, 36, 8)
 
 ## If True, the background of the namebox will be tiled, if False, the
 ## background of the namebox will be scaled.
@@ -130,11 +130,11 @@ define gui.namebox_tile = False
 ## The placement of dialogue relative to the textbox. These can be a whole
 ## number of pixels relative to the left or top side of the textbox, or 0.5 to
 ## center.
-define gui.dialogue_xpos = 402
-define gui.dialogue_ypos = 75
+define gui.dialogue_xpos = 120
+define gui.dialogue_ypos = 62
 
 ## The maximum width of dialogue text, in pixels.
-define gui.dialogue_width = 1116
+define gui.dialogue_width = 1300
 
 ## The horizontal alignment of the dialogue text. This can be 0.0 for left-
 ## aligned, 0.5 for centered, and 1.0 for right-aligned.
@@ -151,7 +151,7 @@ define gui.button_width = None
 define gui.button_height = None
 
 ## The borders on each side of the button, in left, top, right, bottom order.
-define gui.button_borders = Borders(6, 6, 6, 6)
+define gui.button_borders = Borders(28, 8, 28, 8)
 
 ## If True, the background image will be tiled. If False, the background image
 ## will be linearly scaled.
@@ -180,16 +180,16 @@ define gui.button_text_xalign = 0.0
 ##
 ## These customizations are used by the default interface:
 
-define gui.radio_button_borders = Borders(27, 6, 6, 6)
+define gui.radio_button_borders = Borders(54, 6, 12, 6)
 
-define gui.check_button_borders = Borders(27, 6, 6, 6)
+define gui.check_button_borders = Borders(54, 6, 12, 6)
 
 define gui.confirm_button_text_xalign = 0.5
 
 define gui.page_button_borders = Borders(15, 6, 15, 6)
 
-define gui.quick_button_borders = Borders(15, 6, 15, 0)
-define gui.quick_button_text_size = 21
+define gui.quick_button_borders = Borders(18, 5, 18, 5)
+define gui.quick_button_text_size = 22
 define gui.quick_button_text_idle_color = gui.idle_small_color
 define gui.quick_button_text_selected_color = gui.accent_color
 
@@ -207,11 +207,11 @@ define gui.quick_button_text_selected_color = gui.accent_color
 define gui.choice_button_width = 1185
 define gui.choice_button_height = None
 define gui.choice_button_tile = False
-define gui.choice_button_borders = Borders(150, 8, 150, 8)
+define gui.choice_button_borders = Borders(70, 24, 70, 30)
 define gui.choice_button_text_font = gui.text_font
 define gui.choice_button_text_size = gui.text_size
 define gui.choice_button_text_xalign = 0.5
-define gui.choice_button_text_idle_color = '#707070'
+define gui.choice_button_text_idle_color = '#3a1640'
 define gui.choice_button_text_hover_color = "#ffffff"
 define gui.choice_button_text_insensitive_color = '#7070707f'
 
@@ -254,13 +254,13 @@ define gui.navigation_xpos = 60
 define gui.skip_ypos = 15
 
 ## The vertical position of the notify screen.
-define gui.notify_ypos = 68
+define gui.notify_ypos = 240
 
 ## The spacing between menu choices.
-define gui.choice_spacing = 33
+define gui.choice_spacing = 18
 
 ## Buttons in the navigation section of the main and game menus.
-define gui.navigation_spacing = 6
+define gui.navigation_spacing = 14
 
 ## Controls the amount of spacing between preferences.
 define gui.pref_spacing = 15
@@ -284,16 +284,16 @@ define gui.main_menu_text_xalign = 1.0
 ## components when an overlay or window is not present.
 
 ## Generic frames.
-define gui.frame_borders = Borders(6, 6, 6, 6)
+define gui.frame_borders = Borders(44, 44, 44, 44)
 
 ## The frame that is used as part of the confirm screen.
-define gui.confirm_frame_borders = Borders(60, 60, 60, 60)
+define gui.confirm_frame_borders = Borders(70, 60, 70, 60)
 
 ## The frame that is used as part of the skip screen.
-define gui.skip_frame_borders = Borders(24, 8, 75, 8)
+define gui.skip_frame_borders = Borders(30, 10, 30, 10)
 
 ## The frame that is used as part of the notify screen.
-define gui.notify_frame_borders = Borders(24, 8, 60, 8)
+define gui.notify_frame_borders = Borders(30, 10, 30, 10)
 
 ## Should frame backgrounds be tiled?
 define gui.frame_tile = False
@@ -320,7 +320,7 @@ define gui.slider_tile = False
 ## Horizontal borders.
 define gui.bar_borders = Borders(6, 6, 6, 6)
 define gui.scrollbar_borders = Borders(6, 6, 6, 6)
-define gui.slider_borders = Borders(6, 6, 6, 6)
+define gui.slider_borders = Borders(18, 6, 18, 6)
 
 ## Vertical borders.
 define gui.vbar_borders = Borders(6, 6, 6, 6)

@@ -37,13 +37,13 @@ init python:
 screen playtest_tools():
     modal True
     zorder 120
-    add Solid("#00000099")
+    add Solid("#3a164099")
 
     frame:
         xalign 0.5
         yalign 0.5
-        padding (36, 30)
-        background Solid("#fff6fb")
+        padding (54, 40, 54, 44)
+        background ui_panel("panel")
         vbox:
             spacing 14
             text "Playtest tools" size 40 bold True color PHONE_INK
@@ -67,9 +67,10 @@ screen playtest_tools():
 screen playtest_button():
     if PLAYTEST:
         textbutton "Dev":
-            padding (20, 12)
-            background Solid("#7b4dff")
-            hover_background Solid("#ff5fa2")
+            padding (24, 8, 24, 12)
+            background ui_pill("violet")
+            hover_background ui_pill("pink")
             text_color "#ffffff"
-            text_size 30
+            text_outlines OUTLINE_SMALL
+            text_size 28
             action Show("playtest_tools")

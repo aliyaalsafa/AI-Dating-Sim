@@ -11,18 +11,29 @@
 init -1 python:
 
     def placeholder_bg(label, color="#ffd6e8", text_color="#3a164099"):
+        """Location color + soft light/hearts overlay + the place name on a pill."""
         return Fixed(
             Solid(color),
-            Text(label, size=64, color=text_color, bold=True, xalign=0.5, yalign=0.12),
+            "gui/theme/bg_overlay.png",
+            Window(
+                Text(label, size=52, color="#ffffff", outlines=OUTLINE_MED, xalign=0.5),
+                background=ui_pill("plum"), padding=(48, 10, 48, 16),
+                xalign=0.5, yalign=0.11, style="empty",
+            ),
         )
 
     def placeholder_sprite(char_id):
+        """Silhouette tinted in the character's color, with her name chip."""
         c = SIGNATURE_COLORS[char_id]
         return Fixed(
-            Solid(c["fill"], xysize=(440, 860)),
-            Solid(c["accent"], xysize=(440, 14), yalign=0.0),
-            Text(CAST_NAMES[char_id]["name"], size=56, color=c["accent"], bold=True,
-                 xalign=0.5, yalign=0.5),
+            Transform("gui/theme/silhouette.png", matrixcolor=TintMatrix(c["fill"])),
+            Transform("gui/theme/silhouette.png", matrixcolor=TintMatrix(c["accent"]) * OpacityMatrix(0.18),
+                      crop=(0, 0, 440, 330)),
+            Window(
+                Text(CAST_NAMES[char_id]["name"], size=40, color="#ffffff", outlines=OUTLINE_SMALL),
+                background=namebox_bg(char_id), padding=(30, 6, 30, 10),
+                xalign=0.5, yalign=0.62, style="empty",
+            ),
             xysize=(440, 860),
         )
 

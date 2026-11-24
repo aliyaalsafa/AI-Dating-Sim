@@ -16,18 +16,18 @@ init -5 python:
     GEMMA_RAINBOW = ["#d93a2b", "#f2b01e", "#2e9e4f", "#2f6fdf"]
 
 define narrator = Character(None)
-define mc = Character("[player_name]", color="#7b4dff")
+define mc = Character("[player_name]", color="#7b4dff", namebox_background=namebox_bg("mc"), who_color="#ffffff")
 
-define grace   = Character(CAST_NAMES["grace"]["name"],   color=SIGNATURE_COLORS["grace"]["name"])
-define xenia   = Character(CAST_NAMES["xenia"]["name"],   color=SIGNATURE_COLORS["xenia"]["name"])
-define claudia = Character(CAST_NAMES["claudia"]["name"], color=SIGNATURE_COLORS["claudia"]["name"])
-define gemma   = Character(CAST_NAMES["gemma"]["name"],   color=SIGNATURE_COLORS["gemma"]["name"])
-define shen    = Character(CAST_NAMES["shen"]["name"],    color=SIGNATURE_COLORS["shen"]["name"])
+define grace   = Character(CAST_NAMES["grace"]["name"],   color=SIGNATURE_COLORS["grace"]["name"], namebox_background=namebox_bg("grace"), who_color="#ffffff")
+define xenia   = Character(CAST_NAMES["xenia"]["name"],   color=SIGNATURE_COLORS["xenia"]["name"], namebox_background=namebox_bg("xenia"), who_color="#ffffff")
+define claudia = Character(CAST_NAMES["claudia"]["name"], color=SIGNATURE_COLORS["claudia"]["name"], namebox_background=namebox_bg("claudia"), who_color="#ffffff")
+define gemma   = Character(CAST_NAMES["gemma"]["name"],   color=SIGNATURE_COLORS["gemma"]["name"], namebox_background=namebox_bg("gemma"), who_color="#ffffff")
+define shen    = Character(CAST_NAMES["shen"]["name"],    color=SIGNATURE_COLORS["shen"]["name"], namebox_background=namebox_bg("shen"), who_color="#ffffff")
 
 default player_name = "You"
 
 define CHAR = {"grace": grace, "xenia": xenia, "claudia": claudia, "gemma": gemma, "shen": shen}
 
 # Cameos: Claudia's younger sisters.
-define sonnet = Character(CAMEO_NAMES["sonnet"]["name"], color="#c98a5a")
-define haiku  = Character(CAMEO_NAMES["haiku"]["name"],  color="#d9a37a")
+define sonnet = Character(CAMEO_NAMES["sonnet"]["name"], color="#c98a5a", namebox_background=namebox_bg("claudia"), who_color="#ffffff")
+define haiku  = Character(CAMEO_NAMES["haiku"]["name"],  color="#d9a37a", namebox_background=namebox_bg("claudia"), who_color="#ffffff")

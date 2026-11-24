@@ -2,39 +2,46 @@
 
 screen day_recap():
     modal True
-    add Solid("#00000088")
+    add Solid("#3a164099")
 
     $ totals = recap_totals()
 
-    frame:
+    frame at notify_pop:
         xalign 0.5
         yalign 0.5
-        xsize 760
-        padding (26, 26)
-        background Solid(PHONE_BG)
+        xsize 820
+        padding (50, 44, 50, 50)
+        background ui_panel("panel")
         vbox:
-            spacing 16
-            text "Day [gs.day] recap" size 40 bold True color "#fff6fb" xalign 0.5
-            frame:
-                xfill True
-                padding (24, 20)
-                background Solid(PHONE_SCREEN)
-                vbox:
-                    spacing 10
-                    if not totals:
-                        text "A quiet day. Nobody's feelings changed." size 28 color PHONE_INK italic True
-                    for cid, d in totals.items():
+            spacing 18
+            xfill True
+            use heading("Day %d recap" % gs.day, 52)
+            if not totals:
+                text "A quiet day. Nobody's feelings changed." size 28 color THEME_MUTED italic True xalign 0.5
+            for cid, d in totals.items():
+                frame:
+                    xfill True
+                    background ui_card("card")
+                    padding (24, 14)
+                    hbox:
+                        xfill True
+                        use char_chip(cid, 26)
                         hbox:
-                            xfill True
-                            text cname(cid) size 30 bold True color SIGNATURE_COLORS[cid]["name"]
-                            text ("+%d ♥" % d if d >= 0 else "%d ♥" % d) size 30 color ("#ff5fa2" if d >= 0 else "#8a7f88") xalign 1.0
-                    if gs.feed and gs.feed[-1]["day"] == gs.day:
-                        null height 10
-                        text "@x_unfiltered just posted:" size 22 color "#0090ff" bold True
-                        text gs.feed[-1]["text"] size 24 color PHONE_INK italic True
-            textbutton "Go to sleep":
+                            xalign 1.0
+                            yalign 0.5
+                            spacing 8
+                            text ("+%d" % d if d >= 0 else "%d" % d) size 34 bold True color (THEME_HOT if d >= 0 else THEME_MUTED) yalign 0.5
+                            add ("gui/theme/heart_small.png" if d >= 0 else "gui/theme/heart_empty.png") yalign 0.5
+            if gs.feed and gs.feed[-1]["day"] == gs.day:
+                frame:
+                    xfill True
+                    background ui_panel("panel_dark")
+                    padding (30, 20)
+                    vbox:
+                        spacing 6
+                        text "[XENIA_HANDLE] just posted:" size 22 color "#5fd7ff" bold True
+                        text gs.feed[-1]["text"] size 24 color "#ffffff" italic True
+            null height 4
+            hbox:
                 xalign 0.5
-                text_color "#fff6fb"
-                text_hover_color "#ff5fa2"
-                text_size 32
-                action Return()
+                use pill_button("Go to sleep", Return(), "pink", 32)

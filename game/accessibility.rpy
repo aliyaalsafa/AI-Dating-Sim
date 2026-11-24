@@ -12,4 +12,4 @@ init -1 python:
 
     def textbox_background(st, at):
         alpha = max(0.0, min(1.0, persistent.textbox_opacity))
-        return Transform(Frame("gui/textbox.png", 0, 0), alpha=alpha), 0.25
+        return Transform(Frame("gui/theme/textbox.png", 60, 60, 60, 60), alpha=alpha), 0.25

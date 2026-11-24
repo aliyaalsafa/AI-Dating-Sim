@@ -7,34 +7,34 @@ default gala_new_ending = False
 
 screen gala_choice():
     modal True
-    add Solid("#2a1830")
+    add gui.main_menu_background
     vbox:
         xalign 0.5
         yalign 0.45
-        spacing 20
-        text "Who will you ask to the [GALA_NAME]?" size 50 bold True color "#fff6fb" xalign 0.5
-        null height 10
+        spacing 18
+        use heading("Who will you ask to the %s?" % GALA_NAME, 60)
+        null height 14
         for cid in CAST:
             if ("met_" + cid) in gs.flags:
                 $ h = sim_aff.hearts(gs, cid)
-                button:
+                button at pop_hover:
                     xalign 0.5
+                    xsize 760
+                    background ui_card("card")
+                    hover_background ui_card("card_hover")
+                    padding (34, 16)
                     action Return(cid)
                     hbox:
-                        spacing 24
-                        text CAST_NAMES[cid]["name"]:
-                            size 40
-                            min_width 260
-                            color SIGNATURE_COLORS[cid]["accent"]
-                            hover_color "#ff5fa2"
-                        text ("♥" * h + "♡" * (5 - h)) size 34 color "#ff5fa2" yalign 0.5
-        null height 10
-        textbutton "Go alone":
+                        xfill True
+                        use char_chip(cid, 32)
+                        hbox:
+                            xalign 1.0
+                            yalign 0.5
+                            use hearts(h, 5, 1.2)
+        null height 14
+        hbox:
             xalign 0.5
-            text_size 34
-            text_color "#c9bfd6"
-            text_hover_color "#ff5fa2"
-            action Return(None)
+            use pill_button("Go alone", Return(None), "white", 30)
 
 
 label gala:
@@ -113,13 +113,40 @@ label ending_card(ending):
     if "char" in ENDINGS[ending]:
         $ etitle = CAST_NAMES[ENDINGS[ending]["char"]]["name"] + " — " + etitle
     $ eseen, etotal = endings_progress()
-    $ enew = "{color=#ffd84d}New ending!{/color}  " if gala_new_ending and not _in_replay else ""
-    scene black
+    $ enew = gala_new_ending and not _in_replay
+    scene expression gui.main_menu_background
+    show screen ending_card_screen(etitle, enew, eseen, etotal)
     with fade
-    show text "{size=72}{color=#fff6fb}THE END{/color}{/size}\n\n{size=40}{color=#ff5fa2}[etitle]{/color}{/size}\n\n\n{size=28}{color=#c9bfd6}[enew]Endings found: [eseen] / [etotal]{/color}{/size}" at truecenter
-    with dissolve
     pause
+    hide screen ending_card_screen
     return
+
+
+screen ending_card_screen(etitle, enew, eseen, etotal):
+    vbox at title_bob:
+        xalign 0.5
+        yalign 0.45
+        spacing 22
+        add "gui/theme/heart_big.png" xalign 0.5 zoom 1.6 at heart_beat
+        text "THE END" size 130 color "#ffffff" outlines OUTLINE_BIG xalign 0.5
+        frame:
+            xalign 0.5
+            background ui_pill("violet")
+            padding (50, 12, 50, 18)
+            text etitle size 46 color "#ffffff" outlines OUTLINE_SMALL
+        null height 10
+        hbox:
+            xalign 0.5
+            spacing 14
+            if enew:
+                frame:
+                    background ui_pill("gold")
+                    padding (30, 6, 30, 10)
+                    text "New ending!" size 30 color "#ffffff" outlines [(3, "#b77900", 0, 0)]
+            frame:
+                background ui_pill("white")
+                padding (30, 6, 30, 10)
+                text "Endings found: %d / %d" % (eseen, etotal) size 30 color THEME_PLUM
 
 
 ## Replays an ending from the endings gallery (Ren'Py Replay, scope sets `replay_ending_id`).

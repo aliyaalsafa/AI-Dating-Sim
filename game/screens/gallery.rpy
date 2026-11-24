@@ -42,11 +42,11 @@ screen endings_gallery():
 screen gallery_card(eid, label_text):
     $ seen = eid in persistent.endings_seen
     $ secret = ENDINGS[eid].get("secret", False)
-    button:
-        xysize (300, 96)
-        padding (14, 10)
-        background Solid("#ff5fa2" if seen else "#00000014")
-        hover_background Solid("#ff5fa2cc" if seen else "#00000014")
+    button at pop_hover:
+        xysize (300, 100)
+        padding (26, 12)
+        background (ui_pill("pink") if seen else ui_card("card_off"))
+        hover_background (ui_pill("violet") if seen else ui_card("card_off"))
         sensitive seen
         action Replay("replay_ending", scope={"replay_ending_id": eid}, locked=False)
         vbox:
@@ -55,6 +55,7 @@ screen gallery_card(eid, label_text):
                 size 26
                 bold True
                 color ("#ffffff" if seen else GALLERY_INK)
+                outlines (OUTLINE_SMALL if seen else [])
             text ("Replay ▸" if seen else ("Secret" if secret else "Not found yet")):
                 size 20
                 color ("#ffffffcc" if seen else GALLERY_MUTED)
@@ -79,8 +80,11 @@ screen achievement_rows():
         $ hidden = a.get("secret", False) and not got
         frame:
             xfill True
-            padding (18, 14)
-            background Solid("#ff5fa233" if got else "#00000010")
-            vbox:
-                text (a["name"] if got else "???") size 28 bold True color GALLERY_INK
-                text ("Secret achievement" if hidden else (a["desc"] if got else "Locked: " + a["desc"])) size 22 color GALLERY_MUTED
+            padding (24, 14)
+            background ui_card("card_hover" if got else "card_off")
+            hbox:
+                spacing 16
+                add ("gui/theme/heart_small.png" if got else "gui/theme/heart_empty.png") yalign 0.5
+                vbox:
+                    text (a["name"] if got else "???") size 28 bold True color GALLERY_INK
+                    text ("Secret achievement" if hidden else (a["desc"] if got else "Locked: " + a["desc"])) size 22 color GALLERY_MUTED

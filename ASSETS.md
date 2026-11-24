@@ -1,5 +1,11 @@
 # Adding art and audio
 
+**UI theme:** the menus, buttons, panels and placeholder silhouettes are drawn by
+`scripts/make_ui_art.py` (colors at the top of the file; keep them in sync with
+`THEME_*` in `game/theme.rpy`). Run `python3 scripts/make_ui_art.py` after
+changing them. Hand-drawn replacements can overwrite the PNGs in `game/gui/` and
+`game/gui/theme/` directly.
+
 The game runs on placeholder art and no sound. Real assets are picked up by
 **file name**: drop a file in the right folder and it replaces the placeholder
 the next time the game starts. No code changes are needed. The matching rules

@@ -10,43 +10,42 @@ screen phone(tab="contacts"):
     zorder 100
     default current = tab
 
-    add Solid("#00000088")
+    add Solid("#3a164099")
     key "game_menu" action Hide("phone")
 
-    frame:
+    frame at notify_pop:
         xalign 0.5
         yalign 0.5
-        xysize (820, 1000)
-        padding (26, 26)
-        background Solid(PHONE_BG)
+        xysize (860, 1040)
+        padding (40, 36, 40, 36)
+        background ui_panel("panel_dark")
 
         vbox:
             spacing 16
 
             hbox:
-                spacing 10
+                spacing 8
                 xalign 0.5
-                for t, label_ in [("contacts", "Contacts"), ("feed", "Feed"), ("achievements", "Achievements")]:
-                    textbutton label_:
-                        padding (22, 10)
-                        background Solid("#fff6fb33" if current != t else "#ff5fa2")
-                        hover_background Solid("#ff5fa2aa")
-                        text_color "#fff6fb"
-                        text_size 28
+                for t, label_ in [("contacts", "Contacts"), ("feed", "Feed"), ("achievements", "Awards")]:
+                    button:
+                        background ui_pill("pink" if current == t else "plum")
+                        hover_background ui_pill("violet")
+                        padding (26, 8, 26, 12)
                         action SetScreenVariable("current", t)
+                        text label_ size 26 color "#ffffff" outlines OUTLINE_SMALL
 
             frame:
                 xfill True
                 ysize 820
-                padding (24, 20)
-                background Solid(PHONE_SCREEN)
+                padding (26, 24, 18, 24)
+                background ui_panel("panel")
 
                 viewport:
                     scrollbars "vertical"
                     mousewheel True
                     draggable True
                     vbox:
-                        spacing 22
+                        spacing 16
                         xfill True
                         if current == "contacts":
                             use phone_contacts
@@ -55,12 +54,9 @@ screen phone(tab="contacts"):
                         else:
                             use phone_achievements
 
-            textbutton "Close":
+            hbox:
                 xalign 0.5
-                text_color "#fff6fb"
-                text_hover_color "#ff5fa2"
-                text_size 30
-                action Hide("phone")
+                use pill_button("Close", Hide("phone"), "white", 28)
 
 
 screen phone_contacts():
@@ -70,8 +66,8 @@ screen phone_contacts():
         $ col = SIGNATURE_COLORS[cid]
         frame:
             xfill True
-            padding (20, 16)
-            background Solid(col["accent"] + "55")
+            padding (24, 18)
+            background ui_card("card" if met else "card_off")
             vbox:
                 spacing 6
                 if not met:
@@ -79,12 +75,15 @@ screen phone_contacts():
                     text "You haven't met yet." size 24 color "#8a7f88" italic True
                 else:
                     hbox:
-                        spacing 16
-                        text CAST_NAMES[cid]["full"] size 32 bold True color col["name"]
-                        if SHOW_MODEL_SUBTITLES:
-                            text CAST_NAMES[cid]["model"] size 22 color "#8a7f88" yalign 0.5
+                        spacing 14
+                        use char_chip(cid, 28)
+                        vbox:
+                            yalign 0.5
+                            text CAST_NAMES[cid]["full"] size 24 bold True color col["name"]
+                            if SHOW_MODEL_SUBTITLES:
+                                text CAST_NAMES[cid]["model"] size 20 color "#8a7f88"
                     $ h = sim_aff.hearts(gs, cid)
-                    text ("♥" * h + "♡" * (5 - h)) size 34 color "#ff5fa2"
+                    use hearts(h)
                     if c.romance_locked:
                         text "Just friends now." size 22 color "#8a7f88" italic True
                     text "Likes: " + (", ".join(CAST[cid]["favorites"]["likes"]) if "likes" in c.known else "???") size 24 color PHONE_INK
@@ -106,7 +105,7 @@ screen phone_feed():
         frame:
             xfill True
             padding (18, 14)
-            background Solid("#11141812")
+            background ui_card("card")
             vbox:
                 spacing 4
                 text "Day %d" % p["day"] size 20 color "#8a7f88"

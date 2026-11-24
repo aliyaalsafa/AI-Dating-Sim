@@ -117,7 +117,7 @@ default persistent.endings_seen = set()
 
 screen style_badge(ps):
     frame:
-        background Solid(STYLE_BADGES[ps][1])
-        padding (14, 4)
+        background Transform(Frame("gui/theme/badge.png", 26, 22, 26, 22), matrixcolor=TintMatrix(STYLE_BADGES[ps][1]))
+        padding (18, 4, 18, 7)
         yalign 0.5
-        text "%s %s" % (STYLE_BADGES[ps][0], ps) size 24 color "#ffffff" bold True
+        text "%s %s" % (STYLE_BADGES[ps][0], ps) size 24 color "#ffffff" bold True outlines [(2, "#00000040", 0, 1)]

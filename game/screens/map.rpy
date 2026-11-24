@@ -3,47 +3,52 @@
 screen campus_map():
     modal True
 
-    add Solid("#ffd6e8")
+    add gui.game_menu_background
 
-    text "Where to this %s?" % slot_label().lower():
+    vbox:
         xalign 0.5
-        ypos 110
-        size 54
-        bold True
-        color "#3a1640"
+        ypos 105
+        use heading("Where to this %s?" % slot_label().lower(), 58)
 
     grid 4 2:
         xalign 0.5
-        ypos 220
-        spacing 28
+        ypos 215
+        spacing 26
 
         for lid, loc in LOCATIONS.items():
             $ is_open = sim_ev.is_open(LOCATIONS, lid, gs)
             $ here = sim_ev.present(LOCATIONS, lid, gs)
-            $ tc = loc.get("text_color", "#3a1640")
 
-            button:
-                xysize (420, 330)
-                padding (22, 20)
-                background Solid(loc["color"] if is_open else "#d8cfd6")
-                hover_background Frame(Solid("#ffffff"), 0, 0)
-                insensitive_background Solid("#d8cfd6")
+            button at pop_hover:
+                xysize (420, 340)
+                padding (30, 28)
+                background ui_card("card" if is_open else "card_off")
+                hover_background ui_card("card_hover")
+                insensitive_background ui_card("card_off")
                 sensitive is_open
                 action Return(lid)
 
+                # big location icon in the corner
+                text loc.get("icon", "♥"):
+                    size 120
+                    xalign 1.0
+                    yalign 1.0
+                    color (THEME_PINK_LIGHT if is_open else "#e4dce2")
+                    outlines [(4, "#ffffff", 0, 0)]
+
                 vbox:
-                    spacing 14
-                    text loc["name"] size 34 bold True color (tc if is_open else "#8a7f88")
+                    spacing 12
+                    text loc["name"] size 34 bold True color (THEME_PLUM if is_open else "#9a8f98")
 
                     if not is_open:
-                        text "Closed right now" size 26 color "#8a7f88" italic True
+                        text "Closed right now" size 26 color "#9a8f98" italic True
                     elif loc.get("kind") == "shop":
-                        text "Gift shop" size 26 color "#7b4dff"
+                        hbox:
+                            spacing 8
+                            add "gui/theme/heart_small.png" yalign 0.5
+                            text "Gift shop" size 28 color THEME_VIOLET bold True
                     elif not here:
-                        text "Nobody around" size 26 color tc italic True
+                        text "Nobody around" size 26 color THEME_MUTED italic True
                     else:
                         for cid in here:
-                            frame:
-                                padding (14, 4)
-                                background Solid(SIGNATURE_COLORS[cid]["fill"])
-                                text cname(cid) size 26 color SIGNATURE_COLORS[cid]["accent"] bold True
+                            use char_chip(cid)
