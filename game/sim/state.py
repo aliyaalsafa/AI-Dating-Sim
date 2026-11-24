@@ -37,6 +37,8 @@ class GameState:
     feed: list = field(default_factory=list)         # @x_unfiltered posts, newest last
     day_log: list = field(default_factory=list)      # (char_id, delta, reason) for the evening recap
     inventory: dict = field(default_factory=dict)    # gift_id -> count
+    seen_today: set = field(default_factory=set)     # daily keys of events seen today
+    counters: dict = field(default_factory=dict)     # free-form counters, e.g. "grace.hangouts"
     # Extension point for optional layers (e.g. the clue layer, CLAUDE.md §6.7).
     layers: dict = field(default_factory=dict)
 
@@ -67,3 +69,13 @@ def reveal(state: GameState, char_id: str, info_key: str) -> GameState:
     s = evolve(state)
     s.chars[char_id].known.add(info_key)
     return s
+
+
+def incr(state: GameState, key: str, by: int = 1) -> GameState:
+    s = evolve(state)
+    s.counters[key] = s.counters.get(key, 0) + by
+    return s
+
+
+def count(state: GameState, key: str) -> int:
+    return state.counters.get(key, 0)

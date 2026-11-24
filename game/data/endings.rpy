@@ -12,5 +12,11 @@ init -3 python:
         for _kind, _title in [("good", "Good Ending"), ("sweet", "Sweet Ending"), ("friends", "Friends Ending")]:
             ENDINGS["%s_%s" % (_kind, _cid)] = {
                 "title": _title,
-                "label": "ending_placeholder",   # real per-character labels arrive in M2–M4
+                "char": _cid,
+                "label": "ending_placeholder",   # replaced per route below as routes land
             }
+
+    # Routes with written endings (M2: Grace).
+    for _cid in ["grace"]:
+        for _kind in ["good", "sweet", "friends"]:
+            ENDINGS["%s_%s" % (_kind, _cid)]["label"] = "ending_%s_%s" % (_kind, _cid)

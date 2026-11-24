@@ -2,6 +2,7 @@
 
 screen hud():
     zorder 50
+    use playtest_button
 
     frame:
         xpos 24

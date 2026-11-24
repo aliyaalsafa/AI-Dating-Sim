@@ -15,7 +15,11 @@ Event specs are plain dicts defined in game/data/events.rpy:
         "requires_flags": [...],          # optional
         "forbids_flags": [...],           # optional
         "favor_status": {"grace": "active"},  # optional
+        "favor_step": {"grace": 0},       # optional: exact step of an active favor
         "once": True,                     # default True except hangouts
+        "daily": True,                    # default True for hangouts: once per day per daily_key
+        "daily_key": "hangout_grace",     # default: "hangout_<first char>" for hangouts, else id
+        "forced": True,                   # plays at the start of the slot, no map (location ignored)
         "priority": 0,                    # optional tie-breaker within a kind
     }
 """
@@ -41,16 +45,26 @@ def is_once(event: dict) -> bool:
     return event.get("once", event["kind"] != "hangout")
 
 
-def eligible(event: dict, state: GameState, location_id: str, here: list) -> bool:
-    if event.get("location") != location_id:
-        return False
+def is_daily(event: dict) -> bool:
+    return event.get("daily", event["kind"] == "hangout")
+
+
+def daily_key(event: dict) -> str:
+    if "daily_key" in event:
+        return event["daily_key"]
+    if event["kind"] == "hangout" and event.get("chars"):
+        return "hangout_" + event["chars"][0]
+    return event["id"]
+
+
+def _common_ok(event: dict, state: GameState) -> bool:
     if is_once(event) and event["id"] in state.seen_events:
+        return False
+    if is_daily(event) and daily_key(event) in state.seen_today:
         return False
     if "slots" in event and SLOTS[state.slot] not in event["slots"]:
         return False
     if not event.get("day_min", 1) <= state.day <= event.get("day_max", 10**9):
-        return False
-    if any(c not in here for c in event.get("chars", ())):
         return False
     for cid, n in event.get("min_affection", {}).items():
         if state.chars[cid].affection < n:
@@ -65,7 +79,27 @@ def eligible(event: dict, state: GameState, location_id: str, here: list) -> boo
     for cid, status in event.get("favor_status", {}).items():
         if state.chars[cid].favor_status != status:
             return False
+    for cid, step in event.get("favor_step", {}).items():
+        c = state.chars[cid]
+        if c.favor_status != "active" or c.favor_step != step:
+            return False
     return True
+
+
+def eligible(event: dict, state: GameState, location_id: str, here: list) -> bool:
+    if event.get("forced") or event.get("location") != location_id:
+        return False
+    if any(c not in here for c in event.get("chars", ())):
+        return False
+    return _common_ok(event, state)
+
+
+def pick_forced(events: list, state: GameState) -> dict | None:
+    """A scripted event that plays at the start of this slot, before the map."""
+    candidates = [e for e in events if e.get("forced") and _common_ok(e, state)]
+    if not candidates:
+        return None
+    return max(candidates, key=lambda e: (KIND_PRIORITY[e["kind"]], e.get("priority", 0)))
 
 
 def pick_event(events: list, state: GameState, locations: dict, location_id: str) -> dict | None:
@@ -77,9 +111,15 @@ def pick_event(events: list, state: GameState, locations: dict, location_id: str
     return max(candidates, key=lambda e: (KIND_PRIORITY[e["kind"]], e.get("priority", 0)))
 
 
-def mark_seen(state: GameState, event_id: str) -> GameState:
+def mark_seen(state: GameState, event) -> GameState:
+    """Record an event as seen (pass the event dict; a bare id also works)."""
     s = evolve(state)
-    s.seen_events.add(event_id)
+    if isinstance(event, str):
+        s.seen_events.add(event)
+        return s
+    s.seen_events.add(event["id"])
+    if is_daily(event):
+        s.seen_today.add(daily_key(event))
     return s
 
 
@@ -93,7 +133,7 @@ def validate_events(events: list, locations: dict, cast: dict) -> list:
         ids.add(eid)
         if e.get("kind") not in KIND_PRIORITY:
             problems.append(f"{eid}: unknown kind {e.get('kind')!r}")
-        if e.get("location") not in locations:
+        if not e.get("forced") and e.get("location") not in locations:
             problems.append(f"{eid}: unknown location {e.get('location')!r}")
         for cid in e.get("chars", ()):
             if cid not in cast:

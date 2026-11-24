@@ -20,7 +20,8 @@ def is_gala_day(state: GameState, rules: Rules = DEFAULT_RULES) -> bool:
 def advance(state: GameState, rules: Rules = DEFAULT_RULES) -> GameState:
     """Move to the next slot; after evening, start the next day.
 
-    Starting a new day clears the recap log and expires overdue favors.
+    Starting a new day clears the recap log and daily event limits, and
+    expires overdue favors.
     """
     s = evolve(state)
     if s.slot < len(SLOTS) - 1:
@@ -29,4 +30,5 @@ def advance(state: GameState, rules: Rules = DEFAULT_RULES) -> GameState:
     s.day += 1
     s.slot = 0
     s.day_log = []
+    s.seen_today = set()
     return expire_overdue(s, rules)

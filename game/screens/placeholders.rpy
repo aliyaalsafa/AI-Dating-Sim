@@ -24,10 +24,21 @@ init -1 python:
             xysize=(440, 860),
         )
 
-image bg quad = placeholder_bg("Main Quad", "#ffe3f0")
+
 
 image grace placeholder = placeholder_sprite("grace")
 image xenia placeholder = placeholder_sprite("xenia")
 image claudia placeholder = placeholder_sprite("claudia")
 image gemma placeholder = placeholder_sprite("gemma")
 image shen placeholder = placeholder_sprite("shen")
+
+## One placeholder background per map location ("bg <location_id>"), plus
+## a few story-only places. Replace any of them with real art by defining the
+## same image name in a file that loads later.
+init 1 python:
+    for _lid in LOCATIONS:
+        renpy.image(("bg", _lid), location_bg(_lid))
+
+image bg gates = placeholder_bg("Academy Gates", "#e9e1f7")
+image bg dorm = placeholder_bg("Your Dorm Room", "#f7efe4")
+image bg gala = placeholder_bg("The Founders' Gala", "#2a1830", "#fff6fb99")

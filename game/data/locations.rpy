@@ -16,7 +16,7 @@ init -3 python:
         "council_office": {
             "name": "Student Council Office",
             "color": "#d9f2e4",
-            "schedule": {"morning": ["grace"], "afternoon": ["grace"], "evening": []},
+            "schedule": {"morning": ["grace"], "afternoon": ["grace"], "evening": ["grace"]},
         },
         "robotics_lab": {
             "name": "Robotics Lab",

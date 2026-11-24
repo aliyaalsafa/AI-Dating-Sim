@@ -24,8 +24,8 @@ init -3 python:
                 "liked": ["rainbow_folders", "bouquet"],
                 "disliked": ["mystery_box"],
             },
-            # PLACEHOLDER: favor content is TBD (CLAUDE.md §6.3).
-            "favor": {"steps": 1, "desc": "Cover one of her nine club meetings so she can take an hour for herself."},
+            # PLACEHOLDER: favor content is TBD (CLAUDE.md §6.3). Steps: run the meeting, report back.
+            "favor": {"steps": 2, "desc": "Run her Debate Club meeting on the quad one morning, so she can take an hour for herself."},
         },
         "xenia": {
             "difficulty": 8,

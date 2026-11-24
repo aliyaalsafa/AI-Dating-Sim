@@ -1,5 +1,5 @@
-## Founders' Gala placeholder (full version in M4).
-## Asks the player who to invite, evaluates the ending, records it in the gallery.
+## Founders' Gala (full version with gallery in M4).
+## Asks the player who to invite, evaluates the ending and plays it.
 
 screen gala_choice():
     modal True
@@ -27,10 +27,11 @@ screen gala_choice():
 
 label gala:
     hide screen hud
-    scene expression placeholder_bg(GALA_NAME, "#2a1830", "#fff6fb99")
+    scene bg gala
     with fade
-    # PLACEHOLDER: gala night scenes (M4)
+    # PLACEHOLDER: gala night lead-in (M4)
     "The night of the [GALA_NAME] has arrived."
+    "Everyone is here. Everyone is dressed up. Everyone, it seems, is watching to see who you'll ask."
     call screen gala_choice
     $ ending = sim_end.evaluate_ending(gs, _return, RULES)
     $ persistent.endings_seen.add(ending)
@@ -38,8 +39,20 @@ label gala:
     return
 
 
-label ending_placeholder(ending):
-    # PLACEHOLDER: every ending gets its own scene in M2–M4.
+label ending_card(ending):
     $ etitle = ENDINGS[ending]["title"]
-    "Ending reached: [etitle] ([ending])."
+    if "char" in ENDINGS[ending]:
+        $ etitle = CAST_NAMES[ENDINGS[ending]["char"]]["name"] + " — " + etitle
+    scene black
+    with fade
+    show text "{size=72}{color=#fff6fb}THE END{/color}{/size}\n\n{size=40}{color=#ff5fa2}[etitle]{/color}{/size}" at truecenter
+    with dissolve
+    pause
+    return
+
+
+label ending_placeholder(ending):
+    # PLACEHOLDER: every ending gets its own scene in M3–M4.
+    "(This route's endings are written in a later milestone.)"
+    call ending_card(ending)
     return

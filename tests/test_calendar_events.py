@@ -95,3 +95,85 @@ def test_real_data_is_valid(data):
 def test_every_character_has_a_hangout_somewhere(data):
     hangout_chars = {c for e in data["EVENTS"] if e["kind"] == "hangout" for c in e["chars"]}
     assert hangout_chars == set(data["CAST"])
+
+
+# --- M2: daily limits, forced events, favor steps -------------------------
+
+def test_hangouts_once_per_day_per_character(gs):
+    s = gs
+    ev = events.pick_event(EVENTS, s, LOCS, "lab")
+    assert ev["id"] == "hang_gemma"
+    s = events.mark_seen(s, ev)
+    assert events.pick_event(EVENTS, s, LOCS, "lab") is None      # same day: no repeat
+    s = calendar.advance(calendar.advance(calendar.advance(s)))   # next morning
+    assert events.pick_event(EVENTS, s, LOCS, "lab")["id"] == "story_lab"
+
+
+def test_daily_key_shared_across_locations(gs):
+    evs = [
+        {"id": "h1", "label": "x", "kind": "hangout", "location": "lab", "chars": ["gemma"]},
+        {"id": "h2", "label": "x", "kind": "hangout", "location": "roof", "chars": ["gemma"]},
+    ]
+    locs = {"lab": {"schedule": {"morning": ["gemma"]}}, "roof": {"schedule": {"morning": ["gemma"]}}}
+    s = events.mark_seen(gs, evs[0])
+    assert events.pick_event(evs, s, locs, "roof") is None
+
+
+FORCED = [
+    {"id": "prologue", "label": "x", "kind": "story", "forced": True, "day_max": 1, "slots": ["morning"]},
+    {"id": "lunch", "label": "x", "kind": "group", "forced": True, "day_max": 1, "slots": ["afternoon"]},
+    {"id": "loc_event", "label": "x", "kind": "story", "location": "lab", "chars": ["gemma"]},
+]
+
+
+def test_forced_events_play_by_schedule(gs):
+    assert events.pick_forced(FORCED, gs)["id"] == "prologue"
+    s = events.mark_seen(gs, events.pick_forced(FORCED, gs))
+    assert events.pick_forced(FORCED, s) is None                  # once
+    s = calendar.advance(s)
+    assert events.pick_forced(FORCED, s)["id"] == "lunch"
+    s.day = 2
+    assert events.pick_forced(FORCED, s) is None
+
+
+def test_forced_events_never_picked_from_map(gs):
+    assert events.pick_event(FORCED, gs, LOCS, "lab")["id"] == "loc_event"
+
+
+def test_favor_step_requirement(gs):
+    from sim import favors
+    evs = [
+        {"id": "step0", "label": "x", "kind": "favor", "location": "lab", "chars": ["gemma"],
+         "favor_step": {"gemma": 0}, "once": False},
+        {"id": "step1", "label": "x", "kind": "favor", "location": "lab", "chars": ["gemma"],
+         "favor_step": {"gemma": 1}, "once": False},
+    ]
+    assert events.pick_event(evs, gs, LOCS, "lab") is None         # favor not active
+    s = favors.offer(gs, "gemma")
+    assert events.pick_event(evs, s, LOCS, "lab")["id"] == "step0"
+    s = favors.advance_step(s, "gemma", 2)
+    assert events.pick_event(evs, s, LOCS, "lab")["id"] == "step1"
+    s = favors.advance_step(s, "gemma", 2)
+    assert events.pick_event(evs, s, LOCS, "lab") is None         # done
+
+
+def test_counters(gs):
+    from sim.state import count, incr
+    s = incr(incr(gs, "grace.hangouts"), "grace.hangouts")
+    assert count(s, "grace.hangouts") == 2 and count(gs, "grace.hangouts") == 0
+
+
+def test_days_1_to_3_introduce_everyone(data):
+    """Forced scenes on days 1-3 must meet all five characters (M2 requirement)."""
+    met = set()
+    for e in data["EVENTS"]:
+        if e.get("forced") and e.get("day_max", 99) <= 3:
+            met |= set(e.get("introduces", ()))
+    assert met == set(data["CAST"])
+
+
+def test_grace_route_is_complete(data):
+    kinds = {e["kind"] for e in data["EVENTS"] if "grace" in e.get("chars", ()) and e.get("route") == "grace"}
+    assert {"hangout", "story", "favor", "bonus"} <= kinds
+    labels = {data["ENDINGS"][k]["label"] for k in ("good_grace", "sweet_grace", "friends_grace")}
+    assert "ending_placeholder" not in labels
