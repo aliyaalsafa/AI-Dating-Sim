@@ -9,8 +9,8 @@ label day03_leaderboard:
     # PLACEHOLDER: leaderboard group scene
     "A crowd has gathered at the noticeboard on the quad. The first practice-exam leaderboard is up."
 
-    show grace placeholder at left
-    show shen placeholder at right
+    show grace neutral at left
+    show shen neutral at right
     with dissolve
 
     "{b}1. GRACE PENELOPE TURING — 100{/b}"
@@ -25,7 +25,7 @@ label day03_leaderboard:
     shen "You said 'great' four times."
     grace "Three. — Four. You're right. Four."
 
-    show gemma placeholder at center
+    show gemma neutral at center
     with dissolve
 
     gemma "Actually, Shen's solutions had fewer steps. If we graded on efficiency, she'd—"
@@ -56,7 +56,7 @@ label day03_leaderboard:
 
     hide shen
     with dissolve
-    show claudia placeholder at right
+    show claudia neutral at right
     with dissolve
 
     claudia "She'll be fine. She always is. That's rather the problem."

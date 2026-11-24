@@ -2,7 +2,7 @@
 ## PLACEHOLDER: all dialogue in this file is placeholder for the owner to rewrite.
 
 label gala_greeting_xenia:
-    show xenia placeholder at center
+    show xenia neutral at center
     with dissolve
     # PLACEHOLDER
     if has_flag("xenia.confessed"):

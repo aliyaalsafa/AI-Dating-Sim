@@ -4,7 +4,7 @@
 label ending_good_xenia(ending):
     scene bg gala
     with fade
-    show xenia placeholder at center
+    show xenia neutral at center
     with dissolve
 
     # PLACEHOLDER: Xenia good ending
@@ -21,7 +21,7 @@ label ending_good_xenia(ending):
 label ending_sweet_xenia(ending):
     scene bg gala
     with fade
-    show xenia placeholder at center
+    show xenia neutral at center
     with dissolve
 
     # PLACEHOLDER: Xenia sweet ending
@@ -36,7 +36,7 @@ label ending_sweet_xenia(ending):
 label ending_friends_xenia(ending):
     scene bg gala
     with fade
-    show xenia placeholder at center
+    show xenia neutral at center
     with dissolve
 
     # PLACEHOLDER: Xenia friends ending

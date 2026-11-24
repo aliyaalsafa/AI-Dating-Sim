@@ -3,7 +3,7 @@
 ## PLACEHOLDER: all dialogue in this file is placeholder for the owner to rewrite.
 
 label shen_opens_up:
-    show shen placeholder at center
+    show shen neutral at center
     with dissolve
 
     # PLACEHOLDER

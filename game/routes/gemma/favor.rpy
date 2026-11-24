@@ -5,7 +5,7 @@
 ## PLACEHOLDER: all dialogue in this file is placeholder for the owner to rewrite.
 
 label gemma_favor_offer:
-    show gemma placeholder at center
+    show gemma neutral at center
     with dissolve
 
     # PLACEHOLDER
@@ -30,7 +30,7 @@ label gemma_favor_offer:
 
 
 label gemma_favor_pick:
-    show gemma placeholder at center
+    show gemma neutral at center
     with dissolve
 
     # PLACEHOLDER
@@ -66,7 +66,7 @@ label gemma_favor_pick:
 
 
 label gemma_favor_review:
-    show shen placeholder at center
+    show shen neutral at center
     with dissolve
 
     # PLACEHOLDER
@@ -112,7 +112,7 @@ label gemma_favor_review:
 
 
 label gemma_favor_finish:
-    show gemma placeholder at center
+    show gemma neutral at center
     with dissolve
 
     # PLACEHOLDER

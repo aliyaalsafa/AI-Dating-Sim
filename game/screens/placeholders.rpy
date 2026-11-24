@@ -1,10 +1,12 @@
-## Placeholder art so the game is fully playable before real art exists.
-##   - Backgrounds: a solid color with the location name.
-##   - Sprites: a signature-color silhouette card with the character's name.
+## Art: real files where they exist, placeholders everywhere else (CLAUDE.md §2, §8 M5).
 ##
-## To swap in real art later, define an image with the same name
-## (e.g. `image bg council_office = "bg/council_office.png"`) and delete the
-## placeholder line.
+## Swap in real art by dropping files into game/images/ (see game/sim/assets.py
+## and ASSETS.md). No code changes needed:
+##   images/bg/<name>.png                  -> "bg <name>"  (e.g. bg/council_office.png)
+##   images/sprites/<char>_<expression>.png -> "<char> <expression>"  (e.g. sprites/grace_neutral.png)
+##
+## Every scene shows "<char> neutral", so a `<char>_neutral` file is the first
+## sprite to add for each character. Other expressions are optional.
 
 init -1 python:
 
@@ -24,21 +26,35 @@ init -1 python:
             xysize=(440, 860),
         )
 
+    # Story-only backgrounds (map locations come from LOCATIONS).
+    STORY_BGS = {
+        "gates": ("Academy Gates", "#e9e1f7", "#3a164099"),
+        "dorm":  ("Your Dorm Room", "#f7efe4", "#3a164099"),
+        "gala":  ("The Founders' Gala", "#2a1830", "#fff6fb99"),
+    }
 
 
-image grace placeholder = placeholder_sprite("grace")
-image xenia placeholder = placeholder_sprite("xenia")
-image claudia placeholder = placeholder_sprite("claudia")
-image gemma placeholder = placeholder_sprite("gemma")
-image shen placeholder = placeholder_sprite("shen")
-
-## One placeholder background per map location ("bg <location_id>"), plus
-## a few story-only places. Replace any of them with real art by defining the
-## same image name in a file that loads later.
 init 1 python:
-    for _lid in LOCATIONS:
-        renpy.image(("bg", _lid), location_bg(_lid))
+    from sim import assets as sim_assets
 
-image bg gates = placeholder_bg("Academy Gates", "#e9e1f7")
-image bg dorm = placeholder_bg("Your Dorm Room", "#f7efe4")
-image bg gala = placeholder_bg("The Founders' Gala", "#2a1830", "#fff6fb99")
+    _files = renpy.list_files()
+    REAL_BGS = sim_assets.find_backgrounds(_files)
+    REAL_SPRITES = sim_assets.find_sprites(_files, CAST.keys())
+
+    def _bg_placeholder(name):
+        if name in LOCATIONS:
+            return location_bg(name)
+        label_, color, ink = STORY_BGS[name]
+        return placeholder_bg(label_, color, ink)
+
+    for _name in list(LOCATIONS) + list(STORY_BGS):
+        renpy.image(("bg", _name), REAL_BGS.get(_name) or _bg_placeholder(_name))
+    for _name, _path in REAL_BGS.items():          # extra backgrounds with no placeholder
+        if _name not in LOCATIONS and _name not in STORY_BGS:
+            renpy.image(("bg", _name), _path)
+
+    for _cid in CAST:
+        renpy.image((_cid, "neutral"), REAL_SPRITES.get((_cid, "neutral")) or placeholder_sprite(_cid))
+    for (_cid, _expr), _path in REAL_SPRITES.items():
+        if _expr != "neutral":
+            renpy.image((_cid, _expr), _path)

@@ -4,7 +4,7 @@
 ## PLACEHOLDER: all dialogue in this file is placeholder for the owner to rewrite.
 
 label claudia_favor_offer:
-    show claudia placeholder at center
+    show claudia neutral at center
     with dissolve
 
     # PLACEHOLDER
@@ -49,7 +49,7 @@ label claudia_favor_deliver:
         "Leave it sealed.":
             "You leave it sealed. It isn't yours."
 
-    show xenia placeholder at center
+    show xenia neutral at center
     with dissolve
 
     # PLACEHOLDER
@@ -72,7 +72,7 @@ label claudia_favor_deliver:
 
 
 label claudia_favor_report:
-    show claudia placeholder at center
+    show claudia neutral at center
     with dissolve
 
     # PLACEHOLDER

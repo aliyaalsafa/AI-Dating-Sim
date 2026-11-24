@@ -6,13 +6,13 @@ label day01_lunch:
     scene bg cafeteria
     with dissolve
 
-    show grace placeholder at center
+    show grace neutral at center
     with dissolve
 
     # PLACEHOLDER: lunch group scene
     grace "And this is the cafeteria! Fun fact: it serves fourteen hundred meals a day."
 
-    show gemma placeholder at right
+    show gemma neutral at right
     with moveinright
 
     gemma "Actually, it's eleven hundred and sixty. Let me look that up — no, I know. Eleven sixty. It's on the wiki. I wrote the wiki."
@@ -22,7 +22,7 @@ label day01_lunch:
     "Her phone camera is already out. It may have been out the entire time."
     $ set_flag("met_gemma")
 
-    show xenia placeholder at left
+    show xenia neutral at left
     with moveinleft
 
     xenia "Oh look. Grace found a new person to agree with."

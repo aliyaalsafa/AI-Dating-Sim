@@ -4,7 +4,7 @@
 ## PLACEHOLDER: all dialogue in this file is placeholder for the owner to rewrite.
 
 label gemma_hangout:
-    show gemma placeholder at center
+    show gemma neutral at center
     with dissolve
 
     if gs.inventory:

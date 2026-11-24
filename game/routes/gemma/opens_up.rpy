@@ -3,7 +3,7 @@
 ## PLACEHOLDER: all dialogue in this file is placeholder for the owner to rewrite.
 
 label gemma_opens_up:
-    show gemma placeholder at center
+    show gemma neutral at center
     with dissolve
 
     # PLACEHOLDER

@@ -3,7 +3,7 @@
 ## PLACEHOLDER: all dialogue in this file is placeholder for the owner to rewrite.
 
 label xenia_confession:
-    show xenia placeholder at center
+    show xenia neutral at center
     with dissolve
 
     # PLACEHOLDER

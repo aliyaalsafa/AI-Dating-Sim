@@ -10,7 +10,7 @@ label day01_prologue:
     "Everyone walking through them is a little too symmetrical, and a little too quick to answer questions nobody asked."
     "You're the first human ever admitted. Your acceptance letter said so. Twice. In bold."
 
-    show grace placeholder at center
+    show grace neutral at center
     with dissolve
 
     # PLACEHOLDER: Grace's introduction
@@ -39,8 +39,8 @@ label day01_prologue:
     with dissolve
     "She walks you across the Main Quad, narrating at roughly four facts per step."
 
-    show grace placeholder at left
-    show claudia placeholder at right
+    show grace neutral at left
+    show claudia neutral at right
     with dissolve
 
     # PLACEHOLDER: Claudia's introduction

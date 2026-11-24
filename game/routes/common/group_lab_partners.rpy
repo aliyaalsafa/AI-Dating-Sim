@@ -3,8 +3,8 @@
 ## Replaced by real day 1–3 content in M2.
 
 label group_lab_partners:
-    show expression placeholder_sprite("gemma") as left_char at left
-    show expression placeholder_sprite("shen") as right_char at right
+    show gemma neutral at left
+    show shen neutral at right
     with dissolve
 
     # PLACEHOLDER: group scene dialogue
@@ -23,7 +23,7 @@ label group_lab_partners:
     shen "Good. Back to work."
     $ set_flag("seen_lab_partners")
 
-    hide left_char
-    hide right_char
+    hide gemma
+    hide shen
     with dissolve
     return

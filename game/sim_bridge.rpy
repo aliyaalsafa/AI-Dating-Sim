@@ -44,6 +44,7 @@ init -2 python:
 
     def notify_delta(cid, delta):
         if delta:
+            sfx("affection_up" if delta > 0 else "affection_down")
             renpy.notify("%s  %s%d ♥" % (cname(cid), "+" if delta > 0 else "", delta))
 
     def choose(cid, base, style=None):
@@ -89,6 +90,7 @@ init -2 python:
         if aid not in persistent.achievements:
             persistent.achievements.add(aid)
             achievement.grant(aid)
+            sfx("achievement")
             renpy.notify("Achievement: " + ACHIEVEMENTS[aid]["name"])
 
     def check_achievements():

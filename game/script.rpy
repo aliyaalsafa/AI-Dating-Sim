@@ -17,6 +17,7 @@ label day_loop:
 
         if fev is not None:
             $ gs = sim_ev.mark_seen(gs, fev)
+            $ scene_music(fev.get("location"), fev)
             call expression fev["label"] pass (*fev.get("args", []))
 
         else:
@@ -27,9 +28,11 @@ label day_loop:
             with dissolve
 
             if LOCATIONS[loc].get("kind") == "shop":
+                $ scene_music(loc)
                 call screen gift_shop
             else:
                 $ ev = sim_ev.pick_event(EVENTS, gs, LOCATIONS, loc)
+                $ scene_music(loc, ev)
                 if ev is not None:
                     $ gs = sim_ev.mark_seen(gs, ev)
                     call expression ev["label"] pass (*ev.get("args", []))
@@ -47,5 +50,7 @@ label day_loop:
                 $ grant("first_day")
 
         $ gs = sim_cal.advance(gs, RULES)
+        if gs.slot == 0:
+            $ sfx("new_day")
 
     jump gala

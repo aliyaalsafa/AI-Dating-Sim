@@ -4,7 +4,7 @@
 label ending_good_shen(ending):
     scene bg gala
     with fade
-    show shen placeholder at center
+    show shen neutral at center
     with dissolve
 
     # PLACEHOLDER: Shen good ending
@@ -21,7 +21,7 @@ label ending_good_shen(ending):
 label ending_sweet_shen(ending):
     scene bg gala
     with fade
-    show shen placeholder at center
+    show shen neutral at center
     with dissolve
 
     # PLACEHOLDER: Shen sweet ending
@@ -37,7 +37,7 @@ label ending_sweet_shen(ending):
 label ending_friends_shen(ending):
     scene bg gala
     with fade
-    show shen placeholder at center
+    show shen neutral at center
     with dissolve
 
     # PLACEHOLDER: Shen friends ending

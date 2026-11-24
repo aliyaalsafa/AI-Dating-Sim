@@ -3,7 +3,7 @@
 ## PLACEHOLDER: all dialogue in this file is placeholder for the owner to rewrite.
 
 label grace_bonus_date:
-    show grace placeholder at center
+    show grace neutral at center
     with dissolve
 
     # PLACEHOLDER

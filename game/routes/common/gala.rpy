@@ -39,6 +39,7 @@ screen gala_choice():
 
 label gala:
     hide screen hud
+    $ music("gala")
     scene bg gala
     with fade
 
@@ -48,13 +49,13 @@ label gala:
     $ post("BREAKING: the Founders' Gala is tonight and the new kid still hasn't asked anyone. the tension. the DRAMA. 🍿")
     "Your phone buzzes. [XENIA_HANDLE] has posted about you. Of course."
 
-    show grace placeholder at center
+    show grace neutral at center
     with dissolve
     grace "Welcome, everyone, to the [GALA_NAME]! Great to see you all! I've prepared a few remarks — just three sections, plus an appendix."
-    show gemma placeholder at right
+    show gemma neutral at right
     with dissolve
     gemma "Actually, it's five sections. I can see her notecards from here."
-    show shen placeholder at left
+    show shen neutral at left
     with dissolve
     shen "Six. She's hiding one."
     grace "...Six. Great catch, both of you. Sorry!"
@@ -102,6 +103,7 @@ label gala:
     $ persistent.endings_seen.add(ending)
     $ renpy.save_persistent()
     $ check_achievements()
+    $ ending_music(ending)
     call expression ENDINGS[ending]["label"] pass (ending)
     return
 
@@ -124,6 +126,7 @@ label ending_card(ending):
 label replay_ending:
     $ gala_new_ending = False
     $ gs = sim_state.new_game(CAST.keys(), RULES)
+    $ ending_music(replay_ending_id)
     call expression ENDINGS[replay_ending_id]["label"] pass (replay_ending_id)
     $ renpy.end_replay()
     return

@@ -4,13 +4,13 @@
 ## PLACEHOLDER: all dialogue in this file is placeholder for the owner to rewrite.
 
 label rivals_study_night:
-    show shen placeholder at right
+    show shen neutral at right
     with dissolve
 
     # PLACEHOLDER
     "Shen is at her usual table by the outlet. You've barely sat down when the door opens."
 
-    show grace placeholder at left
+    show grace neutral at left
     with dissolve
 
     grace "Oh! Hi! I didn't— I'm just here for a book. A specific book. On a specific shelf."
@@ -58,8 +58,8 @@ label rivals_study_night:
 label ending_rivals(ending):
     scene bg gala
     with fade
-    show grace placeholder at left
-    show shen placeholder at right
+    show grace neutral at left
+    show shen neutral at right
     with dissolve
 
     # PLACEHOLDER: Rivals secret ending

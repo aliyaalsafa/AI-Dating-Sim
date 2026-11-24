@@ -3,7 +3,7 @@
 ## PLACEHOLDER: all dialogue in this file is placeholder for the owner to rewrite.
 
 label day02_meet_shen:
-    show shen placeholder at center
+    show shen neutral at center
     with dissolve
 
     # PLACEHOLDER: Shen's introduction

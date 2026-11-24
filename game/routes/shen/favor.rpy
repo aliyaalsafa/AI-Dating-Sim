@@ -7,7 +7,7 @@
 ## PLACEHOLDER: all dialogue in this file is placeholder for the owner to rewrite.
 
 label shen_favor_offer:
-    show shen placeholder at center
+    show shen neutral at center
     with dissolve
 
     # PLACEHOLDER
@@ -34,7 +34,7 @@ label shen_favor_offer:
 
 
 label shen_favor_claudia:
-    show claudia placeholder at center
+    show claudia neutral at center
     with dissolve
 
     # PLACEHOLDER
@@ -66,7 +66,7 @@ label shen_favor_claudia:
 
 
 label shen_favor_wiki:
-    show gemma placeholder at center
+    show gemma neutral at center
     with dissolve
 
     # PLACEHOLDER
@@ -102,7 +102,7 @@ label shen_favor_wiki:
 
 
 label shen_favor_report:
-    show shen placeholder at center
+    show shen neutral at center
     with dissolve
 
     # PLACEHOLDER

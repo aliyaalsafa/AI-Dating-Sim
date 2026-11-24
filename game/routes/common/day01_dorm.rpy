@@ -2,6 +2,7 @@
 ## PLACEHOLDER: all dialogue in this file is placeholder for the owner to rewrite.
 
 label day01_dorm:
+    $ music("dorm")
     scene bg dorm
     with fade
 

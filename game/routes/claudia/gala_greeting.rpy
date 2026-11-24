@@ -2,7 +2,7 @@
 ## PLACEHOLDER: all dialogue in this file is placeholder for the owner to rewrite.
 
 label gala_greeting_claudia:
-    show claudia placeholder at center
+    show claudia neutral at center
     with dissolve
     # PLACEHOLDER
     if has_flag("claudia.confessed"):

@@ -3,7 +3,7 @@
 ## PLACEHOLDER: all dialogue in this file is placeholder for the owner to rewrite.
 
 label gala_greeting_grace:
-    show grace placeholder at center
+    show grace neutral at center
     with dissolve
     # PLACEHOLDER
     if has_flag("grace.confessed"):

@@ -2,7 +2,7 @@
 ## PLACEHOLDER: all dialogue in this file is placeholder for the owner to rewrite.
 
 label gala_greeting_shen:
-    show shen placeholder at center
+    show shen neutral at center
     with dissolve
     # PLACEHOLDER
     if has_flag("shen.confessed"):

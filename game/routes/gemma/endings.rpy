@@ -4,7 +4,7 @@
 label ending_good_gemma(ending):
     scene bg gala
     with fade
-    show gemma placeholder at center
+    show gemma neutral at center
     with dissolve
 
     # PLACEHOLDER: Gemma good ending
@@ -20,7 +20,7 @@ label ending_good_gemma(ending):
 label ending_sweet_gemma(ending):
     scene bg gala
     with fade
-    show gemma placeholder at center
+    show gemma neutral at center
     with dissolve
 
     # PLACEHOLDER: Gemma sweet ending
@@ -35,7 +35,7 @@ label ending_sweet_gemma(ending):
 label ending_friends_gemma(ending):
     scene bg gala
     with fade
-    show gemma placeholder at center
+    show gemma neutral at center
     with dissolve
 
     # PLACEHOLDER: Gemma friends ending

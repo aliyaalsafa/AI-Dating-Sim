@@ -4,7 +4,7 @@
 ## PLACEHOLDER: all dialogue in this file is placeholder for the owner to rewrite.
 
 label grace_favor_offer:
-    show grace placeholder at center
+    show grace neutral at center
     with dissolve
 
     # PLACEHOLDER
@@ -32,7 +32,7 @@ label grace_favor_debate:
     scene bg quad
     "Debate Club is six students on a bench, waiting for Grace. You are not Grace."
 
-    show gemma placeholder at right
+    show gemma neutral at right
     with dissolve
 
     # PLACEHOLDER
@@ -61,7 +61,7 @@ label grace_favor_debate:
 
 
 label grace_favor_report:
-    show grace placeholder at center
+    show grace neutral at center
     with dissolve
 
     # PLACEHOLDER

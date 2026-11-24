@@ -100,14 +100,18 @@ screen say(who, what):
     window:
         id "window"
 
-        if who is not None:
+        ## yfit lets the text box grow to fit large text instead of filling the screen.
+        fixed:
+            yfit True
 
-            window:
-                id "namebox"
-                style "namebox"
-                text who id "who"
+            if who is not None:
 
-        text what id "what"
+                window:
+                    id "namebox"
+                    style "namebox"
+                    text who id "who"
+
+            text what id "what"
 
 
     ## If there's a side image, display it above the text. Do not display on the
@@ -133,9 +137,12 @@ style window:
     xalign 0.5
     xfill True
     yalign gui.textbox_yalign
-    ysize gui.textbox_height
+    ## Grows upward when large text sizes need more than the default height
+    ## (accessibility.rpy). bottom_padding keeps text clear of the quick menu.
+    yminimum gui.textbox_height
+    bottom_padding 56
 
-    background Image("gui/textbox.png", xalign=0.5, yalign=1.0)
+    background DynamicDisplayable(textbox_background)
 
 style namebox:
     xpos gui.name_xpos
@@ -774,8 +781,30 @@ screen preferences():
                     label _("Choices")
                     textbutton _("Style Icons") action ToggleField(persistent, "show_style_icons")
 
-                ## Additional vboxes of type "radio_pref" or "check_pref" can be
-                ## added here, to add additional creator-defined preferences.
+                ## Accessibility (CLAUDE.md §8 M5). Ren'Py's own accessibility
+                ## menu (Shift+A) offers the same font options, plus more.
+                vbox:
+                    style_prefix "radio"
+                    label _("Text Size")
+                    for _pct in ACCESS_TEXT_SIZES:
+                        textbutton "%d%%" % round(_pct * 100) action Preference("font size", _pct)
+
+                vbox:
+                    style_prefix "radio"
+                    label _("Font")
+                    textbutton _("Default") action Preference("font transform", None)
+                    textbutton _("OpenDyslexic") action Preference("font transform", "opendyslexic")
+
+                vbox:
+                    style_prefix "radio"
+                    label _("Line Spacing")
+                    for _sp in ACCESS_LINE_SPACINGS:
+                        textbutton "%.1fx" % _sp action Preference("font line spacing", _sp)
+
+                vbox:
+                    style_prefix "check"
+                    label _("Assist")
+                    textbutton _("Self-Voicing") action Preference("self voicing", "toggle")
 
             null height (4 * gui.pref_spacing)
 
@@ -792,6 +821,10 @@ screen preferences():
                     label _("Auto-Forward Time")
 
                     bar value Preference("auto-forward time")
+
+                    label _("Text Box Opacity")
+
+                    bar value FieldValue(persistent, "textbox_opacity", range=1.0, style="slider")
 
                 vbox:
 

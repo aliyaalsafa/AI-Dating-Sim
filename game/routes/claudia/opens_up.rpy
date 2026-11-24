@@ -3,7 +3,7 @@
 ## PLACEHOLDER: all dialogue in this file is placeholder for the owner to rewrite.
 
 label claudia_opens_up:
-    show claudia placeholder at center
+    show claudia neutral at center
     with dissolve
 
     # PLACEHOLDER

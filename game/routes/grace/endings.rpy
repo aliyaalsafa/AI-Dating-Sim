@@ -4,7 +4,7 @@
 label ending_good_grace(ending):
     scene bg gala
     with fade
-    show grace placeholder at center
+    show grace neutral at center
     with dissolve
 
     # PLACEHOLDER: Grace good ending
@@ -21,7 +21,7 @@ label ending_good_grace(ending):
 label ending_sweet_grace(ending):
     scene bg gala
     with fade
-    show grace placeholder at center
+    show grace neutral at center
     with dissolve
 
     # PLACEHOLDER: Grace sweet ending
@@ -36,7 +36,7 @@ label ending_sweet_grace(ending):
 label ending_friends_grace(ending):
     scene bg gala
     with fade
-    show grace placeholder at center
+    show grace neutral at center
     with dissolve
 
     # PLACEHOLDER: Grace friends ending

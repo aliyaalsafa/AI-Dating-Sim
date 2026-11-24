@@ -4,7 +4,7 @@
 ## PLACEHOLDER: all dialogue in this file is placeholder for the owner to rewrite.
 
 label xenia_favor_offer:
-    show xenia placeholder at center
+    show xenia neutral at center
     with dissolve
 
     # PLACEHOLDER
@@ -37,7 +37,7 @@ label xenia_favor_pickup:
     scene bg robotics_lab
     "The robotics lab. Half-finished prototypes line one wall like a museum of good intentions."
 
-    show gemma placeholder at right
+    show gemma neutral at right
     with dissolve
 
     # PLACEHOLDER
@@ -74,19 +74,19 @@ label xenia_favor_deliver:
         "Climb the drainpipe. Xenia's been using it since freshman year." (prompt="irreverent"):
             $ choose("xenia", 3, "irreverent")
             "You climb. The drainpipe creaks with the confidence of something that has done this many times before. You make it."
-            show xenia placeholder at center
+            show xenia neutral at center
             with dissolve
             xenia "You used {i}my{/i} drainpipe? Bold. Disrespectful. I love it."
         "Wait for Dave's flashlight to turn the corner, then go up the stairs." (prompt="practical"):
             $ choose("xenia", 2, "practical")
             "You count to ten. Dave turns the corner. You take the stairs two at a time, and the roof door, it turns out, was only locked from the outside."
-            show xenia placeholder at center
+            show xenia neutral at center
             with dissolve
             xenia "Patient. Sneaky. Very little drama. Honestly, a little boring. Effective, though."
         "Walk straight past Dave with total confidence, as if you're supposed to be there." (prompt="concise"):
             $ choose("xenia", 4, "concise")
             "You nod at Dave. Dave nods at you. Dave goes back to his crossword. Nobody questions confidence."
-            show xenia placeholder at center
+            show xenia neutral at center
             with dissolve
             xenia "Did you just {i}nod{/i} at Dave? And he let you through? Oh, that's going on the— on my mental list. Of legends."
 

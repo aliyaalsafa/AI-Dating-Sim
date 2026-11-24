@@ -29,5 +29,6 @@ Run lint and tests before every commit. CI (`.github/workflows/ci.yml`) runs bot
 
 - `game/` — the Ren'Py project. Game rules live in `game/sim/` as plain Python with no Ren'Py imports, so they can be unit-tested.
 - `tests/` — pytest for `game/sim/`.
+- `ASSETS.md` — how to drop in real art, music and sound effects (file names only, no code).
 - `DECISIONS.md` — defaults chosen where the brief said TBD.
 - `CREDITS.md` — every third-party asset and its license.

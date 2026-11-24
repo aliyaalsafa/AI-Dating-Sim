@@ -4,7 +4,7 @@
 ## PLACEHOLDER: all dialogue in this file is placeholder for the owner to rewrite.
 
 label grace_hangout:
-    show grace placeholder at center
+    show grace neutral at center
     with dissolve
 
     if gs.inventory:

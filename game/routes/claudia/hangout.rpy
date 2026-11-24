@@ -5,7 +5,7 @@
 ## PLACEHOLDER: all dialogue in this file is placeholder for the owner to rewrite.
 
 label claudia_hangout:
-    show claudia placeholder at center
+    show claudia neutral at center
     with dissolve
 
     if gs.inventory:

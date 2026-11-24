@@ -4,7 +4,7 @@
 label ending_good_claudia(ending):
     scene bg gala
     with fade
-    show claudia placeholder at center
+    show claudia neutral at center
     with dissolve
 
     # PLACEHOLDER: Claudia good ending
@@ -23,7 +23,7 @@ label ending_good_claudia(ending):
 label ending_sweet_claudia(ending):
     scene bg gala
     with fade
-    show claudia placeholder at center
+    show claudia neutral at center
     with dissolve
 
     # PLACEHOLDER: Claudia sweet ending
@@ -38,7 +38,7 @@ label ending_sweet_claudia(ending):
 label ending_friends_claudia(ending):
     scene bg gala
     with fade
-    show claudia placeholder at center
+    show claudia neutral at center
     with dissolve
 
     # PLACEHOLDER: Claudia friends ending

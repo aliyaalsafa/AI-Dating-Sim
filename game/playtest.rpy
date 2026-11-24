@@ -60,12 +60,8 @@ screen playtest_tools():
 
 
 screen playtest_button():
-    zorder 51
     if PLAYTEST:
         textbutton "Dev":
-            xalign 1.0
-            xoffset -180
-            ypos 20
             padding (20, 12)
             background Solid("#7b4dff")
             hover_background Solid("#ff5fa2")
