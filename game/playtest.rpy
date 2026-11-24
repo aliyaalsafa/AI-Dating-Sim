@@ -1,7 +1,12 @@
 ## Playtest tools: a "Dev" button on the HUD for skipping ahead while testing.
-## Turn PLAYTEST off before any public release (see DECISIONS.md).
+##
+## Release-safe by default. The button shows only when:
+##   - running from the Ren'Py SDK (config.developer is True for unbuilt projects), or
+##   - game/playtest_enabled.txt exists, which pages.yml creates just before the
+##     GitHub Pages playtest build. It is gitignored and never committed, so
+##     desktop and itch.io builds never include it (see RELEASE.md).
 
-define PLAYTEST = True
+define PLAYTEST = config.developer or renpy.loadable("playtest_enabled.txt")
 
 init python:
 

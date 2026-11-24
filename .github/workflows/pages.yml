@@ -41,8 +41,9 @@ jobs:
       - name: Lint
         run: '"$SDK/renpy.sh" . lint --error-code'
 
-      - name: Web build
+      - name: Web build (playtest, with Dev tools)
         run: |
+          echo "Playtest build: enables the Dev button (see game/playtest.rpy)." > game/playtest_enabled.txt
           "$SDK/renpy.sh" "$SDK/launcher" web_build "$GITHUB_WORKSPACE" --destination "$GITHUB_WORKSPACE/web-build"
           test -f web-build/index.html
           touch web-build/.nojekyll

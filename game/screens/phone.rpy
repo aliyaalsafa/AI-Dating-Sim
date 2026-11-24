@@ -81,7 +81,8 @@ screen phone_contacts():
                     hbox:
                         spacing 16
                         text CAST_NAMES[cid]["full"] size 32 bold True color col["name"]
-                        text CAST_NAMES[cid]["model"] size 22 color "#8a7f88" yalign 0.5
+                        if SHOW_MODEL_SUBTITLES:
+                            text CAST_NAMES[cid]["model"] size 22 color "#8a7f88" yalign 0.5
                     $ h = sim_aff.hearts(gs, cid)
                     text ("♥" * h + "♡" * (5 - h)) size 34 color "#ff5fa2"
                     if c.romance_locked:

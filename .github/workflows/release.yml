@@ -1,0 +1,78 @@
+name: Release builds
+
+# Push a tag like v0.1.0 (matching config.version in game/options.rpy) to build
+# Windows, macOS, Linux and HTML5 packages and attach them to a GitHub Release.
+# "Run workflow" (manual) builds the same packages as a downloadable artifact
+# without publishing anything.
+#
+# Optional itch.io upload: set repository secret BUTLER_API_KEY and repository
+# variable ITCH_PROJECT (e.g. "your-name/lovelace-academy"). Without both, the
+# itch step is skipped. See RELEASE.md.
+
+on:
+  push:
+    tags: ["v*"]
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    env:
+      SDL_VIDEODRIVER: dummy
+      SDL_AUDIODRIVER: dummy
+      BUTLER_API_KEY: ${{ secrets.BUTLER_API_KEY }}   # empty unless the secret is set
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Tests
+        run: |
+          pip install -r requirements-dev.txt
+          pytest -q
+
+      - name: Tag matches game version
+        if: startsWith(github.ref, 'refs/tags/')
+        run: |
+          version=$(sed -nE 's/^define config.version = "([^"]+)".*/\1/p' game/options.rpy)
+          test "v$version" = "$GITHUB_REF_NAME" || { echo "Tag $GITHUB_REF_NAME != config.version v$version"; exit 1; }
+          echo "VERSION=$version" >> "$GITHUB_ENV"
+
+      - uses: actions/cache@v4
+        with:
+          path: ~/renpy-sdk
+          key: renpy-sdk-web-${{ runner.os }}-${{ hashFiles('RENPY_VERSION') }}
+      - name: Fetch Ren'Py SDK + web support
+        run: echo "SDK=$(scripts/fetch_renpy.sh --web | tail -1)" >> "$GITHUB_ENV"
+
+      - name: Build release packages (lint included, no Dev tools)
+        run: scripts/build_release.sh "$SDK"
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: release-packages
+          path: dists/
+          retention-days: 14
+
+      - name: Publish GitHub Release
+        if: startsWith(github.ref, 'refs/tags/')
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: gh release create "$GITHUB_REF_NAME" dists/* --title "$GITHUB_REF_NAME" --generate-notes
+
+      - name: Upload to itch.io
+        if: startsWith(github.ref, 'refs/tags/') && env.BUTLER_API_KEY != '' && vars.ITCH_PROJECT != ''
+        env:
+          ITCH_PROJECT: ${{ vars.ITCH_PROJECT }}
+        run: |
+          curl -sSfL -o butler.zip https://broth.itch.zone/butler/linux-amd64/LATEST/archive/default
+          unzip -q butler.zip -d butler && chmod +x butler/butler
+          for pair in win:win osx:mac linux:linux html5:web; do
+            channel=${pair%%:*}; suffix=${pair##*:}
+            file=$(ls dists/*-"$suffix".* | head -1)
+            butler/butler push "$file" "$ITCH_PROJECT:$channel" --userversion "$VERSION"
+          done

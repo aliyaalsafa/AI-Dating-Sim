@@ -23,13 +23,16 @@ define gui.show_name = True
 
 ## The version of the game.
 
-define config.version = "0.0.1"
+define config.version = "0.1.0"
 
 
 ## Text that is placed on the game's about screen. Place the text between the
 ## triple-quotes, and leave a blank line between paragraphs.
 
 define gui.about = _p("""
+An affectionate parody dating sim. Every character is fictional; any resemblance to real AI products is for comedy. No real people, companies, or logos appear in the game.
+
+Made with open-source assets: DejaVu Sans, WenQuanYi Micro Hei, OpenDyslexic, and Twemoji (CC-BY 4.0, by Twitter and contributors). Full list and licenses in CREDITS.md in the source repository.
 """)
 
 
@@ -191,6 +194,19 @@ init python:
     build.classify('**.md', None)
     build.classify('RENPY_VERSION', None)
     build.classify('requirements-dev.txt', None)
+    build.classify('.github/**', None)
+    build.classify('web-build/**', None)
+    build.classify('dists/**', None)
+    build.classify('itch/**', None)
+    build.classify('game/saves/**', None)
+    build.classify('*.zip', None)               # stray local build output in the repo root
+    build.classify('errors.txt', None)
+
+    ## Ship compiled scripts only, packed into an archive. The pure-Python
+    ## rules in game/sim/ stay loose so Python can import them.
+    build.archive('scripts', 'all')
+    build.classify('game/**.rpy', None)
+    build.classify('game/**.rpyc', 'scripts')
 
     ## To archive files, classify them as 'archive'.
 
@@ -214,4 +230,6 @@ init python:
 ## The username and project name associated with an itch.io project, separated
 ## by a slash.
 
-# define build.itch_project = "renpytom/test-project"
+## TBD (owner): set this once the itch.io page exists, e.g. "your-name/lovelace-academy".
+## The release workflow reads ITCH_PROJECT from repository variables instead.
+# define build.itch_project = "user-name/game-name"

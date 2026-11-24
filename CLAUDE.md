@@ -236,3 +236,5 @@ Implement this as a pure function, `evaluate_ending(state, gala_choice) -> Endin
 - Tests: `.venv/bin/pytest -q` (create with `python3 -m venv .venv && .venv/bin/pip install -r requirements-dev.txt`)
 - Web build: `renpy.sh launcher web_build <repo> --destination web-build`
 - `game/gui/` images come from the launcher's `generate_gui` **plus** the `gui_images` command. Lint does not catch missing GUI images; they only fail at runtime.
+- Release builds: `scripts/build_release.sh` → `dists/`. Tag `v<config.version>` to publish via `.github/workflows/release.yml`. See RELEASE.md.
+- The Dev button is automatic: it's on from the SDK or when `game/playtest_enabled.txt` exists (created only by pages.yml). Never commit that file.

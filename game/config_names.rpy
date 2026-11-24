@@ -26,6 +26,10 @@ init -10 python:
 
     XENIA_HANDLE = "@x_unfiltered"
 
+    # Release switch: set False to hide every model-name subtitle (the phone's
+    # Contacts tab is the only place they appear). See RELEASE.md.
+    SHOW_MODEL_SUBTITLES = True
+
 ## Game title (working title, TBD). Ren'Py reads this early, so it must be a
 ## literal string. Use `config.name` anywhere the title is needed.
 define config.name = _("Lovelace Academy")

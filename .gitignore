@@ -46,3 +46,7 @@ __pycache__/
 !.env.example
 /web-build.zip
 /progressive_download.txt
+
+# Release builds and the playtest flag (created only by pages.yml)
+/dists/
+/game/playtest_enabled.txt
