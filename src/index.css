@@ -1,0 +1,86 @@
+:root {
+  --pink: #ff5fa2;
+  --pink-light: #ffc2dc;
+  --purple: #7b4dff;
+  --cream: #fff6fb;
+  --ink: #3a1640;
+  font-family: 'Fredoka', system-ui, sans-serif;
+  color: var(--ink);
+}
+
+* { box-sizing: border-box; }
+
+html, body, #root { margin: 0; height: 100%; }
+
+body {
+  background: radial-gradient(circle at 50% 30%, #ffe3f0 0%, #ffb3d6 45%, #b79bff 100%);
+  overflow: hidden;
+}
+
+.title-screen {
+  position: relative;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+  padding: 16px;
+  text-align: center;
+}
+
+.logo {
+  margin: 0;
+  font-size: clamp(3rem, 11vw, 7rem);
+  font-weight: 700;
+  color: var(--cream);
+  letter-spacing: 0.02em;
+  -webkit-text-stroke: 3px var(--ink);
+  paint-order: stroke fill;
+  text-shadow: 6px 6px 0 var(--purple);
+  transform: rotate(-3deg);
+}
+
+.logo span { color: var(--pink); }
+
+.tagline {
+  margin: 0;
+  font-size: 1.25rem;
+  background: var(--cream);
+  border: 3px solid var(--ink);
+  border-radius: 999px;
+  padding: 0.3rem 1.2rem;
+}
+
+.start {
+  margin-top: 1.5rem;
+  font: inherit;
+  font-size: 1.6rem;
+  font-weight: 600;
+  color: var(--cream);
+  background: var(--pink);
+  border: 4px solid var(--ink);
+  border-radius: 18px;
+  padding: 0.6rem 2.4rem;
+  box-shadow: 0 6px 0 var(--ink);
+  cursor: pointer;
+  transition: transform 0.1s, box-shadow 0.1s;
+}
+
+.start:hover { transform: translateY(-2px) scale(1.04); }
+.start:active { transform: translateY(4px); box-shadow: 0 2px 0 var(--ink); }
+
+.hearts { position: absolute; inset: 0; pointer-events: none; }
+
+.hearts span {
+  position: absolute;
+  bottom: -2rem;
+  font-size: 2rem;
+  color: var(--pink);
+  opacity: 0.7;
+  animation: float 9s linear infinite;
+}
+
+@keyframes float {
+  to { transform: translateY(-115vh) rotate(25deg); opacity: 0; }
+}
