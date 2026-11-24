@@ -1,0 +1,34 @@
+name: CI
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  test:
+    name: pytest (game/sim)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12" # matches the Python bundled with Ren'Py 8.6
+      - run: pip install -r requirements-dev.txt
+      - run: pytest -q
+
+  lint:
+    name: renpy lint
+    runs-on: ubuntu-latest
+    env:
+      SDL_VIDEODRIVER: dummy
+      SDL_AUDIODRIVER: dummy
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/cache@v4
+        with:
+          path: ~/renpy-sdk
+          key: renpy-sdk-${{ runner.os }}-${{ hashFiles('RENPY_VERSION') }}
+      - name: Fetch Ren'Py SDK
+        run: echo "SDK=$(scripts/fetch_renpy.sh | tail -1)" >> "$GITHUB_ENV"
+      - name: Lint
+        run: '"$SDK/renpy.sh" . lint --error-code'
