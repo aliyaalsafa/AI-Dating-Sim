@@ -1,4 +1,4 @@
-## Xenia's favor (CLAUDE.md §6.3), offered at affection 50. Two steps:
+## Xenia's favor (CLAUDE.md §6.3), asked right after she opens up. Two steps:
 ##   0. Pick up a spare telescope eyepiece from Gemma in the robotics lab.
 ##   1. Get it up to the observatory roof one night without security noticing.
 ## PLACEHOLDER: all dialogue in this file is placeholder for the owner to rewrite.
@@ -100,7 +100,6 @@ label xenia_favor_deliver:
     $ gs = sim_fav.advance_step(gs, "xenia", CAST["xenia"]["favor"]["steps"])
     $ bump("xenia", sim_aff.scale_gain(10, CAST["xenia"]["difficulty"]), "favor_done")
     $ grant("first_favor")
-    call minor_clue("xenia", "earned")
 
     hide xenia
     with dissolve

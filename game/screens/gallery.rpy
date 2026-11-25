@@ -19,26 +19,20 @@ screen endings_gallery():
             text "Endings found: %d / %d" % eprog size 34 bold True color GALLERY_INK
             text "Seen endings can be replayed. They stay unlocked across playthroughs." size 24 color GALLERY_MUTED
 
-            for cid in CAST:
-                hbox:
-                    spacing 16
-                    text CAST_NAMES[cid]["name"]:
-                        size 30
-                        bold True
-                        min_width 200
-                        yalign 0.5
-                        color SIGNATURE_COLORS[cid]["name"]
-                    for kind, ktitle in ENDING_KINDS:
-                        use gallery_card("%s_%s" % (kind, cid), ktitle)
-
-            null height 6
-            text "Other endings" size 30 bold True color GALLERY_INK
+            text "Gala endings" size 30 bold True color GALLERY_INK
             hbox:
                 spacing 16
-                use gallery_card("solo", ENDINGS["solo"]["title"])
-                use gallery_card("rivals", ENDINGS["rivals"]["title"])
-                if RULES.clue_layer:
-                    use gallery_card("truth", ENDINGS["truth"]["title"])
+                box_wrap True
+                for eid in MAIN_ENDINGS:
+                    use gallery_card(eid, ENDINGS[eid]["title"])
+
+            null height 6
+            text "Monogamous endings" size 30 bold True color GALLERY_INK
+            hbox:
+                spacing 16
+                box_wrap True
+                for cid in CAST:
+                    use gallery_card("mono_" + cid, CAST_NAMES[cid]["name"])
 
 
 screen gallery_card(eid, label_text):

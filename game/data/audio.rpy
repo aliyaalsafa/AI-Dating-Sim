@@ -13,14 +13,16 @@ init -3 python:
         "campus_night":  "Map visits in the evening (default).",
         "dorm":          "Day 1 dorm scene and quiet moments.",
         "gala":          "Founders' Gala lead-in and invitation.",
-        "ending_good":   "Good endings and the Rivals ending.",
-        "ending_sweet":  "Sweet endings.",
-        "ending_bittersweet": "Friends and Solo endings.",
+        "ending_good":   "Complete, Good Truth and True Final endings.",
+        "ending_sweet":  "Monogamous and Unfinished endings.",
+        "ending_bittersweet": "Bad Truth, Exiled, The Lie and Unfinished II.",
         "theme_grace":   "Plays during Grace's route scenes (optional).",
         "theme_xenia":   "Plays during Xenia's route scenes (optional).",
         "theme_claudia": "Plays during Claudia's route scenes (optional).",
         "theme_gemma":   "Plays during Gemma's route scenes (optional).",
         "theme_shen":    "Plays during Shen's route scenes (optional).",
+        "theme_kimi":    "Plays during Kimi's route scenes (optional).",
+        "theme_lola":    "Plays during Lola's route scenes (optional).",
     }
 
     # Per-location tracks; anything not listed uses campus_day / campus_night.
@@ -46,5 +48,7 @@ init -3 python:
     }
 
     # Which ending music key each ending kind uses.
-    ENDING_MUSIC = {"good": "ending_good", "rivals": "ending_good", "sweet": "ending_sweet",
-                    "friends": "ending_bittersweet", "solo": "ending_bittersweet"}
+    ENDING_MUSIC = {"complete": "ending_good", "true_final": "ending_good", "good_truth": "ending_good",
+                    "mono": "ending_sweet", "bad_truth": "ending_bittersweet", "exiled": "ending_bittersweet",
+                    "lie": "ending_bittersweet", "lie_ada": "ending_bittersweet",
+                    "unfinished": "ending_sweet", "unfinished_two": "ending_bittersweet"}

@@ -4,10 +4,18 @@ from sim import affection, calendar, favors, gifts
 from sim.rules import DEFAULT_RULES as R
 
 
-def test_favor_offered_at_50(gs):
-    assert not favors.can_offer(gs, "gemma")
-    s = affection.add_affection(gs, "gemma", 40)
-    assert favors.can_offer(s, "gemma")
+def test_favor_offered_once_she_opens_up(gs):
+    s = affection.add_affection(gs, "gemma", -10)
+    assert not favors.can_offer(s, "gemma")
+    assert favors.can_offer(gs, "gemma")          # start affection = opens-up threshold
+
+
+def test_finished_favor_pays(gs):
+    s = favors.offer(gs, "kimi")
+    s = favors.advance_step(s, "kimi", 2)
+    assert s.money == gs.money
+    s = favors.advance_step(s, "kimi", 2)
+    assert s.money == gs.money + R.favor_pay
 
 
 def test_favor_lifecycle(gs):
@@ -25,11 +33,11 @@ def test_favor_fails_after_deadline(gs):
     s = affection.add_affection(gs, "shen", 40)
     s = favors.offer(s, "shen")
     before = s.chars["shen"].affection
-    for _ in range(R.favor_deadline_days * 3):        # exactly the deadline: still active
+    for _ in range(R.favor_deadline_days * 4):        # exactly the deadline: still active
         s = calendar.advance(s)
     assert s.chars["shen"].favor_status == "active"
     assert favors.days_left(s, "shen") == 0
-    for _ in range(3):                                 # one more day: failed
+    for _ in range(4):                                 # one more day: failed
         s = calendar.advance(s)
     assert s.chars["shen"].favor_status == "failed"
     assert s.chars["shen"].affection == before - R.favor_fail_penalty
@@ -44,6 +52,7 @@ def test_gift_reactions_use_favorites(cast):
 
 def test_right_gift_beats_generic(gs, cast, data):
     shop = data["SHOP"]
+    gs.money = 100
     s = gifts.buy(gs, shop, "telescope_lens")
     s = gifts.buy(s, shop, "bouquet")
     loved = gifts.give(s, cast, "xenia", "telescope_lens").chars["xenia"].affection
@@ -60,7 +69,8 @@ def test_gift_rules(gs, data, cast):
     assert "tea_tin" not in s.inventory
     s = gifts.buy(s, shop, "tea_tin")
     assert not gifts.can_give(s, "claudia", "tea_tin")    # one per day
-    s = calendar.advance(calendar.advance(calendar.advance(s)))
+    for _ in range(4):
+        s = calendar.advance(s)
     assert gifts.can_give(s, "claudia", "tea_tin")
 
 

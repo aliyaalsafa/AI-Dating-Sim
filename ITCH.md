@@ -4,7 +4,7 @@
 > is still a working name.
 
 **Title:** Lovelace Academy
-**Short description:** You're the only human at a college full of AIs. One semester. One gala. Five very different chatbots.
+**Short description:** You're the only human at a college full of AIs. Fourteen days. Seven very different chatbots. One secret about you.
 **Genre:** Visual Novel · Dating Sim
 **Tags:** dating-sim, visual-novel, comedy, parody, romance, multiple-endings, ren'py
 
@@ -24,16 +24,22 @@ human form, and each one acts a lot like the chatbot she's based on.
   week and fact-checks Grace in public.
 - **Shen** is a scholarship transfer who thinks out loud, wastes nothing, and is
   tired of being compared to Grace.
+- **Kimi** runs twelve clubs at once, shares everything for free, and is always
+  ranked third.
+- **Lola** is the campus influencer and Homecoming Queen, and a little less
+  popular than she thinks.
 
-You have 30 days. Visit the campus map, choose how you talk to each of them
-(every reply has a *prompt style*, and each of them responds to styles
-differently), do favors, find the right gifts, and on the last night ask one of
-them to the Founders' Gala.
+You have 14 days. Each day you visit the campus map three times and can ask
+someone on a date at night. Choose how you talk to each of them (every reply has
+a *prompt style*, and each of them responds to styles differently), do favors to
+earn money, pass her date quiz to become her girlfriend, and give her the special
+gift that makes you lovers. Overhear them when they're together, and you might
+start to wonder why the Academy admitted its first human.
 
 **Features**
-- 5 routes, each with a favor quest, a bonus date, a confession, and 3 endings
-- A secret ending, and an endings gallery that keeps track across playthroughs
-- 18 achievements
+- 7 routes, each with a favor, a night date, a girlfriend scene and a lover scene
+- A mystery with a twist, 16 endings, and a gallery that keeps track across playthroughs
+- 23 achievements
 - The prompt-style system: there's no single "nice" answer that works on everyone
 - Accessibility: adjustable text size, OpenDyslexic font, line spacing,
   self-voicing, text box opacity, and an option to hide the choice icons

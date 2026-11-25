@@ -3,7 +3,6 @@
 import pathlib
 import re
 
-from sim.endings import RIVALS_EVENT_FLAG
 
 GAME = pathlib.Path(__file__).parent.parent / "game"
 
@@ -42,12 +41,50 @@ def test_favor_steps_match_cast(data):
 
 
 def test_every_route_has_every_beat(data):
+    """Map events, plus the labels the engine calls by name (CLAUDE.md §6.1)."""
+    labels = defined_labels()
     for cid in data["CAST"]:
         kinds = {e["kind"] for e in data["EVENTS"] if e.get("route") == cid}
-        assert {"hangout", "story", "favor", "bonus"} <= kinds, cid
-        ids = {e["id"] for e in data["EVENTS"] if e.get("route") == cid}
-        for beat in ("opens_up", "favor_offer", "bonus_date", "confession"):
-            assert "%s_%s" % (cid, beat) in ids, (cid, beat)
+        assert {"hangout", "story", "favor"} <= kinds, cid
+        assert "%s_opens_up" % cid in {e["id"] for e in data["EVENTS"]}, cid
+        for beat in ("favor_offer", "bonus_date", "confession", "lover"):
+            assert "%s_%s" % (cid, beat) in labels, (cid, beat)
+
+
+def test_favors_end_with_her(data):
+    """The last favor step is spent with her, and every favor has two steps."""
+    for cid, route in data["ROUTES"].items():
+        assert len(route["favor_steps"]) == 2, cid
+        assert cid in route["favor_steps"][-1][2], cid
+
+
+def test_every_girl_has_a_special_gift(data):
+    for cid, c in data["CAST"].items():
+        assert data["SHOP"][c["special_gift"]].get("special"), cid
+    specials = [g for g, item in data["SHOP"].items() if item.get("special")]
+    assert sorted(specials) == sorted(c["special_gift"] for c in data["CAST"].values())
+
+
+def test_schedule_is_consistent(data):
+    from sim.events import validate_schedule
+    assert validate_schedule(data["LOCATIONS"], data["CAST"]) == []
+
+
+def test_every_pair_scene_meets_and_has_a_scene(data):
+    """Each MYSTERY pair has a map event, a meetup at that location, and calls pair_done."""
+    events = {e["pair"]: e for e in data["EVENTS"] if e["kind"] == "pair"}
+    for p in data["MYSTERY"]["pairs"]:
+        ev = events[p["id"]]
+        assert sorted(ev["chars"]) == sorted(p["chars"]), p["id"]
+        meetups = data["LOCATIONS"][ev["location"]].get("meetups", [])
+        assert any(sorted(m["chars"]) == sorted(p["chars"]) for m in meetups), p["id"]
+        text = (GAME / "routes" / "common" / "pairs" / ("pair_%s.rpy" % p["id"])).read_text(encoding="utf-8")
+        assert 'call pair_done("%s")' % p["id"] in text, p["id"]
+
+
+def test_mom_texts_cover_the_semester(data):
+    from sim.rules import DEFAULT_RULES as R
+    assert set(range(1, R.semester_days)) <= set(data["MOM_TEXTS"])
 
 
 def test_route_flags_are_set_somewhere(data):
@@ -58,11 +95,6 @@ def test_route_flags_are_set_somewhere(data):
     assert not missing, missing
 
 
-def test_rivals_scene_sets_the_flag_endings_check():
-    text = (GAME / "routes" / "common" / "rivals_study_night.rpy").read_text(encoding="utf-8")
-    assert 'set_flag("%s")' % RIVALS_EVENT_FLAG in text
-
-
 def test_every_route_has_a_dealbreaker_choice(data):
     for cid in data["CAST"]:
         text = "\n".join(p.read_text(encoding="utf-8") for p in (GAME / "routes" / cid).glob("*.rpy"))
@@ -71,7 +103,7 @@ def test_every_route_has_a_dealbreaker_choice(data):
 
 def test_no_model_names_in_dialogue(data):
     """Model names are meta text only (CLAUDE.md §2)."""
-    models = ["ChatGPT", "Grok", "Gemini", "DeepSeek", "Claude Sonnet", "Claude Haiku"]
+    models = ["ChatGPT", "Grok", "Gemini", "DeepSeek", "Claude Sonnet", "Claude Haiku", "Kimi K3", "Llama", "Moonshot"]
     for path in (GAME / "routes").rglob("*.rpy"):
         for n, line in enumerate(path.read_text(encoding="utf-8").splitlines(), 1):
             if line.lstrip().startswith("#"):
@@ -97,15 +129,9 @@ def test_every_achievement_can_be_granted(data):
 def test_gallery_lists_every_ending(data):
     from sim.endings import all_ending_ids
     assert set(data["ENDINGS"]) == set(all_ending_ids(data["CAST"].keys()))
-
-
-def test_every_route_hands_out_its_minor_clues(data):
-    """Freebie when she opens up, earned when her favor is done (CLAUDE.md §6.7)."""
-    for cid in data["CAST"]:
-        opens = (GAME / "routes" / cid / "opens_up.rpy").read_text(encoding="utf-8")
-        favor = (GAME / "routes" / cid / "favor.rpy").read_text(encoding="utf-8")
-        assert 'call minor_clue("%s", "freebie")' % cid in opens, cid
-        assert 'call minor_clue("%s", "earned")' % cid in favor, cid
+    labels = defined_labels()
+    missing = sorted(e["label"] for e in data["ENDINGS"].values() if e["label"] not in labels)
+    assert not missing, missing
 
 
 def test_mystery_starts_on_day_one():

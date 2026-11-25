@@ -18,8 +18,9 @@ def test_scale_gain(gain, difficulty, expected):
     assert scale_gain(gain, difficulty) == expected
 
 
-def test_everyone_starts_at_10(gs):
-    assert {c.affection for c in gs.chars.values()} == {10}
+def test_everyone_starts_ready_to_open_up(gs):
+    assert {c.affection for c in gs.chars.values()} == {R.start_affection}
+    assert R.start_affection >= R.opens_up_at
 
 
 def test_style_affinity_changes_outcome(gs, cast):
@@ -34,8 +35,8 @@ def test_style_affinity_changes_outcome(gs, cast):
 
 def test_apply_choice_returns_new_state(gs, cast):
     s = affection.apply_choice(gs, cast, "gemma", 4, "curious")
-    assert gs.chars["gemma"].affection == 10           # original untouched (rollback-safe)
-    assert s.chars["gemma"].affection > 10
+    assert gs.chars["gemma"].affection == R.start_affection     # original untouched (rollback-safe)
+    assert s.chars["gemma"].affection > R.start_affection
     assert s.day_log[-1][0] == "gemma"
 
 
@@ -47,7 +48,7 @@ def test_affection_clamps(gs):
 
 
 def test_dealbreaker_drops_then_locks(gs, cast):
-    s = affection.add_affection(gs, "gemma", 70)               # 80
+    s = affection.add_affection(gs, "gemma", 80 - R.start_affection)   # 80
     s = affection.dealbreaker(s, cast, "gemma")
     assert s.chars["gemma"].affection == 80 - R.dealbreaker_drop
     assert not s.chars["gemma"].romance_locked
@@ -65,11 +66,14 @@ def test_romance_lock_caps_gains(gs, cast):
 
 
 def test_unlock_thresholds(gs):
-    s = affection.add_affection(gs, "grace", 40)              # 50
-    u = affection.unlocks(s, "grace")
-    assert u == {"opens_up": True, "favor": True, "bonus_date": False, "confession": False}
-    s = affection.add_affection(s, "grace", 40)               # 90
+    u = affection.unlocks(gs, "grace")
+    assert u == {"opens_up": True, "favor": True, "date": False}
+    s = affection.add_affection(gs, "grace", R.date_at - R.start_affection)
     assert all(affection.unlocks(s, "grace").values())
+
+
+def test_romance_cap_blocks_dates():
+    assert R.romance_cap < R.date_at
 
 
 def test_hearts(gs):

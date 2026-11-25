@@ -88,23 +88,35 @@ screen phone_contacts():
                             text CAST_NAMES[cid]["full"] size 24 bold True color col["name"]
                             if SHOW_MODEL_SUBTITLES:
                                 text CAST_NAMES[cid]["model"] size 20 color "#8a7f88"
+                        if c.stage != "none":
+                            frame:
+                                yalign 0.5
+                                background ui_pill("gold" if c.stage == "lover" else "pink")
+                                padding (18, 4, 18, 8)
+                                text STAGE_LABELS[c.stage] size 22 color "#ffffff" outlines OUTLINE_SMALL
                     $ h = sim_aff.hearts(gs, cid)
                     use hearts(h)
                     if c.romance_locked:
                         text "Just friends now." size 22 color "#8a7f88" italic True
-                    text "Likes: " + (", ".join(CAST[cid]["favorites"]["likes"]) if "likes" in c.known else "???") size 24 color PHONE_INK
-                    text "Dislikes: " + (", ".join(CAST[cid]["favorites"]["dislikes"]) if "dislikes" in c.known else "???") size 24 color PHONE_INK
+                    elif c.stage == "none" and sim_rom.can_date(gs, cid, RULES):
+                        text "She'd say yes to a date. Ask her tonight." size 22 color THEME_HOT italic True
+                    for key in sim_rom.FACT_KEYS:
+                        $ v = CAST[cid]["favorites"][key]
+                        $ v = ", ".join(v) if isinstance(v, list) else v
+                        text "%s: %s" % (FACT_LABELS[key], v if key in c.known else "???") size 22 color PHONE_INK
                     $ fs = c.favor_status
                     if fs == "not_offered":
-                        text "Favor: ???" size 24 color PHONE_INK
+                        text "Favor: ???" size 22 color PHONE_INK
                     elif fs == "active":
-                        text "Favor: " + CAST[cid]["favor"]["desc"] + " (%d days left)" % sim_fav.days_left(gs, cid) size 24 color "#b0306a"
+                        text "Favor: " + CAST[cid]["favor"]["desc"] + " (%d days left)" % sim_fav.days_left(gs, cid) size 22 color "#b0306a"
                     else:
-                        text "Favor: " + fs.capitalize() size 24 color PHONE_INK
+                        text "Favor: " + fs.capitalize() size 22 color PHONE_INK
+                    if c.stage == "girlfriend":
+                        text "Her special gift: %s (campus store)" % SHOP[CAST[cid]["special_gift"]]["name"] size 22 color THEME_HOT bold True
 
 
 screen phone_feed():
-    text "@x_unfiltered" size 30 bold True color "#0090ff"
+    text "@x_unfiltered" size 30 bold True color PHONE_INK
     if not gs.feed:
         text "No posts yet." size 24 color "#8a7f88" italic True
     for p in reversed(gs.feed):
@@ -122,17 +134,16 @@ screen phone_achievements():
     use achievement_rows
 
 
-## Mystery board: the premise, then per character her major clue and the two
-## minor clues about her (who gives them, and how).
+## Mystery board: the premise, then per girl her major clue and the hints
+## about her (which pair scene gives each).
 screen phone_case():
     $ found, total = mystery_progress()
-    $ subs = sim_clues.minor_subjects(MYSTERY["order"])
     $ minors = sim_clues.known_minors(gs)
     $ majors = sim_clues.known_majors(gs)
     text MYSTERY["title"] size 32 bold True color PHONE_INK
     text MYSTERY["premise"] size 24 color THEME_MUTED italic True
     text "Pieces found: %d / %d" % (found, total) size 26 bold True color THEME_HOT
-    if found == total:
+    if sim_clues.knows_truth(gs):
         frame:
             xfill True
             background ui_panel("panel_dark")
@@ -152,13 +163,13 @@ screen phone_case():
                     text (major["name"] if cid in majors else "Major clue: ???") size 24 bold True color PHONE_INK yalign 0.5
                 if cid in majors:
                     text major["text"] size 22 color PHONE_INK italic True
-                for src in MYSTERY["order"]:
-                    for which in ("freebie", "earned"):
-                        if subs[src][which] == cid:
-                            if (src, cid) in minors:
-                                text "• " + MYSTERY["minor"][src][which]["text"] size 22 color PHONE_INK
-                            else:
-                                text "• ??? (%s, %s)" % (cname(src), "when she opens up" if which == "freebie" else "after her favor") size 22 color "#9a8f98"
+                for pid in sim_clues.pairs_about(MYSTERY, cid):
+                    $ p = sim_clues.pair_by_id(MYSTERY, pid)
+                    $ other = [x for x in p["chars"] if x != cid][0]
+                    if (pid, cid) in minors:
+                        text "• " + p["hints"][cid] size 22 color PHONE_INK
+                    else:
+                        text "• ??? (overhear %s with %s)" % (cname(cid), cname(other)) size 22 color "#9a8f98"
                 if cid not in majors:
-                    $ ready = sim_clues.can_craft(gs, MYSTERY["order"], cid)
-                    text ("You know enough to ask her the right way." if ready else "Find both hints to ask the right way, or force it out of her.") size 20 color (THEME_HOT if ready else "#9a8f98") italic True
+                    $ ready = sim_clues.can_craft(gs, MYSTERY, cid)
+                    text ("You know enough to ask her the right way." if ready else "Overhear both hints to ask her the right way, or force it out of her.") size 20 color (THEME_HOT if ready else "#9a8f98") italic True

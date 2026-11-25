@@ -22,8 +22,10 @@ class CharState:
     favor_status: str = "not_offered"
     favor_started_day: int | None = None
     favor_step: int = 0
-    known: set = field(default_factory=set)          # info revealed on the phone, e.g. {"likes"}
+    known: set = field(default_factory=set)          # facts revealed on the phone, e.g. {"likes", "place"}
     last_gift_day: int | None = None
+    stage: str = "none"                              # none -> girlfriend (date quiz) -> lover (special gift)
+    dates: int = 0                                   # night dates attempted
 
 
 @dataclass

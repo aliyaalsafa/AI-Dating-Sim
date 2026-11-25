@@ -1,9 +1,11 @@
-## Founders' Gala (CLAUDE.md §5, §7). Day 30.
-## Lead-in, a greeting from each character (routes/<cid>/gala_greeting.rpy),
-## the invitation, then the ending. Endings seen persist across playthroughs.
+## Founders' Gala (CLAUDE.md §7). Day 14, evening and night.
+## Lead-in, a greeting from each girl you've met (routes/<cid>/gala_greeting.rpy),
+## then, if you know the truth, the choice: tell them or say nothing.
+## Ending conditions: game/sim/endings.py. Endings seen persist across playthroughs.
 ## PLACEHOLDER: all dialogue in this file is placeholder for the owner to rewrite.
 
 default gala_new_ending = False
+default gala_lovers = []
 
 screen gala_choice():
     modal True
@@ -11,33 +13,31 @@ screen gala_choice():
     vbox:
         xalign 0.5
         yalign 0.45
-        spacing 18
-        use heading("Who will you ask to the %s?" % GALA_NAME, 60)
-        null height 14
-        for cid in CAST:
-            if ("met_" + cid) in gs.flags:
-                $ h = sim_aff.hearts(gs, cid)
-                button at pop_hover:
+        spacing 22
+        use heading("The music stops. Everyone is looking at you.", 54)
+        null height 10
+        frame:
+            xalign 0.5
+            xsize 1000
+            background ui_card("card")
+            padding (40, 26)
+            vbox:
+                spacing 10
+                text "You know what you are. They don't know that you know." size 30 color THEME_PLUM xalign 0.5
+                hbox:
                     xalign 0.5
-                    xsize 760
-                    background ui_card("card")
-                    hover_background ui_card("card_hover")
-                    padding (34, 16)
-                    action Return(cid)
-                    hbox:
-                        xfill True
-                        use char_chip(cid, 32)
-                        hbox:
-                            xalign 1.0
-                            yalign 0.5
-                            use hearts(h, 5, 1.2)
-        null height 14
+                    spacing 14
+                    text "Your lovers:" size 28 color THEME_PLUM yalign 0.5
+                    if not gala_lovers:
+                        text "none" size 28 color THEME_MUTED italic True yalign 0.5
+                    for cid in gala_lovers:
+                        use char_chip(cid, 24)
+        null height 10
         hbox:
             xalign 0.5
-            spacing 20
-            use pill_button("Go alone", Return(None), "white", 30)
-            if mystery_on() and sim_clues.solved(gs, MYSTERY["order"]):
-                use pill_button("Tell everyone what you found", Return(sim_end.TRUTH_CHOICE), "gold", 30)
+            spacing 24
+            use pill_button("Tell them the truth", Return(sim_end.TELL), "gold", 32)
+            use pill_button("Say nothing", Return(sim_end.SILENT), "white", 32)
 
 
 label gala:
@@ -49,7 +49,7 @@ label gala:
     # PLACEHOLDER: gala lead-in
     "Day [RULES.semester_days]. The night of the [GALA_NAME]."
     "The great hall has been strung with about four thousand fairy lights. Someone has clearly over-delivered on the decorations committee."
-    $ post("BREAKING: the Founders' Gala is tonight and the new kid still hasn't asked anyone. the tension. the DRAMA. 🍿")
+    $ post("the Founders' Gala is tonight and the new kid is HERE. dressed like a person. allegedly. 🍿")
     "Your phone buzzes. [XENIA_HANDLE] has posted about you. Of course."
 
     show grace neutral at center
@@ -78,43 +78,48 @@ label gala:
         call gala_greeting_gemma
     if has_flag("met_shen"):
         call gala_greeting_shen
+    if has_flag("met_kimi"):
+        call gala_greeting_kimi
+    if has_flag("met_lola"):
+        call gala_greeting_lola
 
-    "The band slows down. It's time to ask someone. Or not."
+    $ gala_lovers = lovers()
+    $ gala_pick = None
+    if sim_clues.knows_truth(gs):
+        "The band slows down. Somewhere under the music, you can hear the hum of the building, and you know now that it's the same hum as you."
+        while gala_pick is None:
+            call screen gala_choice
+            $ _tmp = _return
+            if _tmp == sim_end.TELL:
+                menu:
+                    "Tell everyone what you are?"
+                    "Yes. Tell them.":
+                        $ gala_pick = _tmp
+                    "Wait, let me think again.":
+                        pass
+            else:
+                menu:
+                    "Say nothing, dance, and pass?"
+                    "Yes. Say nothing.":
+                        $ gala_pick = _tmp
+                    "Wait, let me think again.":
+                        pass
 
-    $ gala_pick = "unset"
-    while gala_pick == "unset":
-        call screen gala_choice
-        $ gala_pick_tmp = _return
-        if gala_pick_tmp == sim_end.TRUTH_CHOICE:
-            menu:
-                "Skip the invitations and reveal the truth?"
-                "Yes. Tell them.":
-                    $ gala_pick = gala_pick_tmp
-                "Wait, let me think again.":
-                    pass
-        elif gala_pick_tmp is None:
-            menu:
-                "Go to the gala alone?"
-                "Yes, go alone.":
-                    $ gala_pick = None
-                "Wait, let me think again.":
-                    pass
-        else:
-            $ gala_who = cname(gala_pick_tmp)
-            menu:
-                "Ask [gala_who] to the [GALA_NAME]?"
-                "Ask her.":
-                    $ gala_pick = gala_pick_tmp
-                "Wait, let me think again.":
-                    pass
+    $ ending = sim_end.evaluate_ending(gs, gala_pick, CAST.keys(), RULES)
+    call play_ending(ending)
+    $ _coda = sim_end.coda(gs, ending)
+    if _coda:
+        call play_ending(_coda)
+    return
 
-    $ ending = sim_end.evaluate_ending(gs, gala_pick, RULES)
-    $ gala_new_ending = ending not in persistent.endings_seen
-    $ persistent.endings_seen.add(ending)
+
+label play_ending(eid):
+    $ gala_new_ending = eid not in persistent.endings_seen
+    $ persistent.endings_seen.add(eid)
     $ renpy.save_persistent()
     $ check_achievements()
-    $ ending_music(ending)
-    call expression ENDINGS[ending]["label"] pass (ending)
+    $ ending_music(eid)
+    call expression ENDINGS[eid]["label"] pass (eid)
     return
 
 
@@ -163,6 +168,7 @@ screen ending_card_screen(etitle, enew, eseen, etotal):
 label replay_ending:
     $ gala_new_ending = False
     $ gs = sim_state.new_game(CAST.keys(), RULES)
+    $ gala_lovers = []
     $ ending_music(replay_ending_id)
     call expression ENDINGS[replay_ending_id]["label"] pass (replay_ending_id)
     $ renpy.end_replay()

@@ -5,6 +5,9 @@
 ## Extra keys the engine ignores but tests check:
 ##   "introduces": characters this scene introduces (days 1-3 must cover everyone)
 ##   "route":      which route the event belongs to
+##
+## Night dates are not map events: the night menu (routes/common/night.rpy)
+## offers them, then plays <id>_bonus_date, the quiz, and <id>_confession.
 
 init -3 python:
 
@@ -17,14 +20,12 @@ init -3 python:
         {"id": "day01_prologue", "label": "day01_prologue", "kind": "story", "forced": True,
          "day_max": 1, "slots": ["morning"], "introduces": ["grace", "claudia"]},
         {"id": "day01_lunch", "label": "day01_lunch", "kind": "group", "forced": True,
-         "day_max": 1, "slots": ["afternoon"], "introduces": ["xenia", "gemma"]},
+         "day_max": 1, "slots": ["afternoon"], "introduces": ["xenia", "gemma", "kimi", "lola"]},
         {"id": "day01_dorm", "label": "day01_dorm", "kind": "story", "forced": True,
          "day_max": 1, "slots": ["evening"]},
         # Meet Shen early if you go looking for her on day 2...
         {"id": "day02_meet_shen_library", "label": "day02_meet_shen", "kind": "story",
          "location": "library_3f", "chars": ["shen"], "day_max": 2, "forbids_flags": ["met_shen"]},
-        {"id": "day02_meet_shen_lab", "label": "day02_meet_shen", "kind": "story",
-         "location": "robotics_lab", "chars": ["shen"], "day_max": 2, "forbids_flags": ["met_shen"]},
         # ...and everyone meets her at the leaderboard on day 3 regardless.
         {"id": "day03_leaderboard", "label": "day03_leaderboard", "kind": "group", "forced": True,
          "day_min": 3, "day_max": 3, "slots": ["morning"], "introduces": ["shen"]},
@@ -32,14 +33,16 @@ init -3 python:
 
     # ---------------------------------------------------------------------
     # Character routes (routes/<id>/). Every route has the same beats:
-    #   hangout (daily) -> opens up at 25 -> favor offer at 50 -> favor steps
-    #   -> bonus date at 75 -> confession at 90 (after the bonus date).
+    #   hangout (daily; each one teaches you a fact about her) -> opens up
+    #   (she asks her favor at the end of that scene: script.rpy calls
+    #   <id>_favor_offer) -> two favor steps, the last with her (pays money)
+    #   -> night date + quiz (routes/common/night.rpy) -> special gift
+    #   (routes/common/gifts.rpy).
     # ---------------------------------------------------------------------
     ROUTES = {
         "grace": {
             "hangouts": ["council_office"],
             "home": "council_office",
-            "date_slots": ["evening"],
             # Favor steps, in order: (event suffix, location, characters who must be there, slots)
             "favor_steps": [
                 ("debate", "quad", [], ["morning"]),
@@ -49,16 +52,14 @@ init -3 python:
         "xenia": {
             "hangouts": ["cafeteria", "observatory_roof"],
             "home": "observatory_roof",
-            "date_slots": ["evening"],
             "favor_steps": [
                 ("pickup", "robotics_lab", ["gemma"], None),
                 ("deliver", "observatory_roof", ["xenia"], None),
             ],
         },
         "claudia": {
-            "hangouts": ["quad", "claudia_library"],
+            "hangouts": ["claudia_library"],
             "home": "claudia_library",
-            "date_slots": ["evening"],
             "favor_steps": [
                 ("deliver", "cafeteria", ["xenia"], None),
                 ("report", "claudia_library", ["claudia"], None),
@@ -67,24 +68,39 @@ init -3 python:
         "gemma": {
             "hangouts": ["robotics_lab"],
             "home": "robotics_lab",
-            "date_slots": ["evening"],
             "favor_steps": [
-                ("pick", "robotics_lab", ["gemma"], None),
                 ("review", "library_3f", ["shen"], None),
                 ("finish", "robotics_lab", ["gemma"], None),
             ],
         },
         "shen": {
-            "hangouts": ["library_3f", "robotics_lab"],
+            "hangouts": ["library_3f"],
             "home": "library_3f",
-            "date_slots": ["evening"],
             "favor_steps": [
-                ("claudia", "claudia_library", ["claudia"], None),
                 ("wiki", "robotics_lab", ["gemma"], None),
                 ("report", "library_3f", ["shen"], None),
             ],
         },
+        "kimi": {
+            "hangouts": ["activities_hall"],
+            "home": "activities_hall",
+            "favor_steps": [
+                ("swap", "council_office", ["grace"], None),
+                ("report", "activities_hall", ["kimi"], None),
+            ],
+        },
+        "lola": {
+            "hangouts": ["quad"],
+            "home": "quad",
+            "favor_steps": [
+                ("camera", "robotics_lab", ["gemma"], None),
+                ("photo", "quad", ["lola"], None),
+            ],
+        },
     }
+
+    # Affection threshold for opening up. Keep in step with game/sim/rules.py.
+    OPENS_UP_AT = 15
 
     for _cid, _r in ROUTES.items():
         for _loc in _r["hangouts"]:
@@ -93,15 +109,7 @@ init -3 python:
         _home = _r["home"]
         EVENTS += [
             {"id": "%s_opens_up" % _cid, "label": "%s_opens_up" % _cid, "kind": "story", "route": _cid,
-             "location": _home, "chars": [_cid], "min_affection": {_cid: 25}},
-            {"id": "%s_favor_offer" % _cid, "label": "%s_favor_offer" % _cid, "kind": "story", "route": _cid,
-             "location": _home, "chars": [_cid], "min_affection": {_cid: 50},
-             "requires_flags": ["%s.opened_up" % _cid], "favor_status": {_cid: "not_offered"}},
-            {"id": "%s_bonus_date" % _cid, "label": "%s_bonus_date" % _cid, "kind": "bonus", "route": _cid,
-             "location": _home, "chars": [_cid], "slots": _r["date_slots"], "min_affection": {_cid: 75}},
-            {"id": "%s_confession" % _cid, "label": "%s_confession" % _cid, "kind": "story", "route": _cid,
-             "location": _home, "chars": [_cid], "slots": _r["date_slots"], "min_affection": {_cid: 90},
-             "requires_flags": ["%s.bonus_date_done" % _cid]},
+             "location": _home, "chars": [_cid], "min_affection": {_cid: OPENS_UP_AT}},
         ]
         for _i, (_suffix, _loc, _chars, _slots) in enumerate(_r["favor_steps"]):
             _ev = {"id": "%s_favor_%s" % (_cid, _suffix), "label": "%s_favor_%s" % (_cid, _suffix),
@@ -112,15 +120,20 @@ init -3 python:
             EVENTS.append(_ev)
 
     # ---------------------------------------------------------------------
-    # Group scenes
+    # Pair scenes (routes/common/pairs/). Each plays once, when both girls
+    # are at the location (see "meetups" in data/locations.rpy). Ids match
+    # MYSTERY["pairs"] in data/mystery.rpy.
     # ---------------------------------------------------------------------
-    EVENTS += [
-        {"id": "group_lab_partners", "label": "group_lab_partners", "kind": "group",
-         "location": "robotics_lab", "chars": ["gemma", "shen"], "slots": ["morning"], "day_min": 4},
-        # Rivals (secret ending setup): Grace shows up at Shen's library table one evening.
-        # Lower priority than Shen's own story beats so her route isn't blocked.
-        {"id": "rivals_study_night", "label": "rivals_study_night", "kind": "group", "route": "rivals",
-         "location": "library_3f", "chars": ["shen"], "slots": ["evening"], "priority": -1,
-         "min_affection": {"grace": 60, "shen": 60},
-         "requires_flags": ["grace.opened_up", "shen.opened_up"]},
+    PAIR_SCENES = [
+        ("grace_claudia", "council_office", ["grace", "claudia"]),
+        ("grace_shen", "library_3f", ["grace", "shen"]),
+        ("claudia_gemma", "claudia_library", ["claudia", "gemma"]),
+        ("gemma_kimi", "robotics_lab", ["gemma", "kimi"]),
+        ("xenia_kimi", "observatory_roof", ["xenia", "kimi"]),
+        ("xenia_lola", "cafeteria", ["xenia", "lola"]),
+        ("lola_shen", "quad", ["lola", "shen"]),
     ]
+    for _pid, _loc, _chars in PAIR_SCENES:
+        EVENTS.append({"id": "pair_" + _pid, "label": "pair_" + _pid, "kind": "pair",
+                       "location": _loc, "chars": list(_chars), "pair": _pid,
+                       "requires_flags": ["met_" + c for c in _chars]})

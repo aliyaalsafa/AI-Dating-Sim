@@ -7,16 +7,7 @@ label shen_hangout:
     show shen neutral at center
     with dissolve
 
-    if gs.inventory:
-        menu:
-            shen "[player_name]. Sit. You have something in your bag. Wait. Let me reconsider. That's none of my business. Is it for me?"
-            "Just talk.":
-                pass
-            "Give her a gift.":
-                call give_gift_flow("shen")
-                hide shen
-                with dissolve
-                return
+    shen "[player_name]. Sit. You have something in your bag. Wait. Let me reconsider. That's none of my business. Is it for me?"
 
     $ topic = sim_state.count(gs, "shen.hangouts") % 4
     $ gs = sim_state.incr(gs, "shen.hangouts")

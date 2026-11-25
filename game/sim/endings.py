@@ -1,60 +1,81 @@
-"""Ending evaluation at the Founders' Gala (CLAUDE.md §7)."""
+"""Ending evaluation at the Founders' Gala (CLAUDE.md §7).
 
-from . import clues
+Lovers counts only lover stage, among the main cast (Ada is not in it).
+Rules are checked top to bottom:
+
+  Never found the secret                          -> unfinished
+  Know it, say nothing, Ada unlocked              -> lie_ada (worst)
+  Know it, say nothing                            -> lie
+  Tell them, Ada unlocked, all main + Ada lovers  -> true_final
+  Tell them, every main girl a lover              -> complete
+  Tell them, 4-6 lovers                           -> good_truth
+  Tell them, 2-3 lovers                           -> bad_truth
+  Tell them, exactly 1 lover                      -> mono_<her id>
+  Tell them, 0 lovers                             -> exiled
+
+If Ada is unlocked and the ending isn't true_final or lie_ada, the
+unfinished_two scene plays after it (see `coda`).
+"""
+
+from .clues import TRUTH_FLAG
 from .rules import DEFAULT_RULES, Rules
 from .state import GameState
 
-RIVALS_PAIR = ("grace", "shen")
-RIVALS_EVENT_FLAG = "rivals_joint_event_done"
+ADA = "ada"
+ADA_FLAG = "ada.unlocked"
 
-SOLO = "solo"
-RIVALS = "rivals"
-TRUTH = "truth"                 # secret mystery ending
-TRUTH_CHOICE = "__truth__"      # gala choice offered only once the mystery is solved
+TELL = "tell"
+SILENT = "silent"
 
-
-def ending_id(kind: str, char_id: str) -> str:
-    return f"{kind}_{char_id}"   # e.g. "good_grace"
-
-
-def evaluate_ending(state: GameState, gala_choice: str | None, rules: Rules = DEFAULT_RULES) -> str:
-    """Return the EndingId for the player's gala choice (None = asked no one).
-
-    Order matters:
-      0. Truth (secret): chose to reveal the mystery, and every major clue is found.
-      1. Solo: asked no one, or everyone is below `solo_below`.
-      2. Rivals (secret): asked Grace or Shen, both >= `rivals_min`, joint event done.
-      3. Good: >= `good_min`, not locked, favor done.
-      4. Sweet: >= `sweet_min`, not locked.
-      5. Friends: anything else.
-    """
-    chars = state.chars
-    if gala_choice == TRUTH_CHOICE:
-        order = list(chars)
-        if rules.clue_layer and clues.solved(state, order):
-            return TRUTH
-        gala_choice = None      # not solved: treated as asking no one
-    if gala_choice is None or all(c.affection < rules.solo_below for c in chars.values()):
-        return SOLO
-
-    if (
-        gala_choice in RIVALS_PAIR
-        and all(chars[c].affection >= rules.rivals_min for c in RIVALS_PAIR if c in chars)
-        and all(c in chars for c in RIVALS_PAIR)
-        and RIVALS_EVENT_FLAG in state.flags
-    ):
-        return RIVALS
-
-    c = chars[gala_choice]
-    if not c.romance_locked and c.affection >= rules.good_min and c.favor_status == "done":
-        return ending_id("good", gala_choice)
-    if not c.romance_locked and c.affection >= rules.sweet_min:
-        return ending_id("sweet", gala_choice)
-    return ending_id("friends", gala_choice)
+TRUE_FINAL = "true_final"
+COMPLETE = "complete"
+GOOD_TRUTH = "good_truth"
+BAD_TRUTH = "bad_truth"
+EXILED = "exiled"
+LIE = "lie"
+LIE_ADA = "lie_ada"
+UNFINISHED = "unfinished"
+UNFINISHED_TWO = "unfinished_two"
 
 
-def all_ending_ids(cast_ids, rules: Rules = DEFAULT_RULES) -> list:
-    ids = [SOLO, RIVALS] + ([TRUTH] if rules.clue_layer else [])
-    for cid in cast_ids:
-        ids += [ending_id(k, cid) for k in ("good", "sweet", "friends")]
-    return ids
+def mono_id(char_id: str) -> str:
+    return f"mono_{char_id}"
+
+
+def _is_lover(state: GameState, cid: str) -> bool:
+    c = state.chars.get(cid)
+    return c is not None and c.stage == "lover"
+
+
+def evaluate_ending(state: GameState, gala_choice: str | None, main_ids,
+                    rules: Rules = DEFAULT_RULES) -> str:
+    """Return the EndingId for the gala. `gala_choice` is TELL, SILENT or None."""
+    main_ids = list(main_ids)
+    if TRUTH_FLAG not in state.flags:
+        return UNFINISHED
+    ada = ADA_FLAG in state.flags
+    if gala_choice != TELL:
+        return LIE_ADA if ada else LIE
+    lovers = [c for c in main_ids if _is_lover(state, c)]
+    n = len(lovers)
+    if n == len(main_ids):
+        return TRUE_FINAL if ada and _is_lover(state, ADA) else COMPLETE
+    if n >= rules.good_truth_min:
+        return GOOD_TRUTH
+    if n >= rules.bad_truth_min:
+        return BAD_TRUTH
+    if n == 1:
+        return mono_id(lovers[0])
+    return EXILED
+
+
+def coda(state: GameState, ending: str) -> str | None:
+    """The Unfinished II scene that follows a normal ending once Ada is unlocked."""
+    if ADA_FLAG in state.flags and ending not in (TRUE_FINAL, LIE_ADA):
+        return UNFINISHED_TWO
+    return None
+
+
+def all_ending_ids(main_ids, rules: Rules = DEFAULT_RULES) -> list:
+    ids = [TRUE_FINAL, COMPLETE, GOOD_TRUTH, BAD_TRUTH, EXILED, LIE, LIE_ADA, UNFINISHED, UNFINISHED_TWO]
+    return ids + [mono_id(c) for c in main_ids]

@@ -1,4 +1,4 @@
-## Gemma story beat at affection 25: she opens up (CLAUDE.md §6.1).
+## Gemma story beat: she opens up (your first real conversation) (CLAUDE.md §6.1).
 ## The robotics lab and her shelf of dead prototypes.
 ## PLACEHOLDER: all dialogue in this file is placeholder for the owner to rewrite.
 
@@ -31,7 +31,6 @@ label gemma_opens_up:
     $ set_flag("gemma.opened_up")
     $ reveal("gemma", "likes")
     "(You learned what Gemma likes. Check your phone.)"
-    call minor_clue("gemma", "freebie")
 
     hide gemma
     with dissolve

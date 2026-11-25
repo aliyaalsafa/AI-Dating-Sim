@@ -19,20 +19,37 @@ init python:
     def pt_skip_days(n):
         s = sim_state.evolve(store.gs)
         s.day = min(RULES.semester_days - 1, s.day + n)
+        s.slot = 0
         s.seen_today = set()
         store.gs = s
 
     def pt_to_gala_eve():
         s = sim_state.evolve(store.gs)
         s.day = RULES.semester_days - 1
+        s.slot = 0
         s.seen_today = set()
         store.gs = s
 
     def pt_all_clues():
-        """Know every minor clue (to test crafted prompts)."""
-        pairs = [(src, MYSTERY["minor"][src][w]["about"]) for src in MYSTERY["order"] for w in ("freebie", "earned")]
-        store.gs = sim_clues.seed_minors(store.gs, pairs)
-        renpy.notify("All minor clues known")
+        """Know every pair-scene hint (to test well-crafted asks)."""
+        hints = [(p["id"], c) for p in MYSTERY["pairs"] for c in p["chars"]]
+        store.gs = sim_clues.seed_minors(store.gs, hints)
+        renpy.notify("All hints known")
+
+    def pt_stage(cid, stage):
+        s = sim_state.evolve(store.gs)
+        s.chars[cid].stage = stage
+        s.chars[cid].affection = max(s.chars[cid].affection, RULES.date_at)
+        s.flags.add("met_" + cid)
+        store.gs = s
+
+    def pt_truth():
+        """Find every major clue and know the truth (to test the gala choice)."""
+        s = sim_state.evolve(store.gs)
+        s.layers.setdefault("clues", {"minor": set(), "major": set()})["major"] |= set(MYSTERY["order"])
+        s.flags |= {sim_clues.STARTED_FLAG, sim_clues.TRUTH_FLAG}
+        store.gs = s
+        renpy.notify("You know the truth")
 
     def pt_money(n):
         s = sim_state.evolve(store.gs)
@@ -56,18 +73,21 @@ screen playtest_tools():
             text "Affection" size 26 color "#8a7f88"
             for cid in CAST:
                 hbox:
-                    spacing 16
-                    text "%s: %d" % (cname(cid), gs.chars[cid].affection) min_width 260 size 30 color SIGNATURE_COLORS[cid]["name"]
+                    spacing 14
+                    text "%s: %d %s" % (cname(cid), gs.chars[cid].affection, STAGE_LABELS[gs.chars[cid].stage]) min_width 330 size 28 color SIGNATURE_COLORS[cid]["name"]
                     textbutton "-10" action Function(pt_affection, cid, -10)
                     textbutton "+10" action Function(pt_affection, cid, 10)
                     textbutton "+25" action Function(pt_affection, cid, 25)
+                    textbutton "GF" action Function(pt_stage, cid, "girlfriend")
+                    textbutton "Lover" action Function(pt_stage, cid, "lover")
             null height 10
             hbox:
                 spacing 24
                 textbutton "Skip 2 days" action Function(pt_skip_days, 2)
                 textbutton "Go to gala eve" action Function(pt_to_gala_eve)
                 textbutton "+100 cash" action Function(pt_money, 100)
-                textbutton "All clues" action Function(pt_all_clues)
+                textbutton "All hints" action Function(pt_all_clues)
+                textbutton "Know truth" action Function(pt_truth)
             textbutton "Close" xalign 0.5 action Hide("playtest_tools")
 
 

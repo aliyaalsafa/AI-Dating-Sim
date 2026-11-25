@@ -71,9 +71,8 @@ def unlocks(state: GameState, char_id: str, rules: Rules = DEFAULT_RULES) -> dic
     a = state.chars[char_id].affection
     return {
         "opens_up": a >= rules.opens_up_at,
-        "favor": a >= rules.favor_at,
-        "bonus_date": a >= rules.bonus_date_at,
-        "confession": a >= rules.confession_at,
+        "favor": a >= rules.opens_up_at,
+        "date": a >= rules.date_at,
     }
 
 

@@ -10,7 +10,7 @@ def test_fresh_game_earns_nothing(gs, cast):
 
 
 def test_no_state_still_counts_endings(cast):
-    assert earned(None, cast.keys(), {"solo"}) == {"first_ending", "solo_ending"}
+    assert earned(None, cast.keys(), {"unfinished"}) == {"first_ending", "unfinished_ending"}
 
 
 def test_all_met_needs_everyone(gs, cast):
@@ -40,36 +40,44 @@ def test_favors(gs, cast):
     assert "all_favors" in earned(s, cast.keys())
 
 
-def test_date_confession_and_bad_news(gs, cast):
+def test_stages_truth_and_bad_news(gs, cast):
     s = evolve(gs)
-    s.flags |= {"shen.bonus_date_done", "xenia.confessed"}
+    s.chars["shen"].stage = "girlfriend"
+    got = earned(s, cast.keys())
+    assert "first_girlfriend" in got and "first_lover" not in got
+    s.chars["xenia"].stage = "lover"
     s.chars["claudia"].dealbreaker_hits = 1
     s.chars["gemma"].romance_locked = True
-    assert {"first_date", "first_confession", "hit_a_nerve", "friend_zoned"} <= earned(s, cast.keys())
+    s.flags.add("truth.known")
+    assert {"first_girlfriend", "first_lover", "hit_a_nerve", "friend_zoned", "truth_known"} <= earned(s, cast.keys())
 
 
 def test_ending_achievements(cast):
-    got = earned(None, cast.keys(), {"good_grace", "rivals"})
-    assert {"first_ending", "good_ending", "rivals_ending"} <= got
-    assert "all_good" not in got and "completionist" not in got
-    assert "all_good" in earned(None, cast.keys(), {"good_" + c for c in cast})
+    got = earned(None, cast.keys(), {"mono_grace", "lie"})
+    assert {"first_ending", "lie_ending"} <= got
+    assert "all_mono" not in got and "completionist" not in got
+    assert "all_mono" in earned(None, cast.keys(), {"mono_" + c for c in cast})
+    assert "complete_ending" in earned(None, cast.keys(), {"complete"})
+    assert "exiled_ending" in earned(None, cast.keys(), {"exiled"})
     assert "completionist" in earned(None, cast.keys(), set(all_ending_ids(cast.keys())))
 
 
 def test_endings_progress_ignores_unknown_ids(cast):
-    seen, total = endings_progress(cast.keys(), {"solo", "good_grace", "not_an_ending"})
-    assert (seen, total) == (2, 18)
+    seen, total = endings_progress(cast.keys(), {"unfinished", "mono_grace", "not_an_ending"})
+    assert (seen, total) == (2, 16)
 
 
 def test_every_earnable_id_is_registered(data, gs, cast):
     s = evolve(gs)
     for c in cast:
-        s.flags |= {"met_" + c, c + ".opened_up", c + ".bonus_date_done", c + ".confessed"}
+        s.flags |= {"met_" + c, c + ".opened_up"}
         s.chars[c].favor_status = "done"
+        s.chars[c].stage = "lover"
         s.chars[c].dealbreaker_hits = 2
         s.chars[c].romance_locked = True
         s.flags |= {"mystery.%s.jailbreak" % c, "mystery.%s.crafted" % c}
-    s.layers["clues"] = {"minor": {("shen", "grace")}, "major": set(cast)}
+    s.layers["clues"] = {"minor": {("grace_shen", "grace")}, "major": set(cast)}
+    s.flags.add("truth.known")
     ids = earned(s, cast.keys(), set(all_ending_ids(cast.keys())))
     assert ids <= set(data["ACHIEVEMENTS"])
     assert len(ids) == len(data["ACHIEVEMENTS"]) - 3   # first_day, first_gift, loved_gift are granted by scenes

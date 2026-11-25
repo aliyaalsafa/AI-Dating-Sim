@@ -7,16 +7,7 @@ label gemma_hangout:
     show gemma neutral at center
     with dissolve
 
-    if gs.inventory:
-        menu:
-            gemma "Oh! [player_name]! Hold still, the lighting's good. Okay. Hi. What's up?"
-            "Just talk.":
-                pass
-            "Give her a gift.":
-                call give_gift_flow("gemma")
-                hide gemma
-                with dissolve
-                return
+    gemma "Oh! [player_name]! Hold still, the lighting's good. Okay. Hi. What's up?"
 
     $ topic = sim_state.count(gs, "gemma.hangouts") % 4
     $ gs = sim_state.incr(gs, "gemma.hangouts")

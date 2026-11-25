@@ -13,11 +13,15 @@ init -2 python:
     from sim import events as sim_ev
     from sim import favors as sim_fav
     from sim import gifts as sim_gifts
+    from sim import romance as sim_rom
     from sim import state as sim_state
     from sim.rules import DEFAULT_RULES as RULES, SLOTS
     from sim.styles import STYLES
 
-    SLOT_LABELS = {"morning": "Morning", "afternoon": "Afternoon", "evening": "Evening"}
+    SLOT_LABELS = {"morning": "Morning", "afternoon": "Afternoon", "evening": "Evening", "night": "Night"}
+    STAGE_LABELS = {"none": "", "girlfriend": "Girlfriend", "lover": "Lover"}
+    FACT_LABELS = {"likes": "Likes", "dislikes": "Dislikes", "place": "Favorite place",
+                   "item": "Favorite thing", "symbol": "Symbol"}
 
     # Choice badges (CLAUDE.md §6.2). Glyphs verified present in DejaVu Sans.
     STYLE_BADGES = {
@@ -82,6 +86,25 @@ init -2 python:
         s = sim_state.evolve(store.gs)
         s.feed.append({"day": s.day, "text": text})
         store.gs = s
+
+    def learn_fact(cid):
+        """Reveal the next unknown fact about her (shown on the phone, asked in her date quiz)."""
+        store.gs, key = sim_rom.learn_fact(store.gs, cid)
+        if key:
+            renpy.notify("Learned: %s's %s" % (cname(cid), FACT_LABELS[key].lower()))
+
+    def earn(amount, why=""):
+        s = sim_state.evolve(store.gs)
+        s.money += amount
+        store.gs = s
+        sfx("achievement")
+        renpy.notify("+$%d%s" % (amount, (" (%s)" % why) if why else ""))
+
+    def lovers():
+        return sim_rom.lovers(store.gs, CAST.keys())
+
+    def special_gift_owner(gid):
+        return next((c for c in CAST if CAST[c]["special_gift"] == gid), None)
 
     def buy_gift(gid):
         store.gs = sim_gifts.buy(store.gs, SHOP, gid)

@@ -3,6 +3,12 @@ from sim.rules import DEFAULT_RULES as R
 from sim.state import set_flag
 
 
+def next_day(s):
+    for _ in range(len(calendar.SLOTS)):
+        s = calendar.advance(s)
+    return s
+
+
 def test_slots_cycle_and_day_advances(gs):
     s = gs
     assert calendar.slot_name(s) == "morning"
@@ -10,6 +16,8 @@ def test_slots_cycle_and_day_advances(gs):
     assert calendar.slot_name(s) == "afternoon"
     s = calendar.advance(s)
     assert calendar.is_evening(s)
+    s = calendar.advance(s)
+    assert calendar.is_night(s) and calendar.is_last_slot(s)
     s = affection.add_affection(s, "grace", 5)
     s = calendar.advance(s)
     assert (s.day, s.slot) == (2, 0)
@@ -25,10 +33,10 @@ def test_gala_is_the_last_evening(gs):
     assert calendar.is_gala_day(s)              # its evening is the gala
 
 
-def test_short_semester_slot_count():
-    """Days 1..N-1 have 3 slots each, the last day has the slots before the gala."""
-    assert R.semester_days == 7
-    assert (R.semester_days - 1) * 3 + R.gala_slot == 20
+def test_semester_slot_count():
+    """14 days: 3 map slots + a date night each; the gala takes day 14's evening."""
+    assert R.semester_days == 14
+    assert calendar.playable_slots() == {"day": 41, "night": 13}
 
 
 LOCS = {
@@ -96,7 +104,7 @@ def test_real_data_is_valid(data):
     assert events.validate_events(data["EVENTS"], data["LOCATIONS"], data["CAST"]) == []
     for lid, loc in data["LOCATIONS"].items():
         for slot, who in loc.get("schedule", {}).items():
-            assert slot in ("morning", "afternoon", "evening"), lid
+            assert slot in ("morning", "afternoon", "evening"), lid   # nights are dates only
             for cid in who:
                 assert cid in data["CAST"], (lid, cid)
 
@@ -114,7 +122,7 @@ def test_hangouts_once_per_day_per_character(gs):
     assert ev["id"] == "hang_gemma"
     s = events.mark_seen(s, ev)
     assert events.pick_event(EVENTS, s, LOCS, "lab") is None      # same day: no repeat
-    s = calendar.advance(calendar.advance(calendar.advance(s)))   # next morning
+    s = next_day(s)   # next morning
     assert events.pick_event(EVENTS, s, LOCS, "lab")["id"] == "story_lab"
 
 
@@ -179,3 +187,36 @@ def test_days_1_to_3_introduce_everyone(data):
         if e.get("forced") and e.get("day_max", 99) <= 3:
             met |= set(e.get("introduces", ()))
     assert met == set(data["CAST"])
+
+
+MEET = {
+    "lab": {"schedule": {"afternoon": ["gemma"]},
+            "meetups": [{"chars": ["gemma", "kimi"], "slot": "afternoon", "days": [3]}]},
+    "hall": {"schedule": {"afternoon": ["kimi"]}},
+}
+
+
+def test_meetups_pull_both_girls_together(gs):
+    s = calendar.advance(gs)                       # day 1 afternoon: no meetup
+    assert events.present(MEET, "lab", s) == ["gemma"]
+    assert events.present(MEET, "hall", s) == ["kimi"]
+    s.day = 3
+    assert events.present(MEET, "lab", s) == ["gemma", "kimi"]
+    assert events.present(MEET, "hall", s) == []
+    assert events.meetup_here(MEET, "lab", s) == ["gemma", "kimi"]
+
+
+def test_focus_limits_the_pick(gs):
+    evs = [
+        {"id": "h_gemma", "label": "x", "kind": "hangout", "location": "lab", "chars": ["gemma"]},
+        {"id": "h_kimi", "label": "x", "kind": "hangout", "location": "lab", "chars": ["kimi"]},
+    ]
+    s = calendar.advance(gs)
+    s.day = 3
+    assert events.pick_event(evs, s, MEET, "lab", focus="kimi")["id"] == "h_kimi"
+    assert events.pick_event(evs, s, MEET, "lab", focus="gemma")["id"] == "h_gemma"
+
+
+def test_schedule_validation_catches_double_booking(cast):
+    locs = {"a": {"schedule": {"morning": ["grace"]}}, "b": {"schedule": {"morning": ["grace"]}}}
+    assert events.validate_schedule(locs, cast)

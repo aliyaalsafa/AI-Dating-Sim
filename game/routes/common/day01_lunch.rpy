@@ -55,4 +55,57 @@ label day01_lunch:
     gemma "She's actually nice. Statistically. Mostly."
     grace "She's... Xenia. Want me to: one, explain Xenia, two, not explain Xenia, or three—"
     gemma "Nobody can explain Xenia. I've tried. Her wiki page has a disputed tag."
+
+    hide gemma
+    with dissolve
+
+    # PLACEHOLDER: Lola intro
+    "A ring light swings into view before its owner does."
+    show lola neutral at right
+    with moveinright
+
+    lola "Hiii! Don't mind me, I'm live! Say hi to the feed, babe!"
+    lola "Everyone, this is the human. The {i}human{/i}. Exclusive first look. Sparkle sparkle, heart, heart."
+    lola "I'm Lola. Homecoming Queen. You've probably seen my posts. Everyone's seen my posts."
+    grace "Lola, we talked about filming in the cafeteria—"
+    lola "Grace, babe, the lighting in here is a crime, I'm doing it a favor."
+    $ set_flag("met_lola")
+
+    menu:
+        "Wave at the camera like you're on a talk show." (prompt="irreverent"):
+            $ choose("lola", 2, "irreverent")
+            lola "Okay, a natural! Love that. Laughing-crying face. You're going in the highlights."
+        "\"Nice to meet you. The camera, too, I guess.\"" (prompt="warm"):
+            $ choose("lola", 2, "warm")
+            lola "Aww. Polite to the camera. Nobody's polite to the camera."
+
+    lola "Okay, bye, babe! Follow me! I'll follow you back. Probably!"
+    hide lola
+    with moveoutright
+
+    # PLACEHOLDER: Kimi intro
+    show kimi neutral at right
+    with moveinright
+
+    kimi "Hi! Hi. You're new! New people need clubs! Here!"
+    "Three clipboards land on your tray. A fourth lands on your fries."
+    kimi "I'm Kimi! Chess, Pottery, Stargazing, Competitive Napping, Bake Sale Committee, and seven more. I run all of them. At the same time."
+    kimi "Sign up for as many as you want. Everything's free! Well, free for you. Grace, you still owe me a form."
+    grace "Great point — I'll get that to you by — soon. Very soon."
+    $ set_flag("met_kimi")
+
+    menu:
+        "\"Which one should I start with?\"" (prompt="structured"):
+            $ choose("kimi", 2, "structured")
+            kimi "Oh, you're a planner! Start with Stargazing. It's the quiet one. Then everything else. Simultaneously."
+        "Sign every single clipboard." (prompt="practical"):
+            $ choose("kimi", 2, "practical")
+            kimi "All of them? Nobody's ever signed all of them. I'm going to cry. I'm not going to cry. I'm a little bit going to cry."
+
+    kimi "See you everywhere! I mean it. I'm everywhere."
+    hide kimi
+    with moveoutright
+
+    grace "That was Kimi. She's... a lot. A lot of very helpful things. Want me to: one—"
+    "But you're already reading the Stargazing Club flyer."
     return

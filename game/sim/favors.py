@@ -1,4 +1,4 @@
-"""Favors: short multi-step quests offered at affection 50 (CLAUDE.md §6.3)."""
+"""Favors: short multi-step quests, the main source of money (CLAUDE.md §6.3)."""
 
 from .affection import add_affection
 from .rules import DEFAULT_RULES, Rules
@@ -7,7 +7,7 @@ from .state import GameState, evolve
 
 def can_offer(state: GameState, char_id: str, rules: Rules = DEFAULT_RULES) -> bool:
     c = state.chars[char_id]
-    return c.favor_status == "not_offered" and c.affection >= rules.favor_at
+    return c.favor_status == "not_offered" and c.affection >= rules.opens_up_at
 
 
 def offer(state: GameState, char_id: str) -> GameState:
@@ -21,8 +21,9 @@ def offer(state: GameState, char_id: str) -> GameState:
     return s
 
 
-def advance_step(state: GameState, char_id: str, total_steps: int) -> GameState:
-    """Complete one step. Finishing the last step marks the favor done."""
+def advance_step(state: GameState, char_id: str, total_steps: int,
+                 rules: Rules = DEFAULT_RULES) -> GameState:
+    """Complete one step. Finishing the last step marks the favor done and pays out."""
     s = evolve(state)
     c = s.chars[char_id]
     if c.favor_status != "active":
@@ -30,6 +31,7 @@ def advance_step(state: GameState, char_id: str, total_steps: int) -> GameState:
     c.favor_step += 1
     if c.favor_step >= total_steps:
         c.favor_status = "done"
+        s.money += rules.favor_pay
     return s
 
 

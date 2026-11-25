@@ -1,4 +1,5 @@
-## Campus store stock (CLAUDE.md §6.4). Who loves/hates what is in cast.rpy.
+## Campus store stock (CLAUDE.md §6.3). Who loves/hates what is in cast.rpy.
+## "special": True marks a girl's special gift (cast.rpy "special_gift"); it turns a girlfriend into a lover.
 ## Keep this python block free of Ren'Py calls: tests/conftest.py execs it directly.
 
 init -3 python:
@@ -27,4 +28,17 @@ init -3 python:
         "gossip_magazine":     {"name": "Gossip magazine",         "price": 3},
         "retro_bard_mug":      {"name": "Retro 'Bard' mug",        "price": 6},
         "designer_pen":        {"name": "Designer pen",            "price": 28},
+        "clipboard_set":       {"name": "Set of twelve clipboards", "price": 9},
+        "snack_box":           {"name": "Snack box for thirty",    "price": 15},
+        "mini_ring_light":     {"name": "Mini ring light",         "price": 20},
+        "glitter_phone_case":  {"name": "Glitter phone case",      "price": 12},
+
+        # Special gifts (one per girl). PLACEHOLDER names and prices.
+        "blank_planner":       {"name": "A planner with every page left blank", "price": 40, "special": True},
+        "star_atlas":          {"name": "A hand-bound star atlas",  "price": 40, "special": True},
+        "wax_seal_set":        {"name": "Wax seal and stationery set", "price": 40, "special": True},
+        "display_case":        {"name": "Display case for one finished project", "price": 40, "special": True},
+        "whale_pendant":       {"name": "Silver whale pendant",     "price": 40, "special": True},
+        "first_place_ribbon":  {"name": "A blue ribbon that says 1st", "price": 40, "special": True},
+        "instant_camera":      {"name": "Instant camera (no filters)", "price": 40, "special": True},
     }

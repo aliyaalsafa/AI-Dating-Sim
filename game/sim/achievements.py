@@ -1,4 +1,4 @@
-"""State-derived achievements (CLAUDE.md §6.5).
+"""State-derived achievements (CLAUDE.md §6.4).
 
 `earned` looks at a game state plus the persistent set of endings seen and
 returns every achievement id whose condition currently holds. The Ren'Py side
@@ -7,7 +7,7 @@ gift) are still granted directly from the scene that causes them.
 """
 
 from . import clues
-from .endings import RIVALS, SOLO, TRUTH, all_ending_ids
+from .endings import COMPLETE, EXILED, LIE, LIE_ADA, TRUE_FINAL, UNFINISHED, all_ending_ids, mono_id
 from .state import GameState
 
 
@@ -31,10 +31,10 @@ def earned(state: GameState | None, cast_ids, endings_seen=()) -> set:
             got.add("first_favor")
         if cast_ids and len(done) == len(cast_ids):
             got.add("all_favors")
-        if any(f"{c}.bonus_date_done" in flags for c in cast_ids):
-            got.add("first_date")
-        if any(f"{c}.confessed" in flags for c in cast_ids):
-            got.add("first_confession")
+        if any(chars[c].stage in ("girlfriend", "lover") for c in cast_ids):
+            got.add("first_girlfriend")
+        if any(chars[c].stage == "lover" for c in cast_ids):
+            got.add("first_lover")
         if any(chars[c].dealbreaker_hits > 0 for c in cast_ids):
             got.add("hit_a_nerve")
         if any(chars[c].romance_locked for c in cast_ids):
@@ -45,19 +45,21 @@ def earned(state: GameState | None, cast_ids, endings_seen=()) -> set:
             got.add("jailbreak")
         if any("mystery.%s.crafted" % c in flags for c in cast_ids):
             got.add("prompt_engineer")
+        if clues.TRUTH_FLAG in flags:
+            got.add("truth_known")
 
     if seen:
         got.add("first_ending")
-    if any(e.startswith("good_") for e in seen):
-        got.add("good_ending")
-    if RIVALS in seen:
-        got.add("rivals_ending")
-    if SOLO in seen:
-        got.add("solo_ending")
-    if TRUTH in seen:
-        got.add("truth_ending")
-    if cast_ids and all(f"good_{c}" in seen for c in cast_ids):
-        got.add("all_good")
+    if UNFINISHED in seen:
+        got.add("unfinished_ending")
+    if COMPLETE in seen or TRUE_FINAL in seen:
+        got.add("complete_ending")
+    if EXILED in seen:
+        got.add("exiled_ending")
+    if LIE in seen or LIE_ADA in seen:
+        got.add("lie_ending")
+    if cast_ids and all(mono_id(c) in seen for c in cast_ids):
+        got.add("all_mono")
     if cast_ids and set(all_ending_ids(cast_ids)) <= seen:
         got.add("completionist")
 

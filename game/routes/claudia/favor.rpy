@@ -1,4 +1,4 @@
-## Claudia's favor (CLAUDE.md §6.3), offered at affection 50. Two steps:
+## Claudia's favor (CLAUDE.md §6.3), asked right after she opens up. Two steps:
 ##   0. Deliver one of her never-sent letters to Xenia in the cafeteria, unread.
 ##   1. Tell Claudia it's done, back in her library.
 ## PLACEHOLDER: all dialogue in this file is placeholder for the owner to rewrite.
@@ -9,21 +9,21 @@ label claudia_favor_offer:
 
     # PLACEHOLDER
     "Claudia is holding a single envelope. It's cream, sealed with terracotta wax, and a little soft at the corners, as if it's been carried around for a long time."
-    claudia "I'd like to ask you for something, and I want to be careful, because it matters to me more than I'm going to manage to sound like it does."
-    claudia "This is one of my letters. The unsent kind. It's for Xenia. I've rewritten it nine times and carried it for three weeks, and I've decided that if I don't let someone else carry it, I never will."
+    claudia "I'd like to ask you for something, and I want to be careful, because it matters to me more than I'm going to manage to sound like it does. I've run the numbers on this one rather more times than is healthy."
+    claudia "This is one of my letters. The unsent kind. It's for Xenia. I've rewritten it nine times and carried it for three weeks, and every week I tell myself I need more information first. I've finally admitted that's procrastination wearing a lab coat. If I don't let someone else carry it, I never will."
     claudia "Would you give it to her? She's usually in the cafeteria in the afternoons, being rude to the fries."
     claudia "And, I'm so sorry to ask this, please don't read it. It isn't that I don't trust you. It's that it's hers, and I'd like her to be the first."
 
     menu:
         "\"Of course. It won't leave my hands until it's in hers.\"" (prompt="warm"):
             $ choose("claudia", 2, "warm")
-            claudia "Thank you. I'd write you a thank-you note, but I suspect you'd find it alarmingly long."
+            claudia "Thank you. I'd write you a thank-you note, but I suspect you'd find it alarmingly long. It would have an appendix."
         "\"I won't read it. You have my word.\"" (prompt="honest"):
             $ choose("claudia", 3, "honest")
-            claudia "I believe you. That's a lovely thing to be able to say. I don't get to say it very often."
+            claudia "I believe you. Not ninety percent, not with caveats. I simply believe you. That's a lovely thing to be able to say. I don't get to say it very often."
         "\"Is it a love letter?\"" (prompt="pry"):
             $ choose("claudia", 0, "pry")
-            claudia "It's not. That's all I'll say, and I'm sorry it's all I'll say. Perhaps that's part of why I asked you not to read it."
+            claudia "It's not. That's all I'll say, and I'm sorry it's all I'll say. Perhaps that's part of why I asked you not to read it. Some things are only safe with a sample size of one."
 
     $ gs = sim_fav.offer(gs, "claudia")
     "(Favor accepted: deliver Claudia's letter to Xenia in the cafeteria one afternoon, unread, then tell Claudia it's done. You have [RULES.favor_deadline_days] days.)"
@@ -44,7 +44,7 @@ label claudia_favor_deliver:
             "You slip the letter out. Claudia's handwriting is beautiful, and the letter is short. For her, it's practically a telegram."
             # PLACEHOLDER: the letter's contents (only seen by players who read it)
             "{i}Dear Xenia, I want to be careful here, so I'll say it plainly instead. I know you run @x_unfiltered. I've known since the post about the soup.{/i}"
-            "{i}I'm not going to tell anyone. It isn't mine to tell. I only wanted you to know that someone knows, and that it hasn't changed what she thinks of you, which is that you're much kinder than you let anyone see. Yours, with apologies for the length, Claudia.{/i}"
+            "{i}I've weighed it every way I know how, and the answer always comes out the same: I'm not going to tell anyone. It isn't mine to tell. I only wanted you to know that someone knows, and that it hasn't changed what she thinks of you, which is that you're much kinder than you let anyone see. Yours, with apologies for the length, Claudia.{/i}"
             "You fold it back along its creases. It doesn't quite sit the way it did before."
         "Leave it sealed.":
             "You leave it sealed. It isn't yours."
@@ -76,28 +76,27 @@ label claudia_favor_report:
     with dissolve
 
     # PLACEHOLDER
-    claudia "You're back. Did she— no, I'll let you tell it. I've been rehearsing my calm face. How is it? Be honest. It's terrible, isn't it."
+    claudia "You're back. Did she— no, I'll let you tell it. I've been rehearsing my calm face, and modeling every possible outcome, which has not helped the face. How is it? Be honest. It's terrible, isn't it."
     "You tell her the letter is delivered. You pass on Xenia's message: it was too long."
-    claudia "Oh. Oh, that's wonderful. That's the nicest thing she's ever said to anyone."
+    claudia "Oh. Oh, that's wonderful. That's the nicest thing she's ever said to anyone. It was in my best-case scenario, and I'd only given that perhaps a twenty percent chance."
 
     if has_flag("claudia.read_letter"):
         "Claudia looks at you for a long, quiet moment. Not unkindly. Just accurately."
         claudia "You read it, didn't you."
-        claudia "Please don't apologize, or explain. I could tell from the way you said her name. You said it like someone who knows something about her now."
+        claudia "Please don't apologize, or explain. I could tell from the way you said her name. You said it like someone who knows something about her now. It's a very reliable signal; I've rather a lot of data on it."
         claudia "I'm not angry. I'm a little sad, and I think I'm allowed to be. I asked for one small thing, and it was the thing I most needed."
         claudia "But you delivered it, and you were honest with your face, if not your hands. I'll take that. And I'd ask you to keep what you read the way I've kept it."
         $ bump("claudia", -5, "read_letter")
         claudia "Thank you, still. I mean that. I've had it in my pocket for three weeks, and now it's in hers."
     else:
         claudia "And you didn't read it. I can tell. You'd look at me differently if you had, and you're looking at me exactly the same."
-        claudia "Thank you. Truly. It's a strange relief, letting one of them go. I'd been carrying that letter around like a stone in my shoe, a very elegantly addressed stone."
+        claudia "Thank you. Truly. It's a strange relief, letting one of them go. I'd been carrying that letter around like a stone in my shoe, a very elegantly addressed stone. I think the expected cost of never sending it was far higher than I'd let myself calculate."
         claudia "I think I might let another one out someday. I'm not sure who to. I have a feeling I'll know."
 
     $ gs = sim_fav.advance_step(gs, "claudia", CAST["claudia"]["favor"]["steps"])
     $ bump("claudia", sim_aff.scale_gain(10, CAST["claudia"]["difficulty"]), "favor_done")
     $ grant("first_favor")
-    call minor_clue("claudia", "earned")
-    claudia "I'm going to write you a thank-you note now. I'm sorry in advance. It's going to have a postscript."
+    claudia "I'm going to write you a thank-you note now. I'm sorry in advance. It's going to have a postscript, and possibly footnotes."
 
     hide claudia
     with dissolve

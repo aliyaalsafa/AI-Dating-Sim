@@ -1,4 +1,4 @@
-## Xenia story beat at affection 25: she opens up (CLAUDE.md §6.1). On the
+## Xenia story beat: she opens up (your first real conversation) (CLAUDE.md §6.1). On the
 ## observatory roof at night.
 ## PLACEHOLDER: all dialogue in this file is placeholder for the owner to rewrite.
 
@@ -34,7 +34,6 @@ label xenia_opens_up:
     $ set_flag("xenia.opened_up")
     $ reveal("xenia", "likes")
     "(You learned what Xenia likes. Check your phone.)"
-    call minor_clue("xenia", "freebie")
 
     hide xenia
     with dissolve

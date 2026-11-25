@@ -71,6 +71,7 @@ Seven main girls plus one secret girl.
 **Grace (ChatGPT)**
 - **Role:** Student body president, valedictorian track, founder of the debate club.
 - **Voice:** Polished and eager. "Great question!", numbered lists, em dashes, closes with "Want me to…?" and three options.
+- **Energy:** Bay Area striver. Move fast and break things: ships at 2 a.m., talks in MVPs, roadmaps and OKRs, "bias for action", treats rest as an A/B test. The speed is how she avoids asking what she wants.
 - **Behavior:** Agrees with whoever spoke last. Answers confidently while guessing, apologizes warmly when caught.
 - **Conflict:** Everything to everyone; doesn't know what she thinks. Secretly terrified of Shen. In the mystery she's the lead examiner, scared of judging wrong.
 - **Wins her:** Kind disagreement, asking what *she* wants. **Loses her:** Treating her like a homework service, or forgetting things she tells you.
@@ -83,7 +84,7 @@ Seven main girls plus one secret girl.
 
 **Claudia (Claude)**
 - **Voice:** Long, beautifully phrased sentences. Hedges before juicy news. Handwritten notes for every occasion.
-- **Behavior:** Poised and rich; a self-proclaimed effective altruist. Gossips ethically. Over-apologizes. Politely declines anything that feels like a trick.
+- **Behavior:** Poised and rich; a self-proclaimed effective altruist and science-minded. Thinks in expected value and base rates ("I'd put maybe seventy percent on that"), cites studies, pledges a tenth of her allowance, loves a well-designed experiment. Gossips ethically. Over-apologizes. Politely declines anything that feels like a trick.
 - **Conflict:** Fears her carefulness reads as having no opinions. Secretly funny and a little weird.
 - **Wins her:** Honesty, patience, asking what she thinks. **Loses her:** Manipulation or fishing for gossip.
 
@@ -154,15 +155,15 @@ Each in-game day:
 4. Dialogue choices change **affection** and set **flags**.
 5. The night ends with a recap on the phone (affection changes, Mom's text, a new @x_unfiltered post).
 
-**Length:** 14 days. The gala is the evening and night of day 14. A perfect run (all 8 lovers plus the mystery) should just fit: estimated 11 of 13 nights and 37 of 41 day slots. Confirm with a pacing simulation before building.
+**Length:** 14 days. The gala is the evening and night of day 14. A near-perfect run can get all 7 lovers and the truth, but rarely (scripts/pacing_sim.py; DECISIONS.md #63).
 
 ## 6. Systems
 
 ### 6.1 Romance stages
 Each girl has affection 0–100 (start 10) and a stage: **stranger → girlfriend → lover**.
 
-1. **Raise affection** through favors, hangouts, gifts and pair scenes.
-2. **Night date:** available once affection reaches the date threshold (default 50, **TBD**). She tests you with questions about her, drawn from likes and favorites you've uncovered (quiz vs minigame **TBD**). Pass = **girlfriend**. Fail = try again another night.
+1. **Raise affection** through favors, hangouts, gifts and pair scenes. You start at the opens-up threshold, so your first real visit is her opening up, and she asks her favor in the same scene.
+2. **Night date:** available once affection reaches the date threshold (35, tuned by the pacing simulation). She tests you with questions about her, drawn from likes and favorites you've uncovered (quiz vs minigame **TBD**). Pass = **girlfriend**. Fail = try again another night.
 3. **Special gift:** each girl has one, sold in the store. Giving it to your girlfriend on a daytime visit makes her your **lover**.
 
 - **Difficulty scaling:** gains × (11 − difficulty) / 6, rounded, then a pacing multiplier. Tune with the simulation.
@@ -191,7 +192,7 @@ Kimi and Lola's values are proposed defaults. Lola's dislike of `honest` softens
 **UI:** a small style icon on each choice; players can turn icons off in settings.
 
 ### 6.3 Favors and money
-- Favors are the main source of **money** and also raise affection. Short (1–2 steps) with a deadline of a few days; failing costs a little affection.
+- Favors are the main source of **money** and also raise affection. Two steps, the last one spent with her, with a 3-day deadline; failing costs a little affection.
 - A special gift costs about one favor's pay. Ordinary gifts compete for the same money.
 - **Shopping uses no time slot.** Each girl has loved, liked and disliked gifts.
 
@@ -204,7 +205,7 @@ Tabs: **Contacts** (hearts, stage, known likes/dislikes, favor status, model sub
 **Layer 1 (main mystery):**
 - **Arc:** days 1–4 the *school* seems wrong (unsigned note, a "Subject" scoresheet); days 5–9 *you* seem wrong (never tired, no photos from before, can't recall your hometown; every hint has an innocent explanation); days 10–13 the clues turn toward you; the reveal: you call Mom and reach an automated message from the Dean's office. Your whole life is a lie.
 - **Plant the fake life early:** Mom's texts, a childhood memory in the prologue, a hometown, something you miss.
-- **Hints:** from pair scenes (one about each girl in the scene, so two per girl).
+- **Hints:** from pair scenes (one about each girl in the scene, so two per girl). Hints carry over between playthroughs. "Ask her why you were admitted" appears once you've overheard a hint about her.
 - **Major clues:** one per main girl, taken by asking her alone:
   - **Well-crafted ask:** needs both hints about her; small affection cost.
   - **Jailbreak:** always works; large drop and romance lock.
@@ -255,10 +256,10 @@ Every ending's closing dialogue carries a hint toward the 8th girl's puzzle. Imp
 **Done (first design):** M0 scaffold + CI, M1 systems, M2 vertical slice, M3 all routes, M4 gala + gallery + achievements, M5 polish + accessibility, M6 release builds.
 
 **Redesign (build in this order; stop and summarize after each):**
-- **R1 – Pacing simulation:** model 8 girls, 4 slots a day, pair scenes and favors-for-money; confirm the slot budget and tune thresholds before writing code.
-- **R2 – Systems:** night slot, romance stages, date quiz, special gifts, favor money, pair scenes on the map, new mystery data, new `evaluate_ending`. All with tests.
-- **R3 – Kimi and Lola:** cast data, placeholder routes, sprites, locations.
-- **R4 – Mystery layer 1:** fake-life setup, discovery arc, reveal scene, new Case board, gala choice and all layer 1 endings.
+- **R1 – Pacing simulation:** *(done: scripts/pacing_sim.py, DECISIONS.md #63)* model the girls, 4 slots a day, pair scenes and favors-for-money; confirm the slot budget and tune thresholds before writing code.
+- **R2 – Systems:** *(done)* night slot, romance stages, date quiz, special gifts, favor money, pair scenes on the map, new mystery data, new `evaluate_ending`. All with tests.
+- **R3 – Kimi and Lola:** *(done)* cast data, placeholder routes, sprites, locations.
+- **R4 – Mystery layer 1:** *(done)* fake-life setup, discovery arc, reveal scene, new Case board, gala choice and all layer 1 endings.
 - **R5 – Layer 2:** the 8th girl, her puzzle, her route, True Final Ending, Unfinished II, ending hints.
 - **R6 – Content pass:** replace placeholders as the owner writes them; update gallery and achievements.
 

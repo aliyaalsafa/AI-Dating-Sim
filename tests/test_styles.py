@@ -4,13 +4,13 @@ from sim.styles import STYLES, affinity, validate_cast_affinities
 
 # The brief's default table (CLAUDE.md §6.2). Blank = 0.
 BRIEF = {
-    "structured": {"grace": 1, "xenia": -2, "gemma": 1},
-    "honest":     {"grace": 2, "xenia": 1, "claudia": 2, "shen": 1},
-    "irreverent": {"grace": -1, "xenia": 2, "shen": -1},
-    "concise":    {"xenia": 1, "claudia": -1, "shen": 2},
-    "curious":    {"claudia": 1, "gemma": 2},
-    "warm":       {"grace": 1, "xenia": -1, "claudia": 1, "gemma": 1},
-    "practical":  {"grace": 1, "shen": 1},
+    "structured": {"grace": 1, "xenia": -2, "gemma": 1, "kimi": 1},
+    "honest":     {"grace": 2, "xenia": 1, "claudia": 2, "shen": 1, "lola": -1},
+    "irreverent": {"grace": -1, "xenia": 2, "shen": -1, "lola": 1},
+    "concise":    {"xenia": 1, "claudia": -1, "shen": 2, "kimi": -1},
+    "curious":    {"claudia": 1, "gemma": 2, "kimi": 1},
+    "warm":       {"grace": 1, "xenia": -1, "claudia": 1, "gemma": 1, "lola": 2},
+    "practical":  {"grace": 1, "shen": 1, "kimi": 1},
     "pry":        {"xenia": 1, "claudia": -2},
 }
 

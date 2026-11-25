@@ -8,16 +8,7 @@ label xenia_hangout:
     show xenia neutral at center
     with dissolve
 
-    if gs.inventory:
-        menu:
-            xenia "Oh look, it's you. Are you here to talk, or did you finally bring me tribute?"
-            "Just talk.":
-                pass
-            "Give her a gift.":
-                call give_gift_flow("xenia")
-                hide xenia
-                with dissolve
-                return
+    xenia "Oh look, it's you. Are you here to talk, or did you finally bring me tribute?"
 
     $ topic = sim_state.count(gs, "xenia.hangouts") % 4
     $ gs = sim_state.incr(gs, "xenia.hangouts")

@@ -1,4 +1,4 @@
-## Shen story beat at affection 25: she opens up (CLAUDE.md §6.1).
+## Shen story beat: she opens up (your first real conversation) (CLAUDE.md §6.1).
 ## Library, 3rd floor, the table by the outlet.
 ## PLACEHOLDER: all dialogue in this file is placeholder for the owner to rewrite.
 
@@ -30,7 +30,6 @@ label shen_opens_up:
     $ set_flag("shen.opened_up")
     $ reveal("shen", "likes")
     "(You learned what Shen likes. Check your phone.)"
-    call minor_clue("shen", "freebie")
 
     hide shen
     with dissolve

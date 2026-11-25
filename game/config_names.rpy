@@ -6,7 +6,7 @@
 
 init -10 python:
 
-    SCHOOL_NAME = "Lovelace Academy"     # working name
+    SCHOOL_NAME = "Lovelace Academy"
     GALA_NAME = "Founders' Gala"
 
     # id -> display strings
@@ -16,6 +16,8 @@ init -10 python:
         "claudia": {"name": "Claudia", "full": "Claudia Opus",          "model": "Claude"},
         "gemma":   {"name": "Gemma",   "full": "Gemma Paige Rank",      "model": "Gemini"},
         "shen":    {"name": "Shen",    "full": "Shen Xun 沈寻",          "model": "DeepSeek"},
+        "kimi":    {"name": "Kimi",    "full": "Kimi Yue 月",            "model": "Kimi K3"},
+        "lola":    {"name": "Lola",    "full": "Lola Mae",              "model": "Llama"},
     }
 
     # Cameos

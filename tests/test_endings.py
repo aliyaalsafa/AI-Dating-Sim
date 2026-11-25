@@ -2,87 +2,95 @@
 
 import pytest
 
-from sim.endings import RIVALS, RIVALS_EVENT_FLAG, SOLO, all_ending_ids, evaluate_ending
+from sim.clues import TRUTH_FLAG
+from sim.endings import (ADA_FLAG, BAD_TRUTH, COMPLETE, EXILED, GOOD_TRUTH, LIE, LIE_ADA, SILENT, TELL,
+                         TRUE_FINAL, UNFINISHED, UNFINISHED_TWO, all_ending_ids, coda, evaluate_ending,
+                         mono_id)
+from sim.state import CharState
+
+MAIN = ["grace", "xenia", "claudia", "gemma", "shen", "kimi", "lola"]
 
 
-def setup(gs, **affections):
-    for cid, a in affections.items():
-        gs.chars[cid].affection = a
+def setup(gs, n_lovers=0, truth=True, ada=False, ada_lover=False):
+    for cid in MAIN[:n_lovers]:
+        gs.chars[cid].stage = "lover"
+    if truth:
+        gs.flags.add(TRUTH_FLAG)
+    if ada:
+        gs.flags.add(ADA_FLAG)
+        gs.chars["ada"] = CharState(stage="lover" if ada_lover else "none")
     return gs
 
 
-# Row: Good ending
-def test_good(gs):
-    s = setup(gs, grace=92)
-    s.chars["grace"].favor_status = "done"
-    assert evaluate_ending(s, "grace") == "good_grace"
+# Row: Unfinished (never found the secret), whatever else is true
+@pytest.mark.parametrize("choice", [TELL, SILENT, None])
+def test_unfinished(gs, choice):
+    assert evaluate_ending(setup(gs, 7, truth=False), choice, MAIN) == UNFINISHED
 
 
-def test_good_needs_favor_done(gs):
-    s = setup(gs, grace=95)
-    s.chars["grace"].favor_status = "failed"
-    assert evaluate_ending(s, "grace") == "sweet_grace"
+# Rows: The Lie, and The Lie with her
+def test_lie(gs):
+    assert evaluate_ending(setup(gs, 7), SILENT, MAIN) == LIE
 
 
-# Row: Sweet ending
-@pytest.mark.parametrize("a", [60, 75, 89])
-def test_sweet(gs, a):
-    assert evaluate_ending(setup(gs, claudia=a), "claudia") == "sweet_claudia"
+def test_lie_ada(gs):
+    assert evaluate_ending(setup(gs, 7, ada=True, ada_lover=True), SILENT, MAIN) == LIE_ADA
 
 
-# Row: Friends ending
-def test_friends_low_affection(gs):
-    assert evaluate_ending(setup(gs, gemma=59), "gemma") == "friends_gemma"
+# Row: True Final
+def test_true_final(gs):
+    assert evaluate_ending(setup(gs, 7, ada=True, ada_lover=True), TELL, MAIN) == TRUE_FINAL
 
 
-def test_friends_when_locked(gs):
-    s = setup(gs, gemma=60)
-    s.chars["gemma"].romance_locked = True
-    s.chars["gemma"].favor_status = "done"
-    assert evaluate_ending(s, "gemma") == "friends_gemma"
+def test_true_final_needs_ada_as_lover(gs):
+    assert evaluate_ending(setup(gs, 7, ada=True), TELL, MAIN) == COMPLETE
 
 
-# Row: Rivals (secret)
-def test_rivals(gs):
-    s = setup(gs, grace=75, shen=80)
-    s.flags.add(RIVALS_EVENT_FLAG)
-    assert evaluate_ending(s, "grace") == RIVALS
-    assert evaluate_ending(s, "shen") == RIVALS
+# Row: Complete
+def test_complete(gs):
+    assert evaluate_ending(setup(gs, 7), TELL, MAIN) == COMPLETE
 
 
-def test_rivals_needs_joint_event(gs):
-    s = setup(gs, grace=80, shen=80)
-    assert evaluate_ending(s, "shen") == "sweet_shen"
+# Rows: Good / Bad Truth, Monogamous, Exiled
+@pytest.mark.parametrize("n", [4, 5, 6])
+def test_good_truth(gs, n):
+    assert evaluate_ending(setup(gs, n), TELL, MAIN) == GOOD_TRUTH
 
 
-def test_rivals_needs_both_75(gs):
-    s = setup(gs, grace=74, shen=95)
-    s.flags.add(RIVALS_EVENT_FLAG)
-    assert evaluate_ending(s, "shen") == "sweet_shen"
+@pytest.mark.parametrize("n", [2, 3])
+def test_bad_truth(gs, n):
+    assert evaluate_ending(setup(gs, n), TELL, MAIN) == BAD_TRUTH
 
 
-def test_rivals_only_when_asking_one_of_them(gs):
-    s = setup(gs, grace=80, shen=80, xenia=70)
-    s.flags.add(RIVALS_EVENT_FLAG)
-    assert evaluate_ending(s, "xenia") == "sweet_xenia"
+def test_monogamous_names_the_girl(gs):
+    s = setup(gs, 0)
+    s.chars["kimi"].stage = "lover"
+    assert evaluate_ending(s, TELL, MAIN) == mono_id("kimi")
 
 
-# Row: Solo
-def test_solo_asked_no_one(gs):
-    assert evaluate_ending(setup(gs, grace=95), None) == SOLO
+def test_exiled(gs):
+    assert evaluate_ending(setup(gs, 0), TELL, MAIN) == EXILED
 
 
-def test_solo_everyone_below_25(gs):
-    s = setup(gs, grace=24, xenia=24, claudia=24, gemma=24, shen=24)
-    assert evaluate_ending(s, "grace") == SOLO
+def test_girlfriends_dont_count(gs):
+    s = setup(gs, 1)
+    for cid in MAIN[1:]:
+        s.chars[cid].stage = "girlfriend"
+    assert evaluate_ending(s, TELL, MAIN) == mono_id("grace")
 
 
-def test_not_solo_if_anyone_reaches_25(gs):
-    s = setup(gs, grace=10, xenia=25, claudia=10, gemma=10, shen=10)
-    assert evaluate_ending(s, "grace") == "friends_grace"
+# Unfinished II follows a normal ending once Ada is unlocked
+def test_coda(gs):
+    s = setup(gs, 5, ada=True)
+    assert coda(s, GOOD_TRUTH) == UNFINISHED_TWO
+    assert coda(s, UNFINISHED) == UNFINISHED_TWO
+    assert coda(s, TRUE_FINAL) is None
+    assert coda(s, LIE_ADA) is None
+    s.flags.discard(ADA_FLAG)
+    assert coda(s, GOOD_TRUTH) is None
 
 
-def test_all_ending_ids(cast):
-    ids = all_ending_ids(cast)
-    assert len(ids) == 3 + 3 * len(cast)          # solo, rivals, truth + 3 per character
-    assert "good_shen" in ids and SOLO in ids and RIVALS in ids
+def test_all_ending_ids():
+    ids = all_ending_ids(MAIN)
+    assert len(ids) == len(set(ids)) == 9 + 7
+    assert mono_id("lola") in ids

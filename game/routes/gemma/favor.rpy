@@ -1,7 +1,7 @@
-## Gemma's favor (CLAUDE.md §6.3), offered at affection 50. Three steps:
-##   0. Pick one project from the graveyard with her in the robotics lab.
-##   1. Get Shen to review it in the 24-hour library.
-##   2. Finish it together in the robotics lab.
+## Gemma's favor (CLAUDE.md §6.3), asked right after she opens up. You pick
+## the project with her as part of the offer, then two steps:
+##   0. Get Shen to review it in the 24-hour library.
+##   1. Finish it together in the robotics lab.
 ## PLACEHOLDER: all dialogue in this file is placeholder for the owner to rewrite.
 
 label gemma_favor_offer:
@@ -22,7 +22,8 @@ label gemma_favor_offer:
             gemma "Step one: pick a project. Step two: get Shen to review it, she's ruthless. Step three: finish. Step three is the scary one."
 
     $ gs = sim_fav.offer(gs, "gemma")
-    "(Favor accepted: pick a project with Gemma in the lab, get Shen to review it in the library, then finish it with Gemma. You have [RULES.favor_deadline_days] days.)"
+    call gemma_favor_pick
+    "(Favor accepted: get Shen to review the project in the library, then finish it with Gemma in the lab. You have [RULES.favor_deadline_days] days.)"
 
     hide gemma
     with dissolve
@@ -30,9 +31,6 @@ label gemma_favor_offer:
 
 
 label gemma_favor_pick:
-    show gemma neutral at center
-    with dissolve
-
     # PLACEHOLDER
     "Gemma has pulled three prototypes off the graveyard shelf and lined them up on the workbench like contestants on a game show."
     gemma "Finalists! One: the Photo-Bot, a little robot that takes your picture so I don't have to. Two: Sock Oracle, it matches your socks. Three: the Fact Lamp, it glows red when someone says something false."
@@ -57,13 +55,7 @@ label gemma_favor_pick:
             gemma "Fact Lamp. Yes. It's the one I actually care about. I didn't know that until you asked."
 
     gemma "Next step: Shen. She'll find everything wrong with it. That's why I love working with her. It's also why I'm scared."
-    $ gs = sim_fav.advance_step(gs, "gemma", CAST["gemma"]["favor"]["steps"])
-    "(Next: get Shen to review it in the library.)"
-
-    hide gemma
-    with dissolve
     return
-
 
 label gemma_favor_review:
     show shen neutral at center
@@ -149,7 +141,6 @@ label gemma_favor_finish:
     $ gs = sim_fav.advance_step(gs, "gemma", CAST["gemma"]["favor"]["steps"])
     $ bump("gemma", sim_aff.scale_gain(10, CAST["gemma"]["difficulty"]), "favor_done")
     $ grant("first_favor")
-    call minor_clue("gemma", "earned")
     gemma "Thank you. I didn't look that up. I just know it. Thank you."
 
     hide gemma

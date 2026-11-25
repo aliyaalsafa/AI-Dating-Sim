@@ -1,6 +1,6 @@
 ## Calendar HUD (CLAUDE.md §5): day, time slot, money, phone button.
 
-define SLOT_ICONS = {"morning": "☀", "afternoon": "☁", "evening": "☾"}
+define SLOT_ICONS = {"morning": "☀", "afternoon": "☁", "evening": "☾", "night": "✦"}
 
 screen hud():
     zorder 50

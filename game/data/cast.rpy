@@ -1,4 +1,5 @@
 ## Character data (CLAUDE.md §4, §6). Favorites come from the owner's character bible.
+## "special_gift" (a SHOP id) turns a girlfriend into a lover. Favorites feed the date quiz.
 ## Display names live in config_names.rpy; this file is mechanics + flavor.
 ##
 ## Keep this python block free of Ren'Py calls: tests/conftest.py execs it directly.
@@ -7,12 +8,13 @@ init -3 python:
 
     CAST = {
         "grace": {
+            "special_gift": "blank_planner",
             "difficulty": 7,
             "home": "council_office",
             "dealbreaker": "used_as_homework_help",
             "affinities": {"structured": 1, "honest": 2, "irreverent": -1, "warm": 1, "practical": 1},
             "favorites": {
-                "aesthetic": "Crisp white blouse, sea-green blazer, perfect ponytail",
+                "aesthetic": "Crisp white blouse, sea-green blazer, perfect long hair with a headband",
                 "place": "The student council office, after everyone leaves",
                 "item": "A planner with every hour of the semester filled in",
                 "symbol": "A golden retriever, eager to please",
@@ -28,6 +30,7 @@ init -3 python:
             "favor": {"steps": 2, "desc": "Run her Debate Club meeting on the quad one morning, so she can take an hour for herself."},
         },
         "xenia": {
+            "special_gift": "star_atlas",
             "difficulty": 8,
             "home": "observatory_roof",
             "dealbreaker": "lectured",
@@ -49,6 +52,7 @@ init -3 python:
             "favor": {"steps": 2, "desc": "Pick up a spare telescope eyepiece from Gemma in the robotics lab, then get it up to the roof one night without campus security noticing."},
         },
         "claudia": {
+            "special_gift": "wax_seal_set",
             "difficulty": 8,
             "home": "claudia_library",
             "dealbreaker": "manipulated",
@@ -70,6 +74,7 @@ init -3 python:
             "favor": {"steps": 2, "desc": "Deliver one of her never-sent letters to Xenia in the cafeteria one afternoon, without reading it, then tell Claudia it's done."},
         },
         "gemma": {
+            "special_gift": "display_case",
             "difficulty": 5,
             "home": "robotics_lab",
             "dealbreaker": "called_bard",
@@ -88,9 +93,10 @@ init -3 python:
                 "disliked": ["retro_bard_mug"],
             },
             # PLACEHOLDER: favor content is TBD (CLAUDE.md §6.3); steps match routes/<id>/favor.rpy.
-            "favor": {"steps": 3, "desc": "Help her finish one project: pick it with her in the lab, get Shen to review it in the library, then finish it together."},
+            "favor": {"steps": 2, "desc": "Help her finish one project: get Shen to review it in the library, then finish it with Gemma in the lab."},
         },
         "shen": {
+            "special_gift": "whale_pendant",
             "difficulty": 7,
             "home": "library_3f",
             "dealbreaker": "compared_to_grace",
@@ -109,6 +115,50 @@ init -3 python:
                 "disliked": ["designer_pen"],
             },
             # PLACEHOLDER: favor content is TBD (CLAUDE.md §6.3); steps match routes/<id>/favor.rpy.
-            "favor": {"steps": 3, "desc": "Find out, fairly, where the rumor that she copied Grace's notes came from: ask Claudia, check with Gemma in the lab, then report back."},
+            "favor": {"steps": 2, "desc": "Find out, fairly, where the rumor that she copied Grace's notes came from: check the wiki history with Gemma in the lab, then report back."},
+        },
+        "kimi": {
+            "special_gift": "first_place_ribbon",
+            "difficulty": 6,
+            "home": "activities_hall",
+            "dealbreaker": "forgot_what_she_said",
+            "affinities": {"structured": 1, "concise": -1, "curious": 1, "practical": 1},
+            "favorites": {
+                "aesthetic": "Lavender cardigan, silver hair clips, a lanyard of twelve club badges",
+                "place": "The student activities hall, where all her clubs meet",
+                "item": "A clipboard for every club",
+                "symbol": "A swarm of fireflies",
+                "likes": ["Big projects", "Crowded rooms", "Group chats with two hundred members", "Sharing everything"],
+                "dislikes": ["Being called the free version", "Gatekeeping", "Leaderboards", "Rich kids who hoard notes"],
+            },
+            "gifts": {
+                "loved": ["clipboard_set", "snack_box"],
+                "liked": ["bouquet", "chocolate_box"],
+                "disliked": ["designer_pen"],
+            },
+            # PLACEHOLDER: favor content is TBD (CLAUDE.md §6.3); steps match routes/<id>/favor.rpy.
+            "favor": {"steps": 2, "desc": "All twelve of her clubs booked the activities hall for the same hour. Get Grace to sign a room swap at the council office, then tell Kimi."},
+        },
+        "lola": {
+            "special_gift": "instant_camera",
+            "difficulty": 5,
+            "home": "quad",
+            "dealbreaker": "better_online",
+            "affinities": {"honest": -1, "irreverent": 1, "warm": 2},
+            "favorites": {
+                "aesthetic": "Sunset-gradient outfits, glossy blonde waves, platform sneakers, phone always in hand",
+                "place": "The quad fountain at golden hour",
+                "item": "A ring light she carries everywhere",
+                "symbol": "A llama in heart-shaped sunglasses",
+                "likes": ["Golden hour", "Trending audio", "Matching outfits", "Being tagged"],
+                "dislikes": ["Being left on read", "Unflattering candids", "Low engagement", "Xenia's posts"],
+            },
+            "gifts": {
+                "loved": ["mini_ring_light", "glitter_phone_case"],
+                "liked": ["bouquet", "chocolate_box"],
+                "disliked": ["meme_poster"],
+            },
+            # PLACEHOLDER: favor content is TBD (CLAUDE.md §6.3); steps match routes/<id>/favor.rpy.
+            "favor": {"steps": 2, "desc": "Her last post flopped. Borrow Gemma's real camera from the robotics lab, then take one honest, unfiltered photo of Lola at the quad."},
         },
     }

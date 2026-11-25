@@ -83,7 +83,7 @@ def scene_music_key(location_id, slot, event=None, location_music=None, availabl
         candidates.append("theme_" + event["route"])
     if location_music and location_id in location_music:
         candidates.append(location_music[location_id])
-    candidates.append("campus_night" if slot == "evening" else "campus_day")
+    candidates.append("campus_night" if slot in ("evening", "night") else "campus_day")
     for key in candidates:
         if key in available:
             return key

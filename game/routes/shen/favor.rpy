@@ -1,7 +1,6 @@
-## Shen's favor (CLAUDE.md §6.3), offered at affection 50. Three steps:
-##   0. Ask Claudia, in her suite's library, where the copying rumor came from.
-##   1. Check the campus wiki's edit history with Gemma in the robotics lab.
-##   2. Report back to Shen at the library.
+## Shen's favor (CLAUDE.md §6.3), asked right after she opens up. Two steps:
+##   0. Check the campus wiki's edit history with Gemma in the robotics lab.
+##   1. Report back to Shen at the library.
 ## The truth: Gemma's wiki auto-merged Shen's freely shared notes into Grace's
 ## study-guide page and credited Grace. Nobody did anything malicious.
 ## PLACEHOLDER: all dialogue in this file is placeholder for the owner to rewrite.
@@ -26,41 +25,9 @@ label shen_favor_offer:
             shen "...I don't think it's Grace. She's annoying, but she's not that kind of annoying."
 
     $ gs = sim_fav.offer(gs, "shen")
-    "(Favor accepted: find out where the rumor came from. Start by asking Claudia in her suite's library. You have [RULES.favor_deadline_days] days.)"
+    "(Favor accepted: find out where the rumor came from. Start with the campus wiki: Gemma runs it, in the robotics lab. You have [RULES.favor_deadline_days] days.)"
 
     hide shen
-    with dissolve
-    return
-
-
-label shen_favor_claudia:
-    show claudia neutral at center
-    with dissolve
-
-    # PLACEHOLDER
-    "Claudia's private library smells like old paper and very expensive tea. She sets down a fountain pen when you come in."
-    claudia "Oh, how lovely, please do sit; I was only writing a thank-you note to my sister for a thank-you note she wrote me, which I realize is a loop, and I apologize for it."
-    "You explain what Shen asked you to find out."
-    claudia "Ah. The rumor. I want to be careful here, but I think it matters that you're asking where it came from rather than whether it's true, because those are two very different questions."
-
-    menu:
-        "\"Come on, you know everything. Who started it?\"" (prompt="pry"):
-            $ choose("claudia", -1, "pry")
-            claudia "I'm so sorry, but I don't think I'll answer that, and I'd gently suggest that the way you asked it is rather how rumors begin in the first place."
-            claudia "That said, I wouldn't want Shen to suffer for my scruples, so: wikis keep records. Edit histories. They're very dull, and dull things are usually honest."
-        "\"I want to do this fairly. Where should I look?\"" (prompt="honest"):
-            $ choose("claudia", 3, "honest")
-            claudia "Thank you for putting it that way; it makes this so much easier, and I'm sorry it was ever hard."
-            claudia "I won't tell you who said what, because I genuinely don't think anyone set out to say anything. But I'd look at the campus wiki. Specifically, the edit history of Grace's study guide."
-            claudia "Something there has always struck me as a little odd. The handwriting, so to speak, changes halfway down the page."
-
-    claudia "Gemma runs the wiki. Do be kind to her; she cares about accuracy more than almost anyone I know, and I suspect this will sting."
-    "She hands you a small card in elegant ink. It says: {i}Good luck. Be fair. C.{/i}"
-
-    $ gs = sim_fav.advance_step(gs, "shen", CAST["shen"]["favor"]["steps"])
-    "(Next: ask Gemma about the wiki in the robotics lab.)"
-
-    hide claudia
     with dissolve
     return
 
@@ -127,7 +94,6 @@ label shen_favor_report:
     $ gs = sim_fav.advance_step(gs, "shen", CAST["shen"]["favor"]["steps"])
     $ bump("shen", sim_aff.scale_gain(10, CAST["shen"]["difficulty"]), "favor_done")
     $ grant("first_favor")
-    call minor_clue("shen", "earned")
     shen "You did that fairly. No shortcuts. I noticed."
     shen "Thank you. That's the whole sentence. It doesn't need more."
 

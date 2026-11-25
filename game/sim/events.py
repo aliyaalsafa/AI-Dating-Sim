@@ -5,7 +5,7 @@ Event specs are plain dicts defined in game/data/events.rpy:
     {
         "id": "grace_day04_council",      # unique
         "label": "grace_day04_council",   # Ren'Py label to call
-        "kind": "story",                  # story | group | favor | bonus | hangout
+        "kind": "story",                  # story | group | pair | favor | hangout
         "location": "council_office",
         "chars": ["grace"],               # all must be present
         "slots": ["afternoon"],           # optional, default any
@@ -27,13 +27,34 @@ Event specs are plain dicts defined in game/data/events.rpy:
 from .rules import SLOTS
 from .state import GameState, evolve
 
-KIND_PRIORITY = {"story": 4, "group": 4, "favor": 3, "bonus": 2, "hangout": 1}
+KIND_PRIORITY = {"pair": 5, "story": 4, "group": 4, "favor": 3, "bonus": 2, "hangout": 1}
 
 
 def present(locations: dict, location_id: str, state: GameState) -> list:
-    """Characters at a location in the current slot."""
-    sched = locations[location_id].get("schedule", {})
-    return list(sched.get(SLOTS[state.slot], ()))
+    """Characters at a location in the current slot.
+
+    A location's "schedule" is the same every day. "meetups" (pair scenes) pull
+    two characters to one location on listed days, overriding their schedules.
+    """
+    slot = SLOTS[state.slot]
+    pulled, extra = set(), []
+    for lid, loc in locations.items():
+        for m in loc.get("meetups", ()):
+            if m["slot"] == slot and state.day in m["days"]:
+                pulled.update(m["chars"])
+                if lid == location_id:
+                    extra += [c for c in m["chars"] if c not in extra]
+    base = [c for c in locations[location_id].get("schedule", {}).get(slot, ()) if c not in pulled]
+    return base + [c for c in extra if c not in base]
+
+
+def meetup_here(locations: dict, location_id: str, state: GameState):
+    """The pair meeting at this location right now, as a list of two ids, or None."""
+    slot = SLOTS[state.slot]
+    for m in locations[location_id].get("meetups", ()):
+        if m["slot"] == slot and state.day in m["days"]:
+            return list(m["chars"])
+    return None
 
 
 def is_open(locations: dict, location_id: str, state: GameState) -> bool:
@@ -86,10 +107,12 @@ def _common_ok(event: dict, state: GameState) -> bool:
     return True
 
 
-def eligible(event: dict, state: GameState, location_id: str, here: list) -> bool:
+def eligible(event: dict, state: GameState, location_id: str, here: list, focus=None) -> bool:
     if event.get("forced") or event.get("location") != location_id:
         return False
     if any(c not in here for c in event.get("chars", ())):
+        return False
+    if focus and event.get("chars") and focus not in event["chars"]:
         return False
     return _common_ok(event, state)
 
@@ -102,10 +125,15 @@ def pick_forced(events: list, state: GameState) -> dict | None:
     return max(candidates, key=lambda e: (KIND_PRIORITY[e["kind"]], e.get("priority", 0)))
 
 
-def pick_event(events: list, state: GameState, locations: dict, location_id: str) -> dict | None:
-    """Highest-priority eligible event: story/group > favor > bonus > hangout."""
+def pick_event(events: list, state: GameState, locations: dict, location_id: str,
+               focus: str | None = None) -> dict | None:
+    """Highest-priority eligible event: pair > story/group > favor > hangout.
+
+    `focus` limits the pick to events involving that character (or no one),
+    for when the player chose whom to talk to at a busy location.
+    """
     here = present(locations, location_id, state)
-    candidates = [e for e in events if eligible(e, state, location_id, here)]
+    candidates = [e for e in events if eligible(e, state, location_id, here, focus)]
     if not candidates:
         return None
     return max(candidates, key=lambda e: (KIND_PRIORITY[e["kind"]], e.get("priority", 0)))
@@ -141,4 +169,36 @@ def validate_events(events: list, locations: dict, cast: dict) -> list:
         for s in e.get("slots", ()):
             if s not in SLOTS:
                 problems.append(f"{eid}: unknown slot {s!r}")
+    return problems
+
+
+def validate_schedule(locations: dict, cast: dict) -> list:
+    """Nobody may be in two places at once, and meetups must name real people."""
+    problems = []
+    for lid, loc in locations.items():
+        for slot, who in loc.get("schedule", {}).items():
+            if slot not in SLOTS:
+                problems.append(f"{lid}: unknown slot {slot!r}")
+            for c in who:
+                if c not in cast:
+                    problems.append(f"{lid}: unknown character {c!r}")
+        for m in loc.get("meetups", ()):
+            if len(m["chars"]) != 2 or any(c not in cast for c in m["chars"]):
+                problems.append(f"{lid}: bad meetup {m['chars']}")
+    for slot in SLOTS:
+        seen = {}
+        for lid, loc in locations.items():
+            for c in loc.get("schedule", {}).get(slot, ()):
+                if c in seen:
+                    problems.append(f"{c} is at {seen[c]} and {lid} in the {slot}")
+                seen[c] = lid
+    busy = {}
+    for lid, loc in locations.items():
+        for m in loc.get("meetups", ()):
+            for d in m["days"]:
+                for c in m["chars"]:
+                    key = (c, d, m["slot"])
+                    if key in busy:
+                        problems.append(f"{c} has two meetups on day {d} {m['slot']}")
+                    busy[key] = lid
     return problems

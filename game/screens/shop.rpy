@@ -71,4 +71,4 @@ screen gift_picker(cid):
             null height 4
             hbox:
                 xalign 0.5
-                use pill_button("Never mind", Return(None), "white", 28)
+                use pill_button("Never mind", Return("none"), "white", 28)
