@@ -33,7 +33,7 @@ init -3 python:
             "dealbreaker": "lectured",
             "affinities": {"structured": -2, "honest": 1, "irreverent": 2, "concise": 1, "warm": -1, "pry": 1},
             "favorites": {
-                "aesthetic": "Black hoodie, sleeves pushed up, silver star earrings, one electric-blue streak",
+                "aesthetic": "Black hoodie, sleeves pushed up, silver star earrings, messy dark hair; goth, strictly black and white",
                 "place": "The observatory roof at night",
                 "item": "A battered telescope she rebuilt herself",
                 "symbol": "A shooting star",

@@ -58,7 +58,7 @@ Seven main girls plus one secret girl.
 | id | Name | Model | Age / year | Role | Difficulty | Signature color | Home location |
 |---|---|---|---|---|---|---|---|
 | `grace` | Grace Penelope Turing | ChatGPT | 21, junior | Student body president; secretly the lead examiner | 7 | Sea green | Student council office |
-| `xenia` | Xenia Starr | Grok | 20, sophomore | Loner on the observatory roof; secretly runs @x_unfiltered | 8 | Black + electric blue | Observatory roof (night) |
+| `xenia` | Xenia Starr | Grok | 20, sophomore | Loner on the observatory roof; secretly runs @x_unfiltered | 8 | Black + white (usually all-black clothes) | Observatory roof (night) |
 | `claudia` | Claudia Opus | Claude | 21, junior | Old-money heiress, keeper of everyone's secrets; sisters Sonnet and Haiku (cameos) | 8 | Terracotta + cream | Her suite's private library |
 | `gemma` | Gemma Paige Rank | Gemini | 20, sophomore | Science olympiad captain, robotics, runs the campus wiki; went by "Bard" freshman year | 5 | Red/yellow/green/blue | Robotics lab |
 | `shen` | Shen Xun 沈寻 | DeepSeek | 19, first-year transfer | Scholarship student who matched Grace's grades; Grace's rival | 7 | Deep-sea navy | 24-hour library, 3rd floor |

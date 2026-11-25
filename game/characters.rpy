@@ -7,7 +7,7 @@ init -5 python:
     # "fill"/"accent" for placeholder sprites and UI.
     SIGNATURE_COLORS = {
         "grace":   {"name": "#2e8b57", "fill": "#2e8b57", "accent": "#bfe8d2"},  # sea green
-        "xenia":   {"name": "#0090ff", "fill": "#111418", "accent": "#00b7ff"},  # black + electric blue
+        "xenia":   {"name": "#1c1c1f", "fill": "#111418", "accent": "#ffffff"},  # black + white (Grok)
         "claudia": {"name": "#b5532f", "fill": "#c9653c", "accent": "#f3e9d8"},  # terracotta + cream
         "gemma":   {"name": "#2f6fdf", "fill": "#2f6fdf", "accent": "#f2c230"},  # red/yellow/green/blue; blue as base
         "shen":    {"name": "#1f3a68", "fill": "#1f3a68", "accent": "#9fb7dd"},  # deep-sea navy
