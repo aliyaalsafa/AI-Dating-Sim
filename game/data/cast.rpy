@@ -57,7 +57,7 @@ init -3 python:
                 "aesthetic": "Warm terracotta and cream, a camel coat, pearl earrings, an ink-stained fountain pen",
                 "place": "The window seat in her suite's private library",
                 "item": "A leather notebook full of drafts of letters she never sent",
-                "symbol": "A starburst, or a quill",
+                "symbol": "A quill",
                 "likes": ["Poetry", "Long talks", "Tea service", "A well-made argument", "People who are honest with her"],
                 "dislikes": ["Manipulation", "Cruelty", "Being rushed", "People who try to trick secrets out of her"],
             },

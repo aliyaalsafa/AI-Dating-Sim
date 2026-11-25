@@ -83,7 +83,7 @@ Seven main girls plus one secret girl.
 
 **Claudia (Claude)**
 - **Voice:** Long, beautifully phrased sentences. Hedges before juicy news. Handwritten notes for every occasion.
-- **Behavior:** Gossips ethically. Over-apologizes. Politely declines anything that feels like a trick.
+- **Behavior:** Poised and rich; a self-proclaimed effective altruist. Gossips ethically. Over-apologizes. Politely declines anything that feels like a trick.
 - **Conflict:** Fears her carefulness reads as having no opinions. Secretly funny and a little weird.
 - **Wins her:** Honesty, patience, asking what she thinks. **Loses her:** Manipulation or fishing for gossip.
 
