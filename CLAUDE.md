@@ -102,7 +102,7 @@ Seven main girls plus one secret girl.
 
 **Kimi (Kimi K3)**
 - **Voice:** Warm, expansive, a little overwhelming. Says yes to everything and does it all at once.
-- **Swarm mode:** Runs twelve clubs at once and is somehow at all of them; helper notes show up on her behalf.
+- **Swarm mode:** Runs twelve clubs in parallel and seems to be everywhere at once.
 - **License joke:** Shares everything free with everyone except the rich kids. Claudia has to negotiate a contract to borrow her notes.
 - **Conflict:** Huge, brilliant and generous, but always ranked third behind the elite girls and treated as the free alternative rather than a person.
 - **Wins her:** Valuing her for herself over the frontier girls. **Loses her:** Forgetting what she told you.
