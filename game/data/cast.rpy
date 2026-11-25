@@ -78,7 +78,7 @@ init -3 python:
                 "aesthetic": "Oversized cardigan, round glasses, four hair clips in red, yellow, green and blue",
                 "place": "The robotics lab after midnight",
                 "item": "A label maker",
-                "symbol": "A four-pointed sparkle, and the Gemini twins",
+                "symbol": "A four-pointed sparkle or crystal",
                 "likes": ["Facts", "Gadgets", "Side projects", "Photos of everything", "Perfectly sorted folders"],
                 "dislikes": ["Being wrong in public", "People who don't check sources", "Hearing her old nickname"],
             },
