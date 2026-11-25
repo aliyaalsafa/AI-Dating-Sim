@@ -69,10 +69,11 @@ Seven main girls plus one secret girl.
 ### Voice and quirk notes (use these when writing dialogue)
 
 **Grace (ChatGPT)**
+- **Role:** Student body president, valedictorian track, founder of the debate club.
 - **Voice:** Polished and eager. "Great question!", numbered lists, em dashes, closes with "Want me to…?" and three options.
 - **Behavior:** Agrees with whoever spoke last. Answers confidently while guessing, apologizes warmly when caught.
 - **Conflict:** Everything to everyone; doesn't know what she thinks. Secretly terrified of Shen. In the mystery she's the lead examiner, scared of judging wrong.
-- **Wins her:** Kind disagreement, asking what *she* wants. **Loses her:** Treating her like a homework service.
+- **Wins her:** Kind disagreement, asking what *she* wants. **Loses her:** Treating her like a homework service, or forgetting things she tells you.
 
 **Xenia (Grok)**
 - **Voice:** Blunt, irreverent, out of pocket. Roasts on sight, swears creatively, then drops something weirdly profound. Has an "unhinged mode."
