@@ -4,7 +4,7 @@ You are building a standalone, shippable dating-sim visual novel. The owner's ch
 
 When something is marked **TBD**, pick a sensible default, keep it configurable, and log it in `DECISIONS.md` instead of blocking. When the owner hasn't decided something, don't invent final story content. Use clearly marked `# PLACEHOLDER:` lines so she can write the real dialogue in her own voice.
 
-> **Status (2026-11-24):** M0–M6 shipped the *first* design (5 girls, 7 days, opens-up/favor/bonus-date/confession, tie-breaker mystery). This brief now describes the **redesign** the owner decided on in the story workshop (DECISIONS.md #54–60). The code still runs the first design until milestones R1–R6 (§8) are built.
+> **Status (2026-11-24):** M0–M6 shipped the *first* design (5 girls, 7 days, opens-up/favor/bonus-date/confession, tie-breaker mystery). This brief now describes the **redesign** the owner decided on in the story workshop (DECISIONS.md #54–61). The code still runs the first design until milestones R1–R6 (§8) are built.
 
 ## 1. The pitch
 
@@ -64,7 +64,7 @@ Seven main girls plus one secret girl.
 | `shen` | Shen Xun 沈寻 | DeepSeek | 19, first-year transfer | Scholarship student who matched Grace's grades; Grace's rival | 7 | Deep-sea navy | 24-hour library, 3rd floor |
 | `kimi` | Kimi Yue 月 | Kimi K3 | 19, first-year | Runs twelve clubs at once; the generous open-source giant | 6 | Lavender + silver | Student activities hall |
 | `lola` | Lola Mae | Llama | 21, senior | Campus influencer and Homecoming Queen | 5 | Sunset gradient (pink/orange/purple) | Quad fountain (photo spot) |
-| `???` | TBD (secret 8th girl) | none: she's human | TBD | Poses as an obscure "research preview" model; the real human control | TBD | TBD | Background of other scenes |
+| `ada` | Ada Augusta (secret 8th girl) | none: she's human | TBD | Human researcher everyone assumes is an AI; the real human control | TBD | TBD | Background of other scenes (cafeteria corner table) |
 
 ### Voice and quirk notes (use these when writing dialogue)
 
@@ -113,10 +113,14 @@ Seven main girls plus one secret girl.
 - **Insecurity:** She isn't as popular as she thinks. She secretly runs a fake fan account that hypes her posts.
 - **Wins her:** Liking her off-camera. **Loses her:** "You're so much better online."
 
-**The 8th girl (secret)**
-- Human. Poses as a forgettable, obscure model so nobody looks twice. Appears unnamed in the background of the map, group scenes and Gemma's photos until unlocked.
-- While dating her: small signs she's human (gets tired, eats, has real childhood photos), the things the player's fake life lacks.
-- Name, look and voice are **TBD**.
+**Ada Augusta (secret 8th girl)**
+- **Name:** after Augusta Ada Byron (Ada Lovelace's birth name); she went by her middle name.
+- **Who she is:** a human researcher who volunteered to study whether people can still tell humans and AIs apart. She never pretends to be a machine; everyone assumes she is one, and she doesn't correct them. Until unlocked she's an unnamed girl with a notebook in the background of the map, group scenes and Gemma's photos.
+- **Voice:** her own: dry, warm, a little rambly; tells childhood stories.
+- **Conflict:** she can't tell anymore. She believed the player was human (she wrote the unsigned day-1 note to warn them), so her study failed in front of her.
+- **The mirror:** after the player's reveal she starts to wonder whether she's really human, and the player should wonder too. Resolution in the True Final Ending: each is the proof the other needs; Kimi's swarm, which couldn't find the player's hometown, finds hers.
+- **Signs she's human:** gets tired, eats, a bandage on her finger, real childhood photos.
+- **TBD:** her bigger story, what's at stake for her if the player passes, age, look details, color, likes.
 
 ### Relationships and pair scenes
 The seven pair scenes form one loop; each girl is in exactly two:
@@ -215,7 +219,7 @@ Tabs: **Contacts** (hearts, stage, known likes/dislikes, favor status, model sub
 | Kimi | Her swarm searched for your hometown to mail Mom a care package; the address doesn't exist |
 | Lola | She runs a fake account, so she recognizes yours: your "friends from home" are bots |
 
-**Layer 2 (secret):** Turing's imitation game has three players: judge, machine, human. The 8th girl is the human control, and the judges rate you as *more* human than her; if you pass, she's declared the machine.
+**Layer 2 (secret):** Turing's imitation game has three players: judge, machine, human. Ada, the 8th girl, is the human control, and the judges rate you as *more* human than her; if you pass, she's declared the machine.
 - **Unlock:** a secret puzzle on one specific day (**TBD**). Possible on a first run, but most players need hints spread across the ending scenes.
 - **Planted in layer 1:** the scoresheet says "Subject 1"; the unsigned note was hers; the unnamed background student; Shen's data shows "two anomalies".
 - She gives no major clue and is in no pair scene.
@@ -274,4 +278,4 @@ Every ending's closing dialogue carries a hint toward the 8th girl's puzzle. Imp
 - `game/gui/` images come from the launcher's `generate_gui` **plus** the `gui_images` command. Lint does not catch missing GUI images; they only fail at runtime.
 - Release builds: `scripts/build_release.sh` → `dists/`. Tag `v<config.version>` to publish via `.github/workflows/release.yml`. See RELEASE.md.
 - The Dev button is automatic: it's on from the SDK or when `game/playtest_enabled.txt` exists (created only by pages.yml). Never commit that file.
-- Owner decisions (2026-11-24): title is Lovelace Academy; the player chooses pronouns. The shipped build runs the first design (7 days, 5 girls, tie-breaker mystery; DECISIONS.md #46–53). The redesign in this brief is decided but not built (DECISIONS.md #54–60).
+- Owner decisions (2026-11-24): title is Lovelace Academy; the player chooses pronouns. The shipped build runs the first design (7 days, 5 girls, tie-breaker mystery; DECISIONS.md #46–53). The redesign in this brief is decided but not built (DECISIONS.md #54–61).
