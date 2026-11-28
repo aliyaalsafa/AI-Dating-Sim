@@ -23,6 +23,16 @@ init python:
         s.seen_today = set()
         store.gs = s
 
+    def pt_skip_day1():
+        """Skip day 1: everyone met, the mystery started, day 2 morning."""
+        s = sim_state.evolve(store.gs)
+        s.flags |= {"met_" + c for c in CAST} | {sim_clues.STARTED_FLAG}
+        for e in EVENTS:
+            if e.get("day_max") == 1:
+                s.seen_events.add(e["id"])
+        s.day, s.slot, s.seen_today = 2, 0, set()
+        store.gs = s
+
     def pt_to_gala_eve():
         s = sim_state.evolve(store.gs)
         s.day = RULES.semester_days - 1
@@ -83,6 +93,8 @@ screen playtest_tools():
             null height 10
             hbox:
                 spacing 24
+                if gs.day == 1:
+                    textbutton "Skip to day 2" action [Function(pt_skip_day1), Hide("playtest_tools"), Jump("day_loop")]
                 textbutton "Skip 2 days" action Function(pt_skip_days, 2)
                 textbutton "Go to gala eve" action Function(pt_to_gala_eve)
                 textbutton "+100 cash" action Function(pt_money, 100)

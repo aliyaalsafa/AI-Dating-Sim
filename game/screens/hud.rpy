@@ -47,8 +47,14 @@ screen phone_button():
         background ui_pill("pink")
         hover_background ui_pill("violet")
         padding (24, 8, 30, 12)
-        action [Function(sfx, "phone"), Show("phone")]
+        action [Function(sfx, "phone"), Show("phone", tab=("case" if case_new else "contacts"))]
         hbox:
             spacing 10
             add "gui/theme/heart_small.png" at heart_beat yalign 0.5
             text "Phone" size 30 color "#ffffff" outlines OUTLINE_SMALL yalign 0.5
+            if case_new:
+                frame:
+                    background ui_pill("gold")
+                    padding (14, 2, 14, 6)
+                    yalign 0.5
+                    text "New hint" size 20 color "#ffffff" outlines [(2, "#b77900", 0, 0)]

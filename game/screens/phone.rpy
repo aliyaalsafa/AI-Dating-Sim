@@ -5,13 +5,15 @@ define PHONE_BG = "#2a1830"
 define PHONE_SCREEN = "#fff6fb"
 define PHONE_INK = "#3a1640"
 
-screen phone(tab="contacts"):
+screen phone(tab="contacts", called=False):
     modal True
     zorder 100
     default current = tab
 
     add Solid("#3a164099")
-    key "game_menu" action Hide("phone")
+    $ _close = Return() if called else Hide("phone")
+    key "game_menu" action _close
+    on "show" action If(tab == "case", SetVariable("case_new", False))
 
     frame at notify_pop:
         xalign 0.5
@@ -28,14 +30,15 @@ screen phone(tab="contacts"):
                 xalign 0.5
                 $ tabs = [("contacts", "Contacts"), ("feed", "Feed")]
                 if mystery_on() and has_flag(sim_clues.STARTED_FLAG):
-                    $ tabs.append(("case", "Case"))
+                    $ tabs.append(("case", "Case •" if case_new else "Case"))
                 $ tabs.append(("achievements", "Awards"))
                 for t, label_ in tabs:
                     button:
                         background ui_pill("pink" if current == t else "plum")
                         hover_background ui_pill("violet")
                         padding (26, 8, 26, 12)
-                        action SetScreenVariable("current", t)
+                        action [SetScreenVariable("current", t),
+                                If(t == "case", SetVariable("case_new", False))]
                         text label_ size 26 color "#ffffff" outlines OUTLINE_SMALL
 
             frame:
@@ -62,7 +65,7 @@ screen phone(tab="contacts"):
 
             hbox:
                 xalign 0.5
-                use pill_button("Close", Hide("phone"), "white", 28)
+                use pill_button("Close", _close, "white", 28)
 
 
 screen phone_contacts():

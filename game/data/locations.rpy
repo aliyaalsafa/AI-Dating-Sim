@@ -8,8 +8,9 @@
 ##             their hints are in data/mystery.rpy; the scenes in routes/common/pairs/.
 ## "kind":     "shop" opens the store instead of an event.
 ##
-## Days 1 and 3 (morning) are scripted, so meetups start on day 2. Each pair
-## meets on three days so a player who misses one can catch another.
+## Day 1 is meeting everyone, so meetups start on day 2. Day 2 has a pair in
+## every slot (morning, afternoon, evening) so the player meets the mechanic
+## whatever they pick. Each pair meets on three days so a missed one comes back.
 
 init -3 python:
 
@@ -29,7 +30,7 @@ init -3 python:
             "color": "#f6e6d6",
             "schedule": {"morning": ["claudia"], "afternoon": ["claudia"], "evening": ["claudia"]},
             "meetups": [
-                {"chars": ["claudia", "gemma"], "slot": "morning", "days": [4, 7, 11]},
+                {"chars": ["claudia", "gemma"], "slot": "morning", "days": [2, 7, 11]},
             ],
         },
         "robotics_lab": {
@@ -82,7 +83,7 @@ init -3 python:
             "open": ["evening"],
             "schedule": {"evening": ["xenia"]},
             "meetups": [
-                {"chars": ["xenia", "kimi"], "slot": "evening", "days": [4, 8, 12]},
+                {"chars": ["xenia", "kimi"], "slot": "evening", "days": [2, 8, 12]},
             ],
         },
         "campus_store": {

@@ -26,6 +26,11 @@ label day_loop:
             call night_phase
 
         else:
+            if gs.day == 2 and gs.slot == 0 and not has_flag("tut_day2"):
+                $ set_flag("tut_day2")
+                # PLACEHOLDER: day 2 orientation line
+                "(Day 2. Campus is yours now. Spend time with whoever you like.)"
+                "(When two girls are in the same place, the map marks them {b}Together{/b}. Go listen in: whatever you overhear gets saved to the Case tab on your phone.)"
             # The store takes no time: shop, then pick where to actually go.
             $ loc = None
             while loc is None:

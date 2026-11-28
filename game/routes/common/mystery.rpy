@@ -27,6 +27,8 @@ init python:
         return len(sim_clues.known_majors(store.gs)), len(MYSTERY["order"])
 
 default persistent.hints_heard = set()
+default persistent.seen_case_tutorial = False
+default case_new = False
 
 
 ## Day 1 evening: the second envelope starts the mystery.
@@ -51,12 +53,25 @@ label pair_done(pid):
     if mystery_on():
         $ gs, _new = sim_clues.give_pair_hints(gs, MYSTERY, pid)
         $ persistent.hints_heard |= set(_new)
-        $ _h1 = _pair["hints"][_pair["chars"][0]]
-        $ _h2 = _pair["hints"][_pair["chars"][1]]
-        "{i}[_h1]{/i}"
-        "{i}[_h2]{/i}"
+        python:
+            for _c in _pair["chars"]:
+                _hn = cname(_c)
+                _ht = _pair["hints"][_c]
+                narrator("{b}Hint about [_hn]:{/b} {i}[_ht]{/i}")
         if _new:
-            $ renpy.notify("New hints on your phone's Case tab")
+            $ case_new = True
+            $ sfx("phone")
+            if not persistent.seen_case_tutorial:
+                $ persistent.seen_case_tutorial = True
+                "(Your phone buzzes. Both hints were saved to the {b}Case{/b} tab.)"
+                "(Overhear both hints about a girl and you can ask her the right way why you were admitted. Each girl holds one major clue.)"
+                menu:
+                    "Open the Case tab":
+                        call screen phone(tab="case", called=True)
+                    "Later":
+                        pass
+            else:
+                $ renpy.notify("New hints saved to your phone's Case tab")
     python:
         for _c in _pair["chars"]:
             learn_fact(_c)

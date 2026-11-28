@@ -147,6 +147,8 @@ Put each character's favorites (aesthetic, place, item, symbol, likes and dislik
 
 **Day 1:** the opening (admission letter, the school phone, your name and pronouns on your student ID), Grace's campus tour, then an explore phase: girls you haven't met show as "?" on the map, meeting one takes no time, and the evening starts once you've met all of them. Pair scenes start on day 2 and require everyone to be met.
 
+**Day 2:** free exploration. A pair scene waits in every slot, so the player overhears a first pair whatever they pick; both hints go to the Case tab on the phone (the first time, the game offers to open it; the Phone button shows "New hint" until it's viewed).
+
 Each in-game day:
 
 1. The calendar advances through **morning → afternoon → evening → night**.
