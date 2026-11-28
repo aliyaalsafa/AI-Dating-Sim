@@ -137,3 +137,10 @@ def test_gallery_lists_every_ending(data):
 def test_mystery_starts_on_day_one():
     dorm = (GAME / "routes" / "common" / "day01_dorm.rpy").read_text(encoding="utf-8")
     assert "call mystery_hook" in dorm
+
+
+def test_every_girl_has_a_first_meeting(data):
+    labels = defined_labels()
+    for cid in data["CAST"]:
+        if cid != "grace":                          # Grace meets you at the gates
+            assert "meet_" + cid in labels, cid

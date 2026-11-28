@@ -1,6 +1,7 @@
 ## Day 1, morning (forced): the opening (why you're here, the phone, the gala
 ## condition, quiet hints), your name and pronouns on your student ID, then
-## Grace's orientation and meeting Claudia.
+## Grace's orientation and campus tour. You meet everyone else in the
+## afternoon (routes/common/meet.rpy).
 ## PLACEHOLDER: all dialogue in this file is placeholder for the owner to rewrite.
 
 label day01_prologue:
@@ -57,33 +58,32 @@ label day01_prologue:
             $ choose("grace", 2, "structured")
             grace "Do I?! Oh, we're going to get along."
 
+    # PLACEHOLDER: the campus tour
     scene bg quad
     with dissolve
-    "She walks you across the Main Quad, narrating at roughly four facts per step."
-
-    show grace neutral at left
-    show claudia neutral at right
-    with dissolve
-
-    # PLACEHOLDER: Claudia's introduction
-    claudia "Grace, darling. You're doing the tour voice."
-    grace "I don't have a tour voice."
-    claudia "You have three. This is the second most cheerful."
-    claudia "Hello. I'm Claudia. I want to be careful here, but I think you should know there are already four rumors about you. I'm happy to share the two kind ones."
-    $ set_flag("met_claudia")
-
-    menu:
-        "\"What are the other two?\"" (prompt="pry"):
-            $ choose("claudia", 2, "pry")
-            claudia "Ah. Those aren't mine to share. I'm sorry. I'd say the same about you, to them, if that helps."
-        "\"What do {i}you{/i} make of me so far?\"" (prompt="curious"):
-            $ choose("claudia", 2, "curious")
-            claudia "...Oh. People usually ask what I know, not what I think."
-            claudia "I think you seem kind. Give me a week and I'll have something more nuanced. Possibly an essay."
-        "\"That's sweet of you. Thank you.\"" (prompt="warm"):
-            $ choose("claudia", 2, "warm")
-            claudia "Of course. I'll write you a welcome note. I write everyone one. Yours may run a little long."
-
-    grace "Okay! Next stop: lunch. Want me to: one, save you a seat, two, introduce you to people, or three, both?"
-    "You get the sense the answer is always three."
+    show grace neutral at center
+    "She walks you across campus at roughly four facts per step."
+    grace "Main Quad! The fountain is the most photographed spot on campus, mostly by one person. You'll meet her."
+    scene bg council_office
+    show grace neutral at center
+    grace "Student Council Office. My office. Technically everyone's office, but I'm the only one who's ever here."
+    scene bg robotics_lab
+    show grace neutral at center
+    grace "Robotics Lab! Don't touch anything on the shelf by the door. It's a graveyard. Emotionally."
+    scene bg library_3f
+    show grace neutral at center
+    grace "The 24-hour library. Third floor is quiet study. Mostly quiet. Very... quiet."
+    "She says it the way some people say the name of an ex."
+    scene bg activities_hall
+    show grace neutral at center
+    grace "Student Activities Hall, where every club meets. Every single one. Usually at the same time."
+    scene bg cafeteria
+    show grace neutral at center
+    grace "Cafeteria! Fun fact: it serves fourteen hundred meals a day."
+    "Somewhere behind her, a phone camera clicks."
+    scene bg observatory_roof
+    show grace neutral at center
+    grace "And the Observatory Roof. It's only open in the evenings. Somebody always seems to be up there anyway."
+    grace "That's the whole campus! Questions? Concerns? Want me to make you a map? It's already made. It's on your phone."
+    "You check. It is. You don't remember downloading it."
     return

@@ -252,11 +252,13 @@ screen pill_button(label_text, action, kind="pink", size=30, sensitive=True, xsi
             insensitive_outlines []
 
 ## A character's name on a pill in her signature color.
+## Unmet characters show as "?" (CLAUDE.md §5).
 screen char_chip(cid, size=26):
+    $ known = store.gs is None or has_flag("met_" + cid)
     frame:
-        background namebox_bg(cid)
+        background (namebox_bg(cid) if known else namebox_bg("default"))
         padding (24, 4, 24, 8)
-        text cname(cid) size size color "#ffffff" outlines OUTLINE_SMALL
+        text (cname(cid) if known else "?") size size color "#ffffff" outlines OUTLINE_SMALL
 
 ## Row of heart images.
 screen hearts(n, total=5, size=1.0):

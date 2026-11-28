@@ -180,13 +180,28 @@ def test_counters(gs):
     assert count(s, "grace.hangouts") == 2 and count(gs, "grace.hangouts") == 0
 
 
-def test_days_1_to_3_introduce_everyone(data):
-    """Forced scenes on days 1-3 must meet all five characters (M2 requirement)."""
+def test_day_1_introduces_everyone(data):
+    """Everyone is met on day 1, so pair scenes can start on day 2."""
     met = set()
     for e in data["EVENTS"]:
-        if e.get("forced") and e.get("day_max", 99) <= 3:
+        if e.get("forced") and e.get("day_max", 99) <= 1:
             met |= set(e.get("introduces", ()))
     assert met == set(data["CAST"])
+
+
+def test_everyone_can_be_found_on_day_1_afternoon(data, gs):
+    """The explore phase loops until all are met, so each girl must be on the map then."""
+    s = calendar.advance(gs)                       # day 1 afternoon
+    here = {c for lid in data["LOCATIONS"] for c in events.present(data["LOCATIONS"], lid, s)}
+    assert here == set(data["CAST"])
+
+
+def test_pair_scenes_wait_until_everyone_is_met(data):
+    for e in data["EVENTS"]:
+        if e["kind"] == "pair":
+            assert set(e["requires_flags"]) == {"met_" + c for c in data["CAST"]}, e["id"]
+    first = min(d for loc in data["LOCATIONS"].values() for m in loc.get("meetups", ()) for d in m["days"])
+    assert first >= 2
 
 
 MEET = {

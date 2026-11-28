@@ -27,7 +27,7 @@ define gemma   = Character(CAST_NAMES["gemma"]["name"],   color="#ffffff", nameb
 define shen    = Character(CAST_NAMES["shen"]["name"],    color="#ffffff", namebox_background=namebox_bg("shen"), who_color="#ffffff")
 define kimi    = Character(CAST_NAMES["kimi"]["name"],    color="#ffffff", namebox_background=namebox_bg("kimi"), who_color="#ffffff")
 define lola    = Character(CAST_NAMES["lola"]["name"],    color="#ffffff", namebox_background=namebox_bg("lola"), who_color="#ffffff")
-define mom     = Character("Mom", color="#9a8f98", who_color="#ffffff")
+define mom     = Character("Mom", color="#ffffff", who_color="#ffffff")
 
 default player_name = "You"
 

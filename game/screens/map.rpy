@@ -10,7 +10,11 @@ screen campus_map():
     vbox:
         xalign 0.5
         ypos 100
-        use heading("Where to this %s?" % slot_label().lower(), 54)
+        $ _left = len(unmet())
+        if _left and gs.day == 1:
+            use heading("Meet everyone: %d left to find" % _left, 54)
+        else:
+            use heading("Where to this %s?" % slot_label().lower(), 54)
 
     grid 3 3:
         xalign 0.5

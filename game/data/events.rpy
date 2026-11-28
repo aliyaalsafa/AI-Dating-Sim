@@ -18,17 +18,15 @@ init -3 python:
     # ---------------------------------------------------------------------
     EVENTS += [
         {"id": "day01_prologue", "label": "day01_prologue", "kind": "story", "forced": True,
-         "day_max": 1, "slots": ["morning"], "introduces": ["grace", "claudia"]},
-        {"id": "day01_lunch", "label": "day01_lunch", "kind": "group", "forced": True,
-         "day_max": 1, "slots": ["afternoon"], "introduces": ["xenia", "gemma", "kimi", "lola"]},
+         "day_max": 1, "slots": ["morning"], "introduces": ["grace"]},
+        # Explore campus: meet everyone else (takes no time; ends when all are met).
+        {"id": "day01_explore", "label": "day01_explore", "kind": "story", "forced": True,
+         "day_max": 1, "slots": ["afternoon"],
+         "introduces": ["claudia", "gemma", "xenia", "lola", "kimi", "shen"]},
         {"id": "day01_dorm", "label": "day01_dorm", "kind": "story", "forced": True,
          "day_max": 1, "slots": ["evening"]},
-        # Meet Shen early if you go looking for her on day 2...
-        {"id": "day02_meet_shen_library", "label": "day02_meet_shen", "kind": "story",
-         "location": "library_3f", "chars": ["shen"], "day_max": 2, "forbids_flags": ["met_shen"]},
-        # ...and everyone meets her at the leaderboard on day 3 regardless.
         {"id": "day03_leaderboard", "label": "day03_leaderboard", "kind": "group", "forced": True,
-         "day_min": 3, "day_max": 3, "slots": ["morning"], "introduces": ["shen"]},
+         "day_min": 3, "day_max": 3, "slots": ["morning"]},
     ]
 
     # ---------------------------------------------------------------------
@@ -133,7 +131,8 @@ init -3 python:
         ("xenia_lola", "cafeteria", ["xenia", "lola"]),
         ("lola_shen", "quad", ["lola", "shen"]),
     ]
+    # No pair scenes until you've met everyone (all are met on day 1).
     for _pid, _loc, _chars in PAIR_SCENES:
         EVENTS.append({"id": "pair_" + _pid, "label": "pair_" + _pid, "kind": "pair",
                        "location": _loc, "chars": list(_chars), "pair": _pid,
-                       "requires_flags": ["met_" + c for c in _chars]})
+                       "requires_flags": ["met_" + c for c in ROUTES]})
